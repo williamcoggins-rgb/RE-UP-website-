@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses | RE UP</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../images/reup-logo.svg" alt="RE UP" class="logo-img">
+        <span class="logo-text">RE UP</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+        <li><a href="membership.html" class="nav-link">Membership</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="membership.html" class="btn btn-nav">Join Now</a>
+        <button class="mobile-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="membership.html">Membership</a></li>
+      <li><a href="membership.html" class="btn btn-primary">Join Now</a></li>
+    </ul>
+  </div>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <p class="section-tag">LEVEL UP YOUR GAME</p>
+      <h1 class="section-title">Courses</h1>
+      <p>From foundational skills to advanced mastery. Courses built by pros who are in the chair daily.</p>
+    </div>
+  </section>
+
+  <!-- Course Filters + Grid -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="course-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="technique">Technique</button>
+        <button class="filter-btn" data-filter="business">Business</button>
+        <button class="filter-btn" data-filter="advanced">Advanced</button>
+        <button class="filter-btn" data-filter="fundamentals">Fundamentals</button>
+      </div>
+
+      <div class="course-grid" id="courseGrid">
+        <!-- Course 1 -->
+        <div class="course-card" data-category="technique" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9986;</span>
+            </div>
+            <span class="course-badge">BESTSELLER</span>
+          </div>
+          <div class="course-info">
+            <span class="course-category">TECHNIQUE</span>
+            <h3>Advanced Fade Mastery</h3>
+            <p>Perfect your fading technique from skin to seamless. Learn the razor work that separates good from elite.</p>
+            <div class="course-meta">
+              <span class="course-lessons">12 Lessons</span>
+              <span class="course-price">$149</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2 -->
+        <div class="course-card" data-category="business" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9733;</span>
+            </div>
+            <span class="course-badge badge-new">NEW</span>
+          </div>
+          <div class="course-info">
+            <span class="course-category">BUSINESS</span>
+            <h3>Build Your Brand</h3>
+            <p>Turn your chair into a business empire. Social media, client retention, and scaling strategies.</p>
+            <div class="course-meta">
+              <span class="course-lessons">8 Lessons</span>
+              <span class="course-price">$99</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 3 -->
+        <div class="course-card" data-category="advanced" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9889;</span>
+            </div>
+          </div>
+          <div class="course-info">
+            <span class="course-category">ADVANCED</span>
+            <h3>Razor Design & Artistry</h3>
+            <p>Take your creativity to the next level with precision razor designs and custom hair art.</p>
+            <div class="course-meta">
+              <span class="course-lessons">15 Lessons</span>
+              <span class="course-price">$199</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 4 -->
+        <div class="course-card" data-category="fundamentals" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9998;</span>
+            </div>
+          </div>
+          <div class="course-info">
+            <span class="course-category">FUNDAMENTALS</span>
+            <h3>Clipper Fundamentals Bootcamp</h3>
+            <p>Master every clipper guard and technique. Build the foundation that everything else relies on.</p>
+            <div class="course-meta">
+              <span class="course-lessons">10 Lessons</span>
+              <span class="course-price">$79</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 5 -->
+        <div class="course-card" data-category="technique" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9986;</span>
+            </div>
+          </div>
+          <div class="course-info">
+            <span class="course-category">TECHNIQUE</span>
+            <h3>Textured Crop Masterclass</h3>
+            <p>The most requested style of the decade. Nail every variation with detailed step-by-step breakdowns.</p>
+            <div class="course-meta">
+              <span class="course-lessons">9 Lessons</span>
+              <span class="course-price">$119</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 6 -->
+        <div class="course-card" data-category="business" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9733;</span>
+            </div>
+          </div>
+          <div class="course-info">
+            <span class="course-category">BUSINESS</span>
+            <h3>Client Communication Pro</h3>
+            <p>Consultations that convert. Learn to read clients, manage expectations, and build a loyal roster.</p>
+            <div class="course-meta">
+              <span class="course-lessons">6 Lessons</span>
+              <span class="course-price">$69</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 7 -->
+        <div class="course-card" data-category="advanced" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9889;</span>
+            </div>
+          </div>
+          <div class="course-info">
+            <span class="course-category">ADVANCED</span>
+            <h3>Color Theory for Barbers</h3>
+            <p>Expand your services and revenue with men's hair color techniques — from subtle to bold.</p>
+            <div class="course-meta">
+              <span class="course-lessons">11 Lessons</span>
+              <span class="course-price">$159</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 8 -->
+        <div class="course-card" data-category="business" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9733;</span>
+            </div>
+            <span class="course-badge badge-new">NEW</span>
+          </div>
+          <div class="course-info">
+            <span class="course-category">BUSINESS</span>
+            <h3>Open Your Own Shop</h3>
+            <p>From business plan to grand opening. Everything you need to launch a barbershop that thrives.</p>
+            <div class="course-meta">
+              <span class="course-lessons">20 Lessons</span>
+              <span class="course-price">$249</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 9 -->
+        <div class="course-card" data-category="technique" data-animate>
+          <div class="course-image">
+            <div class="course-image-placeholder">
+              <span class="placeholder-icon">&#9986;</span>
+            </div>
+          </div>
+          <div class="course-info">
+            <span class="course-category">TECHNIQUE</span>
+            <h3>Beard Sculpting & Shaping</h3>
+            <p>The art of the perfect beard. Hot towel shaves, sculpting techniques, and product knowledge.</p>
+            <div class="course-meta">
+              <span class="course-lessons">7 Lessons</span>
+              <span class="course-price">$89</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Membership CTA -->
+  <section class="section section-cta-full">
+    <div class="cta-bg-pattern"></div>
+    <div class="container">
+      <div class="cta-content">
+        <p class="section-tag">SAVE ON EVERY COURSE</p>
+        <h2 class="cta-title">Go Unlimited<br>With <span class="text-accent">Membership</span></h2>
+        <p class="cta-text">Unlock all courses, future releases, and exclusive member content for one flat monthly rate.</p>
+        <a href="membership.html" class="btn btn-primary btn-lg">View Membership Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-logo">RE UP</span>
+          <p>Elevating barbers beyond the basics. The premier continuing education platform for the modern barber.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Learn</h4>
+          <ul>
+            <li><a href="courses.html">All Courses</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="membership.html">Membership</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Instructors</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">YouTube</a></li>
+            <li><a href="#">TikTok</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 RE UP. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
