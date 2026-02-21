@@ -412,15 +412,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- Carousels — Immersive Drag with Per-Slide Caption Crossfade ----
+  // ---- Carousels — Immersive Sliding Captions with Parallax Drag ----
   var allCarousels = document.querySelectorAll('.hero-carousel');
   var carouselInstances = [];
 
   allCarousels.forEach(function(container) {
     var track = container.querySelector('.carousel-track');
+    var captionTrack = container.querySelector('.carousel-captions-track');
     var slides = container.querySelectorAll('.carousel-slide');
     var dots = container.querySelectorAll('.carousel-dot');
-    var captions = container.querySelectorAll('.carousel-caption');
 
     if (!track || slides.length === 0) return;
 
@@ -438,15 +438,17 @@ document.addEventListener('DOMContentLoaded', () => {
       lastTime: 0
     };
 
-    // Heavier drag — more rubber-band at edges, feels weighted
-    var RUBBER = 0.18;
-    // Drag damping — makes the slide follow at 92% of finger, feels heavy/premium
-    var DRAG_DAMP = 0.92;
-    // Caption slide distance (px) for incoming/outgoing text
-    var CAPTION_SHIFT = 30;
+    // Physics
+    var RUBBER = 0.18;         // Edge rubber-band resistance
+    var DRAG_DAMP = 0.92;      // Slide follows at 92% of finger — weighted feel
+    var CAPTION_LAG = 0.75;    // Captions slide at 75% of image speed — gentle trail
 
-    function w() { return container.offsetWidth; }
-    function minT() { return -(s.total - 1) * w(); }
+    function slideW() { return container.offsetWidth; }
+    function captionW() {
+      var el = container.querySelector('.carousel-captions');
+      return el ? el.offsetWidth : slideW();
+    }
+    function minT() { return -(s.total - 1) * slideW(); }
 
     function applyRubber(t) {
       var min = minT();
@@ -455,74 +457,36 @@ document.addEventListener('DOMContentLoaded', () => {
       return t;
     }
 
-    function renderTrack(t, smooth) {
+    // Render both tracks — images move at full speed, captions trail behind
+    function render(imgTranslate, smooth) {
+      var ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
       if (smooth) {
-        track.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        track.style.transition = 'transform 0.5s ' + ease;
       } else {
         track.style.transition = 'none';
       }
-      track.style.transform = 'translate3d(' + t + 'px, 0, 0)';
-    }
+      track.style.transform = 'translate3d(' + imgTranslate + 'px, 0, 0)';
 
-    // --- Caption interpolation ---
-    // progress: 0 = fully on current slide, -1 = fully on next, +1 = fully on prev
-    function updateCaptions(fromIndex, progress, isDrag) {
-      // Determine which caption is going out and which is coming in
-      var toIndex;
-      if (progress < 0) {
-        toIndex = Math.min(fromIndex + 1, s.total - 1);
-      } else if (progress > 0) {
-        toIndex = Math.max(fromIndex - 1, 0);
-      } else {
-        toIndex = fromIndex;
-      }
+      if (captionTrack) {
+        // Caption translate: same slide index but scaled to caption container width,
+        // and lagged during drag for that gentle trailing feel
+        var cw = captionW();
+        var sw = slideW();
+        var ratio = (sw !== 0) ? (imgTranslate / sw) : 0;
+        var captionTranslate = ratio * cw;
 
-      var absProg = Math.abs(progress);
-      // Ease the progress for smoother feel: cubic ease-out
-      var easedOut = 1 - Math.pow(1 - absProg, 2);
-      var easedIn = absProg;
-
-      for (var i = 0; i < captions.length; i++) {
-        var cap = captions[i];
-
-        if (isDrag) {
-          cap.classList.add('is-dragging');
-        }
-
-        if (i === fromIndex) {
-          // Outgoing caption: fade out + shift away
-          var outOpacity = 1 - easedOut;
-          var outShift = easedOut * CAPTION_SHIFT * (progress < 0 ? -1 : 1);
-          cap.style.opacity = outOpacity;
-          cap.style.transform = 'translateY(' + (outShift * 0.3) + 'px) translateX(' + outShift + 'px)';
-          cap.classList.toggle('is-active', absProg < 0.5);
-        } else if (i === toIndex && toIndex !== fromIndex) {
-          // Incoming caption: fade in + slide in from opposite side
-          var inOpacity = easedIn;
-          var inShift = (1 - easedIn) * CAPTION_SHIFT * (progress < 0 ? 1 : -1);
-          cap.style.opacity = inOpacity;
-          cap.style.transform = 'translateY(' + (Math.abs(inShift) * 0.3) + 'px) translateX(' + inShift + 'px)';
-          cap.classList.toggle('is-active', absProg >= 0.5);
+        if (smooth) {
+          // On snap: captions use a slightly longer, softer easing
+          captionTrack.style.transition = 'transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)';
         } else {
-          // All other captions: hidden
-          cap.style.opacity = '0';
-          cap.style.transform = 'translateY(18px)';
-          cap.classList.remove('is-active');
+          captionTrack.style.transition = 'none';
+          // During drag: apply the parallax lag
+          var baseCaption = -s.current * cw;
+          var captionDelta = captionTranslate - baseCaption;
+          captionTranslate = baseCaption + (captionDelta * CAPTION_LAG);
         }
-      }
-    }
-
-    // Release captions back to CSS transitions
-    function releaseCaptions(activeIndex) {
-      for (var i = 0; i < captions.length; i++) {
-        captions[i].classList.remove('is-dragging');
-        captions[i].style.opacity = '';
-        captions[i].style.transform = '';
-        if (i === activeIndex) {
-          captions[i].classList.add('is-active');
-        } else {
-          captions[i].classList.remove('is-active');
-        }
+        captionTrack.style.transform = 'translate3d(' + captionTranslate + 'px, 0, 0)';
       }
     }
 
@@ -530,10 +494,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (index < 0) index = 0;
       if (index >= s.total) index = s.total - 1;
       s.current = index;
-      s.translate = -s.current * w();
+      s.translate = -s.current * slideW();
       s.prevTranslate = s.translate;
-      renderTrack(s.translate, smooth !== false);
-      releaseCaptions(s.current);
+      render(s.translate, smooth !== false);
       dots.forEach(function(d, i) { d.classList.toggle('active', i === s.current); });
     }
 
@@ -543,9 +506,9 @@ document.addEventListener('DOMContentLoaded', () => {
       container.classList.remove('is-swiping');
 
       var distance = s.translate - s.prevTranslate;
-      var slideW = w();
+      var sw = slideW();
       var velocityThreshold = 0.4;
-      var distanceThreshold = slideW * 0.18;
+      var distanceThreshold = sw * 0.18;
 
       var next = s.current;
       if (Math.abs(s.velocity) > velocityThreshold) {
@@ -556,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
         next = s.current - 1;
       }
 
-      s.prevTranslate = -s.current * slideW;
+      s.prevTranslate = -s.current * sw;
       goTo(next, true);
     }
 
@@ -569,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
       s.lastX = x;
       s.lastTime = Date.now();
       s.velocity = 0;
-      s.prevTranslate = -s.current * w();
+      s.prevTranslate = -s.current * slideW();
       s.translate = s.prevTranslate;
       container.classList.add('is-swiping');
     }
@@ -591,27 +554,20 @@ document.addEventListener('DOMContentLoaded', () => {
         s.locked = true;
       }
 
-      // Velocity tracking
+      // Smoothed velocity
       var now = Date.now();
       var dt = now - s.lastTime;
       if (dt > 0) {
-        // Smoothed velocity (lerp with previous)
         var instantV = (x - s.lastX) / dt;
         s.velocity = s.velocity * 0.3 + instantV * 0.7;
       }
       s.lastX = x;
       s.lastTime = now;
 
-      // Damped drag — heavier feel
+      // Damped drag
       var dampedDx = dx * DRAG_DAMP;
       s.translate = applyRubber(s.prevTranslate + dampedDx);
-      renderTrack(s.translate, false);
-
-      // Caption interpolation: compute progress (-1 to +1)
-      var slideW = w();
-      var rawProgress = dampedDx / slideW; // negative = swiping left (next), positive = swiping right (prev)
-      var progress = Math.max(-1, Math.min(1, rawProgress));
-      updateCaptions(s.current, progress, true);
+      render(s.translate, false);
 
       return true;
     }
