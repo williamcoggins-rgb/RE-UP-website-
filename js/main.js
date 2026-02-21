@@ -412,8 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- Carousels — Drag/Swipe, No Autoplay, Multiple Instances ----
-  // Each .hero-carousel gets its own independent carousel state
+  // ---- Carousels — Buttery Smooth Drag/Swipe, Multiple Instances ----
   const allCarousels = document.querySelectorAll('.hero-carousel');
   const carouselInstances = [];
 
@@ -424,140 +423,198 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!track || slides.length === 0) return;
 
-    const state = {
-      currentSlide: 0,
-      totalSlides: slides.length,
-      isDragging: false,
+    const s = {
+      current: 0,
+      total: slides.length,
+      dragging: false,
+      locked: false,        // true once we know swipe is horizontal
       startX: 0,
-      currentTranslate: 0,
+      startY: 0,
+      translate: 0,
       prevTranslate: 0,
-      dragDistance: 0
+      velocity: 0,
+      lastX: 0,
+      lastTime: 0,
+      rafId: null
     };
 
-    function getSlideWidth() {
-      return container.offsetWidth;
-    }
+    // Rubber-band resistance at edges (0.25 = 25% of real distance)
+    var RUBBER = 0.25;
 
-    function setPosition(translate) {
-      track.style.transform = 'translateX(' + translate + 'px)';
-    }
+    function w() { return container.offsetWidth; }
 
-    function goToSlide(index) {
-      if (index < 0) index = 0;
-      if (index >= state.totalSlides) index = state.totalSlides - 1;
-      state.currentSlide = index;
-      state.currentTranslate = -state.currentSlide * getSlideWidth();
-      state.prevTranslate = state.currentTranslate;
-      track.classList.remove('is-dragging');
-      setPosition(state.currentTranslate);
-      updateDots();
-    }
+    function minTranslate() { return -(s.total - 1) * w(); }
 
-    function updateDots() {
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === state.currentSlide);
-      });
-    }
-
-    function snapAfterDrag() {
-      state.isDragging = false;
-      track.classList.remove('is-dragging');
-      container.classList.remove('is-swiping');
-      const threshold = getSlideWidth() * 0.15;
-
-      if (state.dragDistance < -threshold) {
-        goToSlide(state.currentSlide + 1);
-      } else if (state.dragDistance > threshold) {
-        goToSlide(state.currentSlide - 1);
-      } else {
-        goToSlide(state.currentSlide);
+    function applyRubber(translate) {
+      var min = minTranslate();
+      if (translate > 0) {
+        return translate * RUBBER;
       }
-      state.dragDistance = 0;
+      if (translate < min) {
+        return min + (translate - min) * RUBBER;
+      }
+      return translate;
     }
 
-    // Dot click navigation
-    dots.forEach(dot => {
-      dot.addEventListener('click', (e) => {
+    function render(translate, smooth) {
+      if (smooth) {
+        track.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
+      } else {
+        track.style.transition = 'none';
+      }
+      track.style.transform = 'translate3d(' + translate + 'px, 0, 0)';
+    }
+
+    function goTo(index, smooth) {
+      if (index < 0) index = 0;
+      if (index >= s.total) index = s.total - 1;
+      s.current = index;
+      s.translate = -s.current * w();
+      s.prevTranslate = s.translate;
+      render(s.translate, smooth !== false);
+      dots.forEach(function(d, i) { d.classList.toggle('active', i === s.current); });
+    }
+
+    function snapFromDrag() {
+      s.dragging = false;
+      s.locked = false;
+      container.classList.remove('is-swiping');
+
+      var distance = s.translate - s.prevTranslate;
+      var slideW = w();
+
+      // Velocity-based: a fast flick (>0.5px/ms) triggers next slide
+      // even with small drag distance
+      var velocityThreshold = 0.5;
+      var distanceThreshold = slideW * 0.15;
+
+      var next = s.current;
+      if (Math.abs(s.velocity) > velocityThreshold) {
+        next = s.velocity < 0 ? s.current + 1 : s.current - 1;
+      } else if (distance < -distanceThreshold) {
+        next = s.current + 1;
+      } else if (distance > distanceThreshold) {
+        next = s.current - 1;
+      }
+
+      // Reset prevTranslate to current slide position for next drag
+      s.prevTranslate = -s.current * slideW;
+      goTo(next, true);
+    }
+
+    // --- Pointer start (touch + mouse unified) ---
+    function onStart(x, y, isTouch) {
+      s.dragging = true;
+      s.locked = false;
+      s.startX = x;
+      s.startY = y;
+      s.lastX = x;
+      s.lastTime = Date.now();
+      s.velocity = 0;
+      s.prevTranslate = -s.current * w();
+      s.translate = s.prevTranslate;
+      container.classList.add('is-swiping');
+    }
+
+    // --- Pointer move ---
+    function onMove(x, y) {
+      if (!s.dragging) return false;
+
+      var dx = x - s.startX;
+      var dy = y - s.startY;
+
+      // First significant move: decide horizontal vs vertical
+      if (!s.locked) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return false; // too small, wait
+        if (Math.abs(dy) > Math.abs(dx)) {
+          // Vertical swipe — release to page scroll
+          s.dragging = false;
+          container.classList.remove('is-swiping');
+          return false;
+        }
+        // Horizontal — lock it in
+        s.locked = true;
+      }
+
+      // Track velocity (px per ms)
+      var now = Date.now();
+      var dt = now - s.lastTime;
+      if (dt > 0) {
+        s.velocity = (x - s.lastX) / dt;
+      }
+      s.lastX = x;
+      s.lastTime = now;
+
+      // Apply rubber-band at edges
+      s.translate = applyRubber(s.prevTranslate + dx);
+      render(s.translate, false);
+      return true; // signal: we handled it, prevent scroll
+    }
+
+    // --- Pointer end ---
+    function onEnd() {
+      if (!s.dragging) return;
+      snapFromDrag();
+    }
+
+    // Dot click
+    dots.forEach(function(dot) {
+      dot.addEventListener('click', function(e) {
         e.stopPropagation();
-        const slideIndex = parseInt(dot.dataset.slide, 10);
-        goToSlide(slideIndex);
+        goTo(parseInt(dot.dataset.slide, 10), true);
       });
     });
 
-    // --- Touch events (on container — overlay won't block touch) ---
-    container.addEventListener('touchstart', (e) => {
-      // Don't start drag if touching a button/link
+    // --- Touch ---
+    container.addEventListener('touchstart', function(e) {
       if (e.target.closest('.btn, .carousel-dot')) return;
-      state.isDragging = true;
-      state.startX = e.touches[0].clientX;
-      state.dragDistance = 0;
-      track.classList.add('is-dragging');
+      onStart(e.touches[0].clientX, e.touches[0].clientY, true);
     }, { passive: true });
 
-    container.addEventListener('touchmove', (e) => {
-      if (!state.isDragging) return;
-      const currentX = e.touches[0].clientX;
-      state.dragDistance = currentX - state.startX;
-      state.currentTranslate = state.prevTranslate + state.dragDistance;
-      setPosition(state.currentTranslate);
-    }, { passive: true });
+    container.addEventListener('touchmove', function(e) {
+      var handled = onMove(e.touches[0].clientX, e.touches[0].clientY);
+      // If horizontal swipe is locked, prevent page scroll
+      if (handled && s.locked) {
+        e.preventDefault();
+      }
+    }, { passive: false }); // NOT passive — we need preventDefault
 
-    container.addEventListener('touchend', () => {
-      if (!state.isDragging) return;
-      snapAfterDrag();
-    });
+    container.addEventListener('touchend', onEnd);
+    container.addEventListener('touchcancel', onEnd);
 
-    // --- Mouse events (on container — overlay won't block mouse) ---
-    container.addEventListener('mousedown', (e) => {
-      // Don't start drag if clicking a button/link
+    // --- Mouse ---
+    container.addEventListener('mousedown', function(e) {
       if (e.target.closest('.btn, .carousel-dot, a')) return;
-      state.isDragging = true;
-      state.startX = e.clientX;
-      state.dragDistance = 0;
-      track.classList.add('is-dragging');
-      container.classList.add('is-swiping');
+      onStart(e.clientX, e.clientY, false);
       e.preventDefault();
     });
 
-    container.addEventListener('mousemove', (e) => {
-      if (!state.isDragging) return;
-      const currentX = e.clientX;
-      state.dragDistance = currentX - state.startX;
-      state.currentTranslate = state.prevTranslate + state.dragDistance;
-      setPosition(state.currentTranslate);
+    container.addEventListener('mousemove', function(e) {
+      onMove(e.clientX, e.clientY);
     });
 
-    container.addEventListener('mouseup', () => {
-      if (!state.isDragging) return;
-      snapAfterDrag();
+    container.addEventListener('mouseup', onEnd);
+    container.addEventListener('mouseleave', onEnd);
+
+    // Prevent native image drag
+    container.querySelectorAll('img').forEach(function(img) {
+      img.addEventListener('dragstart', function(e) { e.preventDefault(); });
     });
 
-    container.addEventListener('mouseleave', () => {
-      if (!state.isDragging) return;
-      snapAfterDrag();
-    });
+    // Resize
+    window.addEventListener('resize', function() { goTo(s.current, false); });
 
-    // Prevent image drag
-    container.querySelectorAll('img').forEach(img => {
-      img.addEventListener('dragstart', (e) => e.preventDefault());
-    });
+    // Init
+    goTo(0, false);
 
-    // Recalculate on resize
-    window.addEventListener('resize', () => {
-      goToSlide(state.currentSlide);
-    });
-
-    // Initialize
-    goToSlide(0);
-
-    carouselInstances.push({ container, state, goToSlide });
+    carouselInstances.push({ container: container, state: s, goTo: goTo });
   });
 
   // ---- Course Carousel Scroll Reveal ----
-  const courseCarousels = document.querySelectorAll('.course-carousel');
+  var courseCarousels = document.querySelectorAll('.course-carousel');
   if (courseCarousels.length > 0) {
-    const carouselRevealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    var carouselRevealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
           carouselRevealObserver.unobserve(entry.target);
@@ -565,30 +622,30 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, { threshold: 0.25 });
 
-    courseCarousels.forEach(c => carouselRevealObserver.observe(c));
+    courseCarousels.forEach(function(c) { carouselRevealObserver.observe(c); });
   }
 
-  // Keyboard navigation — control the carousel closest to viewport center
-  document.addEventListener('keydown', (e) => {
+  // Keyboard — control carousel closest to viewport center
+  document.addEventListener('keydown', function(e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     if (carouselInstances.length === 0) return;
 
-    const viewCenter = window.innerHeight / 2;
-    let closest = carouselInstances[0];
-    let closestDist = Infinity;
+    var viewCenter = window.innerHeight / 2;
+    var closest = carouselInstances[0];
+    var closestDist = Infinity;
 
-    carouselInstances.forEach(inst => {
-      const rect = inst.container.getBoundingClientRect();
-      const center = rect.top + rect.height / 2;
-      const dist = Math.abs(center - viewCenter);
+    carouselInstances.forEach(function(inst) {
+      var rect = inst.container.getBoundingClientRect();
+      var center = rect.top + rect.height / 2;
+      var dist = Math.abs(center - viewCenter);
       if (dist < closestDist) {
         closestDist = dist;
         closest = inst;
       }
     });
 
-    if (e.key === 'ArrowLeft') closest.goToSlide(closest.state.currentSlide - 1);
-    if (e.key === 'ArrowRight') closest.goToSlide(closest.state.currentSlide + 1);
+    if (e.key === 'ArrowLeft') closest.goTo(closest.state.current - 1, true);
+    if (e.key === 'ArrowRight') closest.goTo(closest.state.current + 1, true);
   });
 
   // ---- Hero Parallax Depth ----
