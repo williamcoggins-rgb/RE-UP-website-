@@ -72,6 +72,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ---- Magnetic Button Effect (desktop only) ----
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const magneticBtns = document.querySelectorAll('.btn-primary, .btn-lg');
+    const magnetStrength = 0.3;
+    const magnetRadius = 80;
+
+    magneticBtns.forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const deltaX = e.clientX - centerX;
+        const deltaY = e.clientY - centerY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        if (distance < magnetRadius) {
+          const pull = (1 - distance / magnetRadius) * magnetStrength;
+          btn.style.transform = 'translate(' + (deltaX * pull) + 'px, ' + (deltaY * pull) + 'px)';
+        }
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // ---- 3D Card Tilt Effect (desktop only) ----
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const tiltCards = document.querySelectorAll('.course-card, .pricing-card, .feature-card');
+    const maxTilt = 6;
+
+    tiltCards.forEach(card => {
+      card.style.transformStyle = 'preserve-3d';
+      card.style.willChange = 'transform';
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotateX = (0.5 - y) * maxTilt;
+        const rotateY = (x - 0.5) * maxTilt;
+
+        card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.02, 1.02, 1.02)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    });
+  }
+
   // ---- Mobile Menu Toggle ----
   const mobileToggle = document.querySelector('.mobile-toggle');
   const mobileMenu = document.querySelector('.mobile-menu');
@@ -349,6 +401,30 @@ document.addEventListener('DOMContentLoaded', () => {
         visualCard.style.transform = 'translateY(' + translateY + 'px)';
       }, { passive: true });
     }
+  }
+
+  // ---- Staggered Grid Animations ----
+  const grids = document.querySelectorAll('.course-grid, .blog-page-grid, .features-grid, .pricing-grid');
+  grids.forEach(grid => {
+    const children = grid.querySelectorAll('[data-animate]');
+    children.forEach((child, index) => {
+      child.style.transitionDelay = (index * 80) + 'ms';
+    });
+  });
+
+  // ---- Hero Parallax Depth ----
+  const hero = document.querySelector('.hero');
+  const heroContent = document.querySelector('.hero-content');
+  if (hero && heroContent && window.matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const heroHeight = hero.offsetHeight;
+      if (scrollY < heroHeight) {
+        const progress = scrollY / heroHeight;
+        heroContent.style.transform = 'translateY(' + (progress * 60) + 'px)';
+        heroContent.style.opacity = 1 - (progress * 0.6);
+      }
+    }, { passive: true });
   }
 
   // ---- Keyboard Navigation ----
