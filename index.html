@@ -11,13 +11,16 @@
 </head>
 <body>
 
+  <!-- Skip Nav (Accessibility) -->
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
   <!-- Announcement Bar -->
-  <div class="announcement-bar">
+  <div class="announcement-bar" role="banner">
     <p>NEW DROP: Chair Utilization Mastery — <a href="pages/courses.html">Enroll Now</a></p>
   </div>
 
   <!-- Navigation -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
         <img src="images/reup-logo.svg" alt="RE UP" class="logo-img">
@@ -30,7 +33,7 @@
       </ul>
       <div class="nav-actions">
         <a href="pages/membership.html" class="btn btn-nav">Join Now</a>
-        <button class="mobile-toggle" aria-label="Toggle menu">
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
@@ -50,7 +53,7 @@
   </div>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero" id="main-content">
     <div class="hero-bg-overlay"></div>
     <div class="hero-content">
       <p class="hero-tag">BEYOND THE CHAIR</p>
@@ -80,7 +83,7 @@
   <!-- Featured Courses Section -->
   <section class="section section-dark">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-reveal>
         <p class="section-tag">TRENDING NOW</p>
         <h2 class="section-title">Featured Programs</h2>
       </div>
@@ -149,7 +152,7 @@
     <div class="container">
       <div class="split-grid">
         <div class="split-content">
-          <p class="section-tag">WHY RE UP</p>
+          <p class="section-tag" data-reveal>WHY RE UP</p>
           <h2 class="section-title">You Know How<br>To Cut.<br><span class="text-accent">Now Learn To Earn.</span></h2>
           <p class="split-text">Your skills are solid. But the barbers making real money understand the business behind the chair — marketing, finance, operations, and growth. RE UP bridges that gap with courses built by barbers who've scaled to six figures and beyond.</p>
           <ul class="value-list">

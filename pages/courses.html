@@ -11,8 +11,10 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
   <!-- Navigation -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <img src="../images/reup-logo.svg" alt="RE UP" class="logo-img">
@@ -25,7 +27,7 @@
       </ul>
       <div class="nav-actions">
         <a href="membership.html" class="btn btn-nav">Join Now</a>
-        <button class="mobile-toggle" aria-label="Toggle menu">
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
@@ -45,7 +47,7 @@
   </div>
 
   <!-- Page Header -->
-  <section class="page-header">
+  <section class="page-header" id="main-content">
     <div class="container">
       <p class="section-tag">BUSINESS EDUCATION FOR BARBERS</p>
       <h1 class="section-title">Courses</h1>

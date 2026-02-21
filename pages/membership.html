@@ -11,8 +11,10 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
   <!-- Navigation -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <img src="../images/reup-logo.svg" alt="RE UP" class="logo-img">
@@ -25,7 +27,7 @@
       </ul>
       <div class="nav-actions">
         <a href="membership.html" class="btn btn-nav">Join Now</a>
-        <button class="mobile-toggle" aria-label="Toggle menu">
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
@@ -45,7 +47,7 @@
   </div>
 
   <!-- Membership Hero -->
-  <section class="membership-hero">
+  <section class="membership-hero" id="main-content">
     <div class="container">
       <p class="section-tag">INVEST IN YOURSELF</p>
       <h1 class="section-title">Unlock <span class="text-accent">Everything</span></h1>
