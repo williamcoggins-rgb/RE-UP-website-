@@ -2221,10 +2221,70 @@ html {
   pointer-events: auto;
 }
 
-.carousel-content {
+/* Captions container — stacks all captions on top of each other */
+.carousel-captions {
+  position: relative;
   max-width: 700px;
+  width: 100%;
 }
 
+/* Each caption — absolutely positioned, layered */
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+  transition:
+    opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+/* First caption needs to be in flow to give the container height */
+.carousel-caption:first-child {
+  position: relative;
+}
+
+/* Active caption — visible and interactive */
+.carousel-caption.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* During drag: JS sets inline styles, disable CSS transitions */
+.carousel-caption.is-dragging {
+  transition: none;
+}
+
+/* Staggered children within each caption for gentle cascade */
+.carousel-caption .carousel-tag {
+  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.04s,
+              transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.04s;
+}
+
+.carousel-caption .carousel-title {
+  transition: opacity 0.65s cubic-bezier(0.25, 1, 0.5, 1) 0.08s,
+              transform 0.65s cubic-bezier(0.25, 1, 0.5, 1) 0.08s;
+}
+
+.carousel-caption .carousel-subtitle {
+  transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.12s,
+              transform 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.12s;
+}
+
+.carousel-caption .btn {
+  transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.16s,
+              transform 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.16s,
+              background-color var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) var(--ease-out);
+}
+
+/* Typography styles (shared) */
 .carousel-tag {
   font-size: 0.7rem;
   font-weight: 600;
@@ -2232,9 +2292,6 @@ html {
   text-transform: uppercase;
   color: var(--red);
   margin-bottom: var(--space-3);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.2s forwards;
 }
 
 .carousel-title {
@@ -2245,9 +2302,6 @@ html {
   letter-spacing: -0.02em;
   text-transform: uppercase;
   margin-bottom: var(--space-4);
-  opacity: 0;
-  transform: translateY(30px);
-  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.4s forwards;
 }
 
 .carousel-subtitle {
@@ -2257,50 +2311,59 @@ html {
   margin: 0 auto var(--space-6);
   line-height: 1.7;
   font-weight: 400;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.6s forwards;
 }
 
-.carousel-content .btn {
+.carousel-caption .btn {
   font-size: var(--text-xs);
   padding: 12px var(--space-8);
   min-height: 42px;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.8s forwards;
 }
 
-/* Course carousels — use scroll-triggered animation instead of auto-play */
-.course-carousel .carousel-tag,
-.course-carousel .carousel-title,
-.course-carousel .carousel-subtitle,
-.course-carousel .carousel-content .btn {
-  animation: none;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+/* Hero carousel — initial page-load entrance animation */
+.hero-carousel:not(.course-carousel) .carousel-caption.is-active .carousel-tag {
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.2s both;
 }
 
-.course-carousel.in-view .carousel-tag {
+.hero-carousel:not(.course-carousel) .carousel-caption.is-active .carousel-title {
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.4s both;
+}
+
+.hero-carousel:not(.course-carousel) .carousel-caption.is-active .carousel-subtitle {
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.6s both;
+}
+
+.hero-carousel:not(.course-carousel) .carousel-caption.is-active .btn {
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.8s both;
+}
+
+/* Course carousels — scroll-triggered entrance, then caption transitions take over */
+.course-carousel .carousel-caption .carousel-tag,
+.course-carousel .carousel-caption .carousel-title,
+.course-carousel .carousel-caption .carousel-subtitle,
+.course-carousel .carousel-caption .btn {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.course-carousel.in-view .carousel-caption.is-active .carousel-tag {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.1s;
 }
 
-.course-carousel.in-view .carousel-title {
+.course-carousel.in-view .carousel-caption.is-active .carousel-title {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.2s;
 }
 
-.course-carousel.in-view .carousel-subtitle {
+.course-carousel.in-view .carousel-caption.is-active .carousel-subtitle {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.35s;
 }
 
-.course-carousel.in-view .carousel-content .btn {
+.course-carousel.in-view .carousel-caption.is-active .btn {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.5s;

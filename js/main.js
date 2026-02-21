@@ -412,57 +412,118 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- Carousels — Buttery Smooth Drag/Swipe, Multiple Instances ----
-  const allCarousels = document.querySelectorAll('.hero-carousel');
-  const carouselInstances = [];
+  // ---- Carousels — Immersive Drag with Per-Slide Caption Crossfade ----
+  var allCarousels = document.querySelectorAll('.hero-carousel');
+  var carouselInstances = [];
 
-  allCarousels.forEach((container) => {
-    const track = container.querySelector('.carousel-track');
-    const slides = container.querySelectorAll('.carousel-slide');
-    const dots = container.querySelectorAll('.carousel-dot');
+  allCarousels.forEach(function(container) {
+    var track = container.querySelector('.carousel-track');
+    var slides = container.querySelectorAll('.carousel-slide');
+    var dots = container.querySelectorAll('.carousel-dot');
+    var captions = container.querySelectorAll('.carousel-caption');
 
     if (!track || slides.length === 0) return;
 
-    const s = {
+    var s = {
       current: 0,
       total: slides.length,
       dragging: false,
-      locked: false,        // true once we know swipe is horizontal
+      locked: false,
       startX: 0,
       startY: 0,
       translate: 0,
       prevTranslate: 0,
       velocity: 0,
       lastX: 0,
-      lastTime: 0,
-      rafId: null
+      lastTime: 0
     };
 
-    // Rubber-band resistance at edges (0.25 = 25% of real distance)
-    var RUBBER = 0.25;
+    // Heavier drag — more rubber-band at edges, feels weighted
+    var RUBBER = 0.18;
+    // Drag damping — makes the slide follow at 92% of finger, feels heavy/premium
+    var DRAG_DAMP = 0.92;
+    // Caption slide distance (px) for incoming/outgoing text
+    var CAPTION_SHIFT = 30;
 
     function w() { return container.offsetWidth; }
+    function minT() { return -(s.total - 1) * w(); }
 
-    function minTranslate() { return -(s.total - 1) * w(); }
-
-    function applyRubber(translate) {
-      var min = minTranslate();
-      if (translate > 0) {
-        return translate * RUBBER;
-      }
-      if (translate < min) {
-        return min + (translate - min) * RUBBER;
-      }
-      return translate;
+    function applyRubber(t) {
+      var min = minT();
+      if (t > 0) return t * RUBBER;
+      if (t < min) return min + (t - min) * RUBBER;
+      return t;
     }
 
-    function render(translate, smooth) {
+    function renderTrack(t, smooth) {
       if (smooth) {
-        track.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
+        track.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
       } else {
         track.style.transition = 'none';
       }
-      track.style.transform = 'translate3d(' + translate + 'px, 0, 0)';
+      track.style.transform = 'translate3d(' + t + 'px, 0, 0)';
+    }
+
+    // --- Caption interpolation ---
+    // progress: 0 = fully on current slide, -1 = fully on next, +1 = fully on prev
+    function updateCaptions(fromIndex, progress, isDrag) {
+      // Determine which caption is going out and which is coming in
+      var toIndex;
+      if (progress < 0) {
+        toIndex = Math.min(fromIndex + 1, s.total - 1);
+      } else if (progress > 0) {
+        toIndex = Math.max(fromIndex - 1, 0);
+      } else {
+        toIndex = fromIndex;
+      }
+
+      var absProg = Math.abs(progress);
+      // Ease the progress for smoother feel: cubic ease-out
+      var easedOut = 1 - Math.pow(1 - absProg, 2);
+      var easedIn = absProg;
+
+      for (var i = 0; i < captions.length; i++) {
+        var cap = captions[i];
+
+        if (isDrag) {
+          cap.classList.add('is-dragging');
+        }
+
+        if (i === fromIndex) {
+          // Outgoing caption: fade out + shift away
+          var outOpacity = 1 - easedOut;
+          var outShift = easedOut * CAPTION_SHIFT * (progress < 0 ? -1 : 1);
+          cap.style.opacity = outOpacity;
+          cap.style.transform = 'translateY(' + (outShift * 0.3) + 'px) translateX(' + outShift + 'px)';
+          cap.classList.toggle('is-active', absProg < 0.5);
+        } else if (i === toIndex && toIndex !== fromIndex) {
+          // Incoming caption: fade in + slide in from opposite side
+          var inOpacity = easedIn;
+          var inShift = (1 - easedIn) * CAPTION_SHIFT * (progress < 0 ? 1 : -1);
+          cap.style.opacity = inOpacity;
+          cap.style.transform = 'translateY(' + (Math.abs(inShift) * 0.3) + 'px) translateX(' + inShift + 'px)';
+          cap.classList.toggle('is-active', absProg >= 0.5);
+        } else {
+          // All other captions: hidden
+          cap.style.opacity = '0';
+          cap.style.transform = 'translateY(18px)';
+          cap.classList.remove('is-active');
+        }
+      }
+    }
+
+    // Release captions back to CSS transitions
+    function releaseCaptions(activeIndex) {
+      for (var i = 0; i < captions.length; i++) {
+        captions[i].classList.remove('is-dragging');
+        captions[i].style.opacity = '';
+        captions[i].style.transform = '';
+        if (i === activeIndex) {
+          captions[i].classList.add('is-active');
+        } else {
+          captions[i].classList.remove('is-active');
+        }
+      }
     }
 
     function goTo(index, smooth) {
@@ -471,7 +532,8 @@ document.addEventListener('DOMContentLoaded', () => {
       s.current = index;
       s.translate = -s.current * w();
       s.prevTranslate = s.translate;
-      render(s.translate, smooth !== false);
+      renderTrack(s.translate, smooth !== false);
+      releaseCaptions(s.current);
       dots.forEach(function(d, i) { d.classList.toggle('active', i === s.current); });
     }
 
@@ -482,11 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       var distance = s.translate - s.prevTranslate;
       var slideW = w();
-
-      // Velocity-based: a fast flick (>0.5px/ms) triggers next slide
-      // even with small drag distance
-      var velocityThreshold = 0.5;
-      var distanceThreshold = slideW * 0.15;
+      var velocityThreshold = 0.4;
+      var distanceThreshold = slideW * 0.18;
 
       var next = s.current;
       if (Math.abs(s.velocity) > velocityThreshold) {
@@ -497,13 +556,12 @@ document.addEventListener('DOMContentLoaded', () => {
         next = s.current - 1;
       }
 
-      // Reset prevTranslate to current slide position for next drag
       s.prevTranslate = -s.current * slideW;
       goTo(next, true);
     }
 
-    // --- Pointer start (touch + mouse unified) ---
-    function onStart(x, y, isTouch) {
+    // --- Pointer start ---
+    function onStart(x, y) {
       s.dragging = true;
       s.locked = false;
       s.startX = x;
@@ -523,32 +581,39 @@ document.addEventListener('DOMContentLoaded', () => {
       var dx = x - s.startX;
       var dy = y - s.startY;
 
-      // First significant move: decide horizontal vs vertical
       if (!s.locked) {
-        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return false; // too small, wait
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return false;
         if (Math.abs(dy) > Math.abs(dx)) {
-          // Vertical swipe — release to page scroll
           s.dragging = false;
           container.classList.remove('is-swiping');
           return false;
         }
-        // Horizontal — lock it in
         s.locked = true;
       }
 
-      // Track velocity (px per ms)
+      // Velocity tracking
       var now = Date.now();
       var dt = now - s.lastTime;
       if (dt > 0) {
-        s.velocity = (x - s.lastX) / dt;
+        // Smoothed velocity (lerp with previous)
+        var instantV = (x - s.lastX) / dt;
+        s.velocity = s.velocity * 0.3 + instantV * 0.7;
       }
       s.lastX = x;
       s.lastTime = now;
 
-      // Apply rubber-band at edges
-      s.translate = applyRubber(s.prevTranslate + dx);
-      render(s.translate, false);
-      return true; // signal: we handled it, prevent scroll
+      // Damped drag — heavier feel
+      var dampedDx = dx * DRAG_DAMP;
+      s.translate = applyRubber(s.prevTranslate + dampedDx);
+      renderTrack(s.translate, false);
+
+      // Caption interpolation: compute progress (-1 to +1)
+      var slideW = w();
+      var rawProgress = dampedDx / slideW; // negative = swiping left (next), positive = swiping right (prev)
+      var progress = Math.max(-1, Math.min(1, rawProgress));
+      updateCaptions(s.current, progress, true);
+
+      return true;
     }
 
     // --- Pointer end ---
@@ -568,16 +633,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Touch ---
     container.addEventListener('touchstart', function(e) {
       if (e.target.closest('.btn, .carousel-dot')) return;
-      onStart(e.touches[0].clientX, e.touches[0].clientY, true);
+      onStart(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
 
     container.addEventListener('touchmove', function(e) {
       var handled = onMove(e.touches[0].clientX, e.touches[0].clientY);
-      // If horizontal swipe is locked, prevent page scroll
-      if (handled && s.locked) {
-        e.preventDefault();
-      }
-    }, { passive: false }); // NOT passive — we need preventDefault
+      if (handled && s.locked) e.preventDefault();
+    }, { passive: false });
 
     container.addEventListener('touchend', onEnd);
     container.addEventListener('touchcancel', onEnd);
@@ -585,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Mouse ---
     container.addEventListener('mousedown', function(e) {
       if (e.target.closest('.btn, .carousel-dot, a')) return;
-      onStart(e.clientX, e.clientY, false);
+      onStart(e.clientX, e.clientY);
       e.preventDefault();
     });
 
