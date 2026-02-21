@@ -2124,6 +2124,17 @@ html {
   background: var(--black);
   user-select: none;
   -webkit-user-select: none;
+  cursor: grab;
+}
+
+.hero-carousel.is-swiping {
+  cursor: grabbing;
+}
+
+/* Course carousels — slightly shorter than hero */
+.course-carousel {
+  height: 85vh;
+  min-height: 500px;
 }
 
 .carousel-track {
@@ -2252,6 +2263,41 @@ html {
   opacity: 0;
   transform: translateY(20px);
   animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.8s forwards;
+}
+
+/* Course carousels — use scroll-triggered animation instead of auto-play */
+.course-carousel .carousel-tag,
+.course-carousel .carousel-title,
+.course-carousel .carousel-subtitle,
+.course-carousel .carousel-content .btn {
+  animation: none;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.course-carousel.in-view .carousel-tag {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.course-carousel.in-view .carousel-title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.course-carousel.in-view .carousel-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.35s;
+}
+
+.course-carousel.in-view .carousel-content .btn {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
 }
 
 /* Carousel Dots */
@@ -2516,6 +2562,11 @@ html {
     min-height: 500px;
   }
 
+  .course-carousel {
+    height: 75vh;
+    min-height: 420px;
+  }
+
   .carousel-title {
     font-size: clamp(3rem, 14vw, 5rem);
   }
@@ -2526,23 +2577,6 @@ html {
 
   .carousel-dots {
     bottom: var(--space-6);
-  }
-
-  .category-grid {
-    gap: var(--space-3);
-  }
-
-  .category-image {
-    aspect-ratio: 3 / 4;
-  }
-
-  .spotlight-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3);
-  }
-
-  .spotlight-info h3 {
-    font-size: var(--text-sm);
   }
 
   .footer-nav {
@@ -2558,20 +2592,12 @@ html {
     min-height: 450px;
   }
 
+  .course-carousel {
+    height: 70vh;
+    min-height: 380px;
+  }
+
   .carousel-title {
     font-size: clamp(2.5rem, 14vw, 4rem);
-  }
-
-  .category-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-
-  .category-image {
-    aspect-ratio: 16 / 9;
-  }
-
-  .spotlight-grid {
-    grid-template-columns: 1fr 1fr;
   }
 }

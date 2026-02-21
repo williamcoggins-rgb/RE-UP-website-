@@ -412,144 +412,184 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- Hero Carousel — Drag/Swipe, No Autoplay ----
-  const carouselTrack = document.querySelector('.carousel-track');
-  const carouselSlides = document.querySelectorAll('.carousel-slide');
-  const carouselDots = document.querySelectorAll('.carousel-dot');
+  // ---- Carousels — Drag/Swipe, No Autoplay, Multiple Instances ----
+  // Each .hero-carousel gets its own independent carousel state
+  const allCarousels = document.querySelectorAll('.hero-carousel');
+  const carouselInstances = [];
 
-  if (carouselTrack && carouselSlides.length > 0) {
-    let currentSlide = 0;
-    const totalSlides = carouselSlides.length;
+  allCarousels.forEach((container) => {
+    const track = container.querySelector('.carousel-track');
+    const slides = container.querySelectorAll('.carousel-slide');
+    const dots = container.querySelectorAll('.carousel-dot');
 
-    // Drag state
-    let isDragging = false;
-    let startX = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-    let dragDistance = 0;
+    if (!track || slides.length === 0) return;
+
+    const state = {
+      currentSlide: 0,
+      totalSlides: slides.length,
+      isDragging: false,
+      startX: 0,
+      currentTranslate: 0,
+      prevTranslate: 0,
+      dragDistance: 0
+    };
 
     function getSlideWidth() {
-      return carouselTrack.parentElement.offsetWidth;
+      return container.offsetWidth;
     }
 
     function setPosition(translate) {
-      carouselTrack.style.transform = 'translateX(' + translate + 'px)';
+      track.style.transform = 'translateX(' + translate + 'px)';
     }
 
     function goToSlide(index) {
       if (index < 0) index = 0;
-      if (index >= totalSlides) index = totalSlides - 1;
-      currentSlide = index;
-      currentTranslate = -currentSlide * getSlideWidth();
-      prevTranslate = currentTranslate;
-      setPosition(currentTranslate);
+      if (index >= state.totalSlides) index = state.totalSlides - 1;
+      state.currentSlide = index;
+      state.currentTranslate = -state.currentSlide * getSlideWidth();
+      state.prevTranslate = state.currentTranslate;
+      track.classList.remove('is-dragging');
+      setPosition(state.currentTranslate);
       updateDots();
     }
 
     function updateDots() {
-      carouselDots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === state.currentSlide);
       });
     }
 
+    function snapAfterDrag() {
+      state.isDragging = false;
+      track.classList.remove('is-dragging');
+      container.classList.remove('is-swiping');
+      const threshold = getSlideWidth() * 0.15;
+
+      if (state.dragDistance < -threshold) {
+        goToSlide(state.currentSlide + 1);
+      } else if (state.dragDistance > threshold) {
+        goToSlide(state.currentSlide - 1);
+      } else {
+        goToSlide(state.currentSlide);
+      }
+      state.dragDistance = 0;
+    }
+
     // Dot click navigation
-    carouselDots.forEach(dot => {
-      dot.addEventListener('click', () => {
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
         const slideIndex = parseInt(dot.dataset.slide, 10);
-        carouselTrack.classList.remove('is-dragging');
         goToSlide(slideIndex);
       });
     });
 
-    // Touch events
-    carouselTrack.addEventListener('touchstart', (e) => {
-      isDragging = true;
-      startX = e.touches[0].clientX;
-      carouselTrack.classList.add('is-dragging');
+    // --- Touch events (on container — overlay won't block touch) ---
+    container.addEventListener('touchstart', (e) => {
+      // Don't start drag if touching a button/link
+      if (e.target.closest('.btn, .carousel-dot')) return;
+      state.isDragging = true;
+      state.startX = e.touches[0].clientX;
+      state.dragDistance = 0;
+      track.classList.add('is-dragging');
     }, { passive: true });
 
-    carouselTrack.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
+    container.addEventListener('touchmove', (e) => {
+      if (!state.isDragging) return;
       const currentX = e.touches[0].clientX;
-      dragDistance = currentX - startX;
-      currentTranslate = prevTranslate + dragDistance;
-      setPosition(currentTranslate);
+      state.dragDistance = currentX - state.startX;
+      state.currentTranslate = state.prevTranslate + state.dragDistance;
+      setPosition(state.currentTranslate);
     }, { passive: true });
 
-    carouselTrack.addEventListener('touchend', () => {
-      isDragging = false;
-      carouselTrack.classList.remove('is-dragging');
-      const threshold = getSlideWidth() * 0.2;
-
-      if (dragDistance < -threshold) {
-        goToSlide(currentSlide + 1);
-      } else if (dragDistance > threshold) {
-        goToSlide(currentSlide - 1);
-      } else {
-        goToSlide(currentSlide);
-      }
-      dragDistance = 0;
+    container.addEventListener('touchend', () => {
+      if (!state.isDragging) return;
+      snapAfterDrag();
     });
 
-    // Mouse events (desktop drag)
-    carouselTrack.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX;
-      carouselTrack.classList.add('is-dragging');
+    // --- Mouse events (on container — overlay won't block mouse) ---
+    container.addEventListener('mousedown', (e) => {
+      // Don't start drag if clicking a button/link
+      if (e.target.closest('.btn, .carousel-dot, a')) return;
+      state.isDragging = true;
+      state.startX = e.clientX;
+      state.dragDistance = 0;
+      track.classList.add('is-dragging');
+      container.classList.add('is-swiping');
       e.preventDefault();
     });
 
-    carouselTrack.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
+    container.addEventListener('mousemove', (e) => {
+      if (!state.isDragging) return;
       const currentX = e.clientX;
-      dragDistance = currentX - startX;
-      currentTranslate = prevTranslate + dragDistance;
-      setPosition(currentTranslate);
+      state.dragDistance = currentX - state.startX;
+      state.currentTranslate = state.prevTranslate + state.dragDistance;
+      setPosition(state.currentTranslate);
     });
 
-    carouselTrack.addEventListener('mouseup', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      carouselTrack.classList.remove('is-dragging');
-      const threshold = getSlideWidth() * 0.2;
-
-      if (dragDistance < -threshold) {
-        goToSlide(currentSlide + 1);
-      } else if (dragDistance > threshold) {
-        goToSlide(currentSlide - 1);
-      } else {
-        goToSlide(currentSlide);
-      }
-      dragDistance = 0;
+    container.addEventListener('mouseup', () => {
+      if (!state.isDragging) return;
+      snapAfterDrag();
     });
 
-    carouselTrack.addEventListener('mouseleave', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      carouselTrack.classList.remove('is-dragging');
-      goToSlide(currentSlide);
-      dragDistance = 0;
+    container.addEventListener('mouseleave', () => {
+      if (!state.isDragging) return;
+      snapAfterDrag();
     });
 
     // Prevent image drag
-    carouselTrack.querySelectorAll('img').forEach(img => {
+    container.querySelectorAll('img').forEach(img => {
       img.addEventListener('dragstart', (e) => e.preventDefault());
-    });
-
-    // Keyboard navigation for carousel
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
-      if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
     });
 
     // Recalculate on resize
     window.addEventListener('resize', () => {
-      goToSlide(currentSlide);
+      goToSlide(state.currentSlide);
     });
 
-    // Initialize position
+    // Initialize
     goToSlide(0);
+
+    carouselInstances.push({ container, state, goToSlide });
+  });
+
+  // ---- Course Carousel Scroll Reveal ----
+  const courseCarousels = document.querySelectorAll('.course-carousel');
+  if (courseCarousels.length > 0) {
+    const carouselRevealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          carouselRevealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    courseCarousels.forEach(c => carouselRevealObserver.observe(c));
   }
+
+  // Keyboard navigation — control the carousel closest to viewport center
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (carouselInstances.length === 0) return;
+
+    const viewCenter = window.innerHeight / 2;
+    let closest = carouselInstances[0];
+    let closestDist = Infinity;
+
+    carouselInstances.forEach(inst => {
+      const rect = inst.container.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const dist = Math.abs(center - viewCenter);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = inst;
+      }
+    });
+
+    if (e.key === 'ArrowLeft') closest.goToSlide(closest.state.currentSlide - 1);
+    if (e.key === 'ArrowRight') closest.goToSlide(closest.state.currentSlide + 1);
+  });
 
   // ---- Hero Parallax Depth ----
   const hero = document.querySelector('.hero');
