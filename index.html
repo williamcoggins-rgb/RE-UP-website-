@@ -50,199 +50,190 @@
     </ul>
   </div>
 
-  <!-- Hero Section -->
-  <section class="hero" id="main-content">
-    <div class="hero-bg-overlay"></div>
-    <div class="hero-content">
-      <p class="hero-tag">BEYOND THE CHAIR</p>
-      <h1 class="hero-title">ELEVATE<br><span class="hero-accent">YOUR BUSINESS</span></h1>
-      <p class="hero-subtitle">You already know how to cut. RE UP is the business education platform for barbers ready to master marketing, finance, and the strategy behind a six-figure career.</p>
-      <div class="hero-cta">
-        <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Courses</a>
-        <a href="pages/membership.html" class="btn btn-outline btn-lg">Get Membership</a>
+  <!-- ============================================
+       HERO CAROUSEL — Full-bleed, swipe/drag, no autoplay
+       Images move, typography stays fixed on top
+       ============================================ -->
+  <section class="hero-carousel" id="main-content">
+    <div class="carousel-track">
+      <!-- Slide 1 — Marketing -->
+      <div class="carousel-slide" data-bg="linear-gradient(160deg, #1a0000 0%, #0a0a0a 40%, #111 100%)">
+        <div class="slide-image-placeholder">
+          <span class="slide-placeholder-text">MARKETING</span>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-number">500+</span>
-          <span class="stat-label">Barbers Trained</span>
+      <!-- Slide 2 — Finance -->
+      <div class="carousel-slide" data-bg="linear-gradient(160deg, #000a1a 0%, #0a0a0a 40%, #111 100%)">
+        <div class="slide-image-placeholder">
+          <span class="slide-placeholder-text">FINANCE</span>
         </div>
-        <div class="stat">
-          <span class="stat-number">15+</span>
-          <span class="stat-label">Business Courses</span>
+      </div>
+      <!-- Slide 3 — Operations -->
+      <div class="carousel-slide" data-bg="linear-gradient(160deg, #0a1a00 0%, #0a0a0a 40%, #111 100%)">
+        <div class="slide-image-placeholder">
+          <span class="slide-placeholder-text">OPERATIONS</span>
         </div>
-        <div class="stat">
-          <span class="stat-number">98%</span>
-          <span class="stat-label">Would Recommend</span>
+      </div>
+      <!-- Slide 4 — Growth -->
+      <div class="carousel-slide" data-bg="linear-gradient(160deg, #1a0a00 0%, #0a0a0a 40%, #111 100%)">
+        <div class="slide-image-placeholder">
+          <span class="slide-placeholder-text">GROWTH</span>
         </div>
+      </div>
+    </div>
+
+    <!-- Text overlay — stays fixed, does NOT move with slides -->
+    <div class="carousel-overlay">
+      <div class="carousel-content">
+        <p class="carousel-tag">RE UP EDUCATION</p>
+        <h1 class="carousel-title">ELEVATE<br>YOUR BUSINESS</h1>
+        <p class="carousel-subtitle">Business education for barbers who already know how to cut.</p>
+        <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Courses</a>
+      </div>
+      <div class="carousel-dots">
+        <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
+        <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
+        <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
+        <button class="carousel-dot" data-slide="3" aria-label="Slide 4"></button>
       </div>
     </div>
   </section>
 
-  <!-- Featured Courses Section -->
-  <section class="section section-dark">
+  <!-- ============================================
+       CATEGORY GRID — Nike 2-column image tiles
+       ============================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="category-grid">
+        <a href="pages/courses.html" class="category-tile" data-animate>
+          <div class="category-image">
+            <div class="category-image-placeholder" style="background: linear-gradient(135deg, #1a0505, #111);">
+              <span>MARKETING</span>
+            </div>
+          </div>
+          <span class="category-link">Shop Marketing <span class="link-arrow">&rarr;</span></span>
+        </a>
+        <a href="pages/courses.html" class="category-tile" data-animate>
+          <div class="category-image">
+            <div class="category-image-placeholder" style="background: linear-gradient(135deg, #050a1a, #111);">
+              <span>FINANCE</span>
+            </div>
+          </div>
+          <span class="category-link">Shop Finance <span class="link-arrow">&rarr;</span></span>
+        </a>
+        <a href="pages/courses.html" class="category-tile" data-animate>
+          <div class="category-image">
+            <div class="category-image-placeholder" style="background: linear-gradient(135deg, #0a1a05, #111);">
+              <span>OPERATIONS</span>
+            </div>
+          </div>
+          <span class="category-link">Shop Operations <span class="link-arrow">&rarr;</span></span>
+        </a>
+        <a href="pages/courses.html" class="category-tile" data-animate>
+          <div class="category-image">
+            <div class="category-image-placeholder" style="background: linear-gradient(135deg, #1a0a05, #111);">
+              <span>GROWTH</span>
+            </div>
+          </div>
+          <span class="category-link">Shop Growth <span class="link-arrow">&rarr;</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SPOTLIGHT — Light background section (Nike-style)
+       ============================================ -->
+  <section class="section section-light">
     <div class="container">
       <div class="section-header" data-reveal>
-        <p class="section-tag">TRENDING NOW</p>
-        <h2 class="section-title">Featured Programs</h2>
+        <p class="section-tag section-tag-dark">TRENDING NOW</p>
+        <h2 class="section-title section-title-dark">Spotlight</h2>
       </div>
-      <div class="course-grid">
-        <div class="course-card" data-animate>
-          <div class="course-image">
-            <div class="course-image-placeholder">
-              <span class="placeholder-icon">&#9733;</span>
+      <div class="spotlight-grid">
+        <a href="pages/courses.html" class="spotlight-card" data-animate>
+          <div class="spotlight-image">
+            <div class="spotlight-image-placeholder">
+              <span>01</span>
             </div>
-            <span class="course-badge">BESTSELLER</span>
           </div>
-          <div class="course-info">
-            <span class="course-category">MARKETING</span>
+          <div class="spotlight-info">
             <h3>Personal Brand Blueprint</h3>
-            <p>Social media strategy, content creation, and building a recognizable brand that keeps your chair full.</p>
-            <div class="course-meta">
-              <span class="course-lessons">10 Lessons</span>
-              <span class="course-price">$149</span>
+            <p class="spotlight-category">Marketing</p>
+            <p class="spotlight-price">$149</p>
+          </div>
+        </a>
+        <a href="pages/courses.html" class="spotlight-card" data-animate>
+          <div class="spotlight-image">
+            <div class="spotlight-image-placeholder">
+              <span>02</span>
             </div>
           </div>
-        </div>
-
-        <div class="course-card" data-animate>
-          <div class="course-image">
-            <div class="course-image-placeholder">
-              <span class="placeholder-icon">&#128176;</span>
-            </div>
-            <span class="course-badge badge-new">NEW</span>
-          </div>
-          <div class="course-info">
-            <span class="course-category">FINANCE</span>
+          <div class="spotlight-info">
             <h3>Barber Finance Fundamentals</h3>
-            <p>P&L statements, pricing strategy, taxes, saving, and building real wealth from behind the chair.</p>
-            <div class="course-meta">
-              <span class="course-lessons">12 Lessons</span>
-              <span class="course-price">$129</span>
+            <p class="spotlight-category">Finance</p>
+            <p class="spotlight-price">$129</p>
+          </div>
+        </a>
+        <a href="pages/courses.html" class="spotlight-card" data-animate>
+          <div class="spotlight-image">
+            <div class="spotlight-image-placeholder">
+              <span>03</span>
             </div>
           </div>
-        </div>
-
-        <div class="course-card" data-animate>
-          <div class="course-image">
-            <div class="course-image-placeholder">
-              <span class="placeholder-icon">&#9889;</span>
-            </div>
-          </div>
-          <div class="course-info">
-            <span class="course-category">OPERATIONS</span>
+          <div class="spotlight-info">
             <h3>Chair Utilization Mastery</h3>
-            <p>Maximize every hour. Scheduling systems, client flow, reducing no-shows, and optimizing your time for profit.</p>
-            <div class="course-meta">
-              <span class="course-lessons">8 Lessons</span>
-              <span class="course-price">$99</span>
+            <p class="spotlight-category">Operations</p>
+            <p class="spotlight-price">$99</p>
+          </div>
+        </a>
+        <a href="pages/courses.html" class="spotlight-card" data-animate>
+          <div class="spotlight-image">
+            <div class="spotlight-image-placeholder">
+              <span>04</span>
             </div>
           </div>
-        </div>
+          <div class="spotlight-info">
+            <h3>Marketing That Fills Your Chair</h3>
+            <p class="spotlight-category">Marketing</p>
+            <p class="spotlight-price">$119</p>
+          </div>
+        </a>
+        <a href="pages/courses.html" class="spotlight-card" data-animate>
+          <div class="spotlight-image">
+            <div class="spotlight-image-placeholder">
+              <span>05</span>
+            </div>
+          </div>
+          <div class="spotlight-info">
+            <h3>From Booth Rent to Shop Owner</h3>
+            <p class="spotlight-category">Growth</p>
+            <p class="spotlight-price">$249</p>
+          </div>
+        </a>
+        <a href="pages/courses.html" class="spotlight-card" data-animate>
+          <div class="spotlight-image">
+            <div class="spotlight-image-placeholder">
+              <span>06</span>
+            </div>
+          </div>
+          <div class="spotlight-info">
+            <h3>Client Retention & Experience</h3>
+            <p class="spotlight-category">Operations</p>
+            <p class="spotlight-price">$89</p>
+          </div>
+        </a>
       </div>
       <div class="section-cta">
-        <a href="pages/courses.html" class="btn btn-outline">View All Courses</a>
+        <a href="pages/courses.html" class="btn btn-dark btn-lg">See All</a>
       </div>
     </div>
   </section>
 
-  <!-- Value Proposition -->
-  <section class="section section-split">
-    <div class="container">
-      <div class="split-grid">
-        <div class="split-content">
-          <p class="section-tag" data-reveal>WHY RE UP</p>
-          <h2 class="section-title">You Know How<br>To Cut.<br><span class="text-accent">Now Learn To Earn.</span></h2>
-          <p class="split-text">Your skills are solid. But the barbers making real money understand the business behind the chair — marketing, finance, operations, and growth. RE UP bridges that gap with courses built by barbers who've scaled to six figures and beyond.</p>
-          <ul class="value-list">
-            <li>
-              <span class="value-icon">&#10003;</span>
-              <div>
-                <strong>Business-First Curriculum</strong>
-                <p>Marketing, finance, and operations — not another fading tutorial</p>
-              </div>
-            </li>
-            <li>
-              <span class="value-icon">&#10003;</span>
-              <div>
-                <strong>Built by Six-Figure Barbers</strong>
-                <p>Learn from barbers who've turned chairs into enterprises</p>
-              </div>
-            </li>
-            <li>
-              <span class="value-icon">&#10003;</span>
-              <div>
-                <strong>Community of Entrepreneurs</strong>
-                <p>Network with 500+ barbers building businesses, not just booking cuts</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="split-visual">
-          <div class="visual-card">
-            <div class="visual-placeholder">
-              <span class="visual-text">THE<br>RE UP<br>METHOD</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Blog Preview -->
-  <section class="section section-dark">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-tag">THE CUT SHEET</p>
-        <h2 class="section-title">Latest From The Blog</h2>
-      </div>
-      <div class="blog-grid">
-        <article class="blog-card blog-featured" data-animate>
-          <div class="blog-image">
-            <div class="blog-image-placeholder">
-              <span class="placeholder-text">FEATURED</span>
-            </div>
-          </div>
-          <div class="blog-info">
-            <span class="blog-category">FINANCE</span>
-            <h3>What Six-Figure Barbers Know About Money That You Don't</h3>
-            <p>The income gap in barbering isn't about skill — it's about financial literacy. Here's what top earners do differently.</p>
-            <span class="blog-date">Feb 15, 2026</span>
-          </div>
-        </article>
-        <article class="blog-card" data-animate>
-          <div class="blog-image">
-            <div class="blog-image-placeholder small">
-              <span class="placeholder-text">01</span>
-            </div>
-          </div>
-          <div class="blog-info">
-            <span class="blog-category">MARKETING</span>
-            <h3>How to Price Your Cuts Without Losing Clients</h3>
-            <span class="blog-date">Feb 10, 2026</span>
-          </div>
-        </article>
-        <article class="blog-card" data-animate>
-          <div class="blog-image">
-            <div class="blog-image-placeholder small">
-              <span class="placeholder-text">02</span>
-            </div>
-          </div>
-          <div class="blog-info">
-            <span class="blog-category">OPERATIONS</span>
-            <h3>Chair Utilization: Why Your Empty Hours Are Costing You Thousands</h3>
-            <span class="blog-date">Feb 5, 2026</span>
-          </div>
-        </article>
-      </div>
-      <div class="section-cta">
-        <a href="pages/blog.html" class="btn btn-outline">Read More</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Membership CTA -->
+  <!-- ============================================
+       MEMBERSHIP CTA — Full-bleed dark
+       ============================================ -->
   <section class="section section-cta-full">
-    <div class="cta-bg-pattern"></div>
     <div class="container">
       <div class="cta-content">
         <p class="section-tag">STOP SETTLING</p>
@@ -260,38 +251,22 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ============================================
+       FOOTER — Nike-minimal centered
+       ============================================ -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <span class="footer-logo">RE UP</span>
-          <p>The business education platform for barbers who already know how to cut. Marketing, finance, and growth strategy.</p>
-        </div>
-        <div class="footer-links">
-          <h4>Learn</h4>
-          <ul>
-            <li><a href="pages/courses.html">All Courses</a></li>
-            <li><a href="pages/blog.html">Blog</a></li>
-            <li><a href="pages/membership.html">Membership</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Instructors</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Connect</h4>
-          <ul>
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">YouTube</a></li>
-            <li><a href="#">TikTok</a></li>
-          </ul>
-        </div>
+      <div class="footer-top">
+        <span class="footer-logo">RE UP</span>
+      </div>
+      <div class="footer-nav">
+        <a href="pages/courses.html">Courses</a>
+        <a href="pages/blog.html">Blog</a>
+        <a href="pages/membership.html">Membership</a>
+        <a href="#">About</a>
+        <a href="#">Instagram</a>
+        <a href="#">YouTube</a>
+        <a href="#">TikTok</a>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 RE UP. All rights reserved.</p>

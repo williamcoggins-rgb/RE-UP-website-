@@ -2110,3 +2110,468 @@ html {
     border-bottom-color: rgba(255, 255, 255, 0.2);
   }
 }
+
+/* ============================================
+   HERO CAROUSEL — Full-bleed, drag/swipe
+   Images move, typography stays fixed on top
+   ============================================ */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--black);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+  transition: transform 0.5s var(--ease-out);
+  cursor: grab;
+}
+
+.carousel-track.is-dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Placeholder slides (until user adds real images) */
+.slide-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+}
+
+.carousel-slide:nth-child(1) .slide-image-placeholder {
+  background: linear-gradient(160deg, #1a0000 0%, #0a0a0a 40%, #111 100%);
+}
+
+.carousel-slide:nth-child(2) .slide-image-placeholder {
+  background: linear-gradient(160deg, #000a1a 0%, #0a0a0a 40%, #111 100%);
+}
+
+.carousel-slide:nth-child(3) .slide-image-placeholder {
+  background: linear-gradient(160deg, #0a1a00 0%, #0a0a0a 40%, #111 100%);
+}
+
+.carousel-slide:nth-child(4) .slide-image-placeholder {
+  background: linear-gradient(160deg, #1a0a00 0%, #0a0a0a 40%, #111 100%);
+}
+
+.slide-placeholder-text {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* When real images are added */
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text overlay — fixed on top, does NOT move with slides */
+.carousel-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-6);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.carousel-overlay > * {
+  pointer-events: auto;
+}
+
+.carousel-content {
+  max-width: 800px;
+}
+
+.carousel-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: var(--space-6);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.2s forwards;
+}
+
+.carousel-title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 9rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-8);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.4s forwards;
+}
+
+.carousel-subtitle {
+  font-size: var(--text-base);
+  color: var(--gray-400);
+  max-width: 520px;
+  margin: 0 auto var(--space-10);
+  line-height: 1.8;
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.6s forwards;
+}
+
+.carousel-content .btn {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.8s forwards;
+}
+
+/* Carousel Dots */
+.carousel-dots {
+  position: absolute;
+  bottom: var(--space-10);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-3);
+  z-index: 20;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.carousel-dot:hover {
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.carousel-dot.active {
+  background: var(--white);
+  border-color: var(--white);
+  transform: scale(1.15);
+}
+
+/* ============================================
+   CATEGORY GRID — Nike 2-column image tiles
+   ============================================ */
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.category-tile {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.category-image {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.category-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.category-image-placeholder span {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.12;
+}
+
+.category-tile:hover .category-image-placeholder {
+  transform: scale(1.05);
+}
+
+.category-link {
+  display: block;
+  padding: var(--space-4) var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--white);
+  transition: color var(--duration-fast);
+}
+
+.category-tile:hover .category-link {
+  color: var(--red);
+}
+
+.link-arrow {
+  display: inline-block;
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.category-tile:hover .link-arrow {
+  transform: translateX(6px);
+}
+
+/* ============================================
+   LIGHT SECTION — Nike-style white/grey bg
+   ============================================ */
+.section-light {
+  background: var(--white-soft);
+  color: var(--black);
+}
+
+.section-tag-dark {
+  color: var(--red);
+}
+
+.section-title-dark {
+  color: var(--black);
+}
+
+/* ============================================
+   SPOTLIGHT GRID — Product cards on light bg
+   ============================================ */
+.spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.spotlight-card {
+  display: block;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal);
+}
+
+.spotlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.spotlight-image {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.spotlight-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e8e8e8, #f5f5f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.spotlight-image-placeholder span {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 900;
+  color: var(--gray-300);
+  opacity: 0.5;
+}
+
+.spotlight-card:hover .spotlight-image-placeholder {
+  transform: scale(1.05);
+}
+
+.spotlight-info {
+  padding: var(--space-4) var(--space-4) var(--space-5);
+}
+
+.spotlight-info h3 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: var(--space-1);
+  line-height: 1.3;
+}
+
+.spotlight-category {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  margin-bottom: var(--space-2);
+}
+
+.spotlight-price {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--black);
+}
+
+/* ============================================
+   BTN DARK — For light background sections
+   ============================================ */
+.btn-dark {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+.btn-dark:hover {
+  background: var(--gray-800);
+  border-color: var(--gray-800);
+  transform: translateY(-1px);
+}
+
+.btn-dark:active {
+  transform: translateY(0) scale(0.98);
+  background: var(--gray-900);
+}
+
+/* ============================================
+   FOOTER — Nike-minimal centered layout
+   ============================================ */
+.footer-top {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-bottom: var(--space-10);
+}
+
+.footer-nav a {
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: color var(--duration-fast);
+}
+
+.footer-nav a:hover {
+  color: var(--white);
+}
+
+/* ============================================
+   RESPONSIVE — New components
+   ============================================ */
+@media (max-width: 1024px) {
+  .spotlight-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-carousel {
+    height: 90vh;
+    min-height: 500px;
+  }
+
+  .carousel-title {
+    font-size: clamp(3rem, 14vw, 5rem);
+  }
+
+  .carousel-subtitle {
+    font-size: var(--text-sm);
+  }
+
+  .carousel-dots {
+    bottom: var(--space-6);
+  }
+
+  .category-grid {
+    gap: var(--space-3);
+  }
+
+  .category-image {
+    aspect-ratio: 3 / 4;
+  }
+
+  .spotlight-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .spotlight-info h3 {
+    font-size: var(--text-sm);
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-carousel {
+    height: 85vh;
+    min-height: 450px;
+  }
+
+  .carousel-title {
+    font-size: clamp(2.5rem, 14vw, 4rem);
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .category-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .spotlight-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

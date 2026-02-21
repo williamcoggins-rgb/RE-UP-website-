@@ -412,6 +412,145 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ---- Hero Carousel — Drag/Swipe, No Autoplay ----
+  const carouselTrack = document.querySelector('.carousel-track');
+  const carouselSlides = document.querySelectorAll('.carousel-slide');
+  const carouselDots = document.querySelectorAll('.carousel-dot');
+
+  if (carouselTrack && carouselSlides.length > 0) {
+    let currentSlide = 0;
+    const totalSlides = carouselSlides.length;
+
+    // Drag state
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let dragDistance = 0;
+
+    function getSlideWidth() {
+      return carouselTrack.parentElement.offsetWidth;
+    }
+
+    function setPosition(translate) {
+      carouselTrack.style.transform = 'translateX(' + translate + 'px)';
+    }
+
+    function goToSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      currentSlide = index;
+      currentTranslate = -currentSlide * getSlideWidth();
+      prevTranslate = currentTranslate;
+      setPosition(currentTranslate);
+      updateDots();
+    }
+
+    function updateDots() {
+      carouselDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    // Dot click navigation
+    carouselDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const slideIndex = parseInt(dot.dataset.slide, 10);
+        carouselTrack.classList.remove('is-dragging');
+        goToSlide(slideIndex);
+      });
+    });
+
+    // Touch events
+    carouselTrack.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      carouselTrack.classList.add('is-dragging');
+    }, { passive: true });
+
+    carouselTrack.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const currentX = e.touches[0].clientX;
+      dragDistance = currentX - startX;
+      currentTranslate = prevTranslate + dragDistance;
+      setPosition(currentTranslate);
+    }, { passive: true });
+
+    carouselTrack.addEventListener('touchend', () => {
+      isDragging = false;
+      carouselTrack.classList.remove('is-dragging');
+      const threshold = getSlideWidth() * 0.2;
+
+      if (dragDistance < -threshold) {
+        goToSlide(currentSlide + 1);
+      } else if (dragDistance > threshold) {
+        goToSlide(currentSlide - 1);
+      } else {
+        goToSlide(currentSlide);
+      }
+      dragDistance = 0;
+    });
+
+    // Mouse events (desktop drag)
+    carouselTrack.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      carouselTrack.classList.add('is-dragging');
+      e.preventDefault();
+    });
+
+    carouselTrack.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const currentX = e.clientX;
+      dragDistance = currentX - startX;
+      currentTranslate = prevTranslate + dragDistance;
+      setPosition(currentTranslate);
+    });
+
+    carouselTrack.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      carouselTrack.classList.remove('is-dragging');
+      const threshold = getSlideWidth() * 0.2;
+
+      if (dragDistance < -threshold) {
+        goToSlide(currentSlide + 1);
+      } else if (dragDistance > threshold) {
+        goToSlide(currentSlide - 1);
+      } else {
+        goToSlide(currentSlide);
+      }
+      dragDistance = 0;
+    });
+
+    carouselTrack.addEventListener('mouseleave', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      carouselTrack.classList.remove('is-dragging');
+      goToSlide(currentSlide);
+      dragDistance = 0;
+    });
+
+    // Prevent image drag
+    carouselTrack.querySelectorAll('img').forEach(img => {
+      img.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+
+    // Keyboard navigation for carousel
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+      if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+    });
+
+    // Recalculate on resize
+    window.addEventListener('resize', () => {
+      goToSlide(currentSlide);
+    });
+
+    // Initialize position
+    goToSlide(0);
+  }
+
   // ---- Hero Parallax Depth ----
   const hero = document.querySelector('.hero');
   const heroContent = document.querySelector('.hero-content');
