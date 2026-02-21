@@ -2185,11 +2185,11 @@ html {
 
 .slide-placeholder-text {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 10rem);
+  font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 900;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  opacity: 0.06;
+  opacity: 0.04;
   pointer-events: none;
 }
 
@@ -2200,18 +2200,26 @@ html {
   object-fit: cover;
 }
 
-/* Text overlay — fixed on top, does NOT move with slides */
+/* Text overlay — anchored to bottom, images dominate */
 .carousel-overlay {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   text-align: center;
-  padding: var(--space-6);
+  padding: 0 var(--space-6) var(--space-16);
   pointer-events: none;
   z-index: 10;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.15) 60%,
+    rgba(0, 0, 0, 0.6) 80%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
 }
 
 .carousel-overlay > * {
@@ -2219,16 +2227,16 @@ html {
 }
 
 .carousel-content {
-  max-width: 800px;
+  max-width: 700px;
 }
 
 .carousel-tag {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--red);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-3);
   opacity: 0;
   transform: translateY(20px);
   animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.2s forwards;
@@ -2236,23 +2244,23 @@ html {
 
 .carousel-title {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 9rem);
+  font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 900;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-4);
   opacity: 0;
   transform: translateY(30px);
   animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.4s forwards;
 }
 
 .carousel-subtitle {
-  font-size: var(--text-base);
-  color: var(--gray-400);
-  max-width: 520px;
-  margin: 0 auto var(--space-10);
-  line-height: 1.8;
+  font-size: var(--text-sm);
+  color: var(--gray-300);
+  max-width: 460px;
+  margin: 0 auto var(--space-6);
+  line-height: 1.7;
   font-weight: 400;
   opacity: 0;
   transform: translateY(20px);
@@ -2260,6 +2268,9 @@ html {
 }
 
 .carousel-content .btn {
+  font-size: var(--text-xs);
+  padding: 12px var(--space-8);
+  min-height: 42px;
   opacity: 0;
   transform: translateY(20px);
   animation: heroFadeUp var(--duration-slower) var(--ease-out) 0.8s forwards;
@@ -2272,7 +2283,7 @@ html {
 .course-carousel .carousel-content .btn {
   animation: none;
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(20px);
   transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
 }
 
@@ -2568,15 +2579,20 @@ html {
   }
 
   .carousel-title {
-    font-size: clamp(3rem, 14vw, 5rem);
+    font-size: clamp(1.75rem, 7vw, 3rem);
   }
 
   .carousel-subtitle {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-4);
+  }
+
+  .carousel-overlay {
+    padding-bottom: var(--space-12);
   }
 
   .carousel-dots {
-    bottom: var(--space-6);
+    bottom: var(--space-4);
   }
 
   .footer-nav {
@@ -2598,6 +2614,10 @@ html {
   }
 
   .carousel-title {
-    font-size: clamp(2.5rem, 14vw, 4rem);
+    font-size: clamp(1.5rem, 7vw, 2.5rem);
+  }
+
+  .carousel-overlay {
+    padding-bottom: var(--space-10);
   }
 }
