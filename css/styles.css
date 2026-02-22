@@ -1131,6 +1131,58 @@ img { max-width: 100%; display: block; }
 }
 
 /* ============================================
+   Blog Article — Long-form reading
+   ============================================ */
+.blog-article {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.blog-article .article-lede {
+  font-size: var(--text-lg);
+  line-height: 1.8;
+  color: var(--gray-200);
+  margin-bottom: var(--space-12);
+  font-weight: 400;
+}
+
+.blog-article h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
+  color: var(--white);
+}
+
+.blog-article p {
+  font-size: var(--text-base);
+  line-height: 1.85;
+  color: var(--gray-300);
+  margin-bottom: var(--space-6);
+  font-weight: 400;
+}
+
+.blog-article p strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.blog-article .article-closing {
+  font-size: var(--text-lg);
+  color: var(--gray-200);
+  margin-top: var(--space-12);
+  line-height: 1.8;
+}
+
+.blog-article .article-cta {
+  margin-top: var(--space-10);
+  text-align: center;
+}
+
+/* ============================================
    CTA Full Section — Depth + motion
    ============================================ */
 .section-cta-full {
