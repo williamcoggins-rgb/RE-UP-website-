@@ -120,8 +120,10 @@
             btn.textContent = 'Create Account';
             return;
           }
-          // Account created + logged in — go to courses
-          window.location.href = '/pages/courses.html';
+          // Account created + logged in — go to where they were headed, or courses
+          var params = new URLSearchParams(window.location.search);
+          var redirect = params.get('redirect') || '/pages/courses.html';
+          window.location.href = redirect;
         })
         .catch(function() {
           errorEl.textContent = 'Something went wrong. Try again.';

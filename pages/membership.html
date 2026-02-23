@@ -204,5 +204,17 @@
   </footer>
 
   <script src="../js/main.js"></script>
+  <script>
+    // Pass through redirect URL to signup links so users land on the course they wanted
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var redirect = params.get('redirect');
+      if (redirect) {
+        document.querySelectorAll('a[href="signup.html"]').forEach(function(link) {
+          link.href = 'signup.html?redirect=' + encodeURIComponent(redirect);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

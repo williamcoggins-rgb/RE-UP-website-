@@ -157,8 +157,8 @@ function requireAuth(req, res, next) {
   if (req.session.user) {
     return next();
   }
-  // Redirect to login with return URL
-  res.redirect('/pages/login.html?redirect=' + encodeURIComponent(req.originalUrl));
+  // No account / not logged in — send to membership page so they sign up first
+  res.redirect('/pages/membership.html?redirect=' + encodeURIComponent(req.originalUrl));
 }
 
 function requireAuthAPI(req, res, next) {

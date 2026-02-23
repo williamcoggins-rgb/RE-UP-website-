@@ -64,7 +64,7 @@
           <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Log In</button>
         </form>
 
-        <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
+        <p class="auth-switch">Don't have an account? <a href="signup.html" id="signupLink">Sign up</a></p>
       </div>
     </div>
   </section>
@@ -81,6 +81,14 @@
   <script src="../js/main.js"></script>
   <script>
     (function() {
+      // Pass redirect param to signup link
+      var params = new URLSearchParams(window.location.search);
+      var redirect = params.get('redirect');
+      if (redirect) {
+        var signupLink = document.getElementById('signupLink');
+        if (signupLink) signupLink.href = 'signup.html?redirect=' + encodeURIComponent(redirect);
+      }
+
       var form = document.getElementById('loginForm');
       var errorEl = document.getElementById('loginError');
       var btn = document.getElementById('loginBtn');
