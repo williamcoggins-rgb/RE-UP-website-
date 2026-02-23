@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | RE UP</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../images/reup-logo.svg" alt="RE UP" class="logo-img">
+        <span class="logo-text">RE UP</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+        <li><a href="membership.html" class="nav-link">Membership</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="membership.html" class="btn btn-nav">Join Now</a>
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="membership.html">Membership</a></li>
+      <li><a href="membership.html" class="btn btn-primary">Join Now</a></li>
+    </ul>
+  </div>
+
+  <!-- Signup Form -->
+  <section class="auth-page" id="main-content">
+    <div class="container">
+      <div class="auth-card">
+        <h1 class="auth-title">Join RE UP</h1>
+        <p class="auth-subtitle">Create your account to access all courses and workbooks.</p>
+
+        <div class="auth-membership-info">
+          <span class="auth-price">$29<small>/mo</small></span>
+          <span class="auth-price-note">Cancel anytime. No contracts.</span>
+        </div>
+
+        <div class="auth-error" id="signupError" style="display: none;"></div>
+
+        <form class="auth-form" id="signupForm">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="Your name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="you@email.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-input" placeholder="At least 8 characters" required minlength="8" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="signupBtn">Create Account</button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RE UP. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    (function() {
+      var form = document.getElementById('signupForm');
+      var errorEl = document.getElementById('signupError');
+      var btn = document.getElementById('signupBtn');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        errorEl.style.display = 'none';
+        btn.disabled = true;
+        btn.textContent = 'Creating account...';
+
+        var data = {
+          name: form.name.value,
+          email: form.email.value,
+          password: form.password.value
+        };
+
+        fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(res) { return res.json().then(function(json) { return { ok: res.ok, data: json }; }); })
+        .then(function(result) {
+          if (!result.ok) {
+            errorEl.textContent = result.data.error;
+            errorEl.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Create Account';
+            return;
+          }
+          // Account created + logged in — go to courses
+          window.location.href = '/pages/courses.html';
+        })
+        .catch(function() {
+          errorEl.textContent = 'Something went wrong. Try again.';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

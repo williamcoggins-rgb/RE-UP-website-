@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In | RE UP</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../images/reup-logo.svg" alt="RE UP" class="logo-img">
+        <span class="logo-text">RE UP</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+        <li><a href="membership.html" class="nav-link">Membership</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="membership.html" class="btn btn-nav">Join Now</a>
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="membership.html">Membership</a></li>
+      <li><a href="membership.html" class="btn btn-primary">Join Now</a></li>
+    </ul>
+  </div>
+
+  <!-- Login Form -->
+  <section class="auth-page" id="main-content">
+    <div class="container">
+      <div class="auth-card">
+        <h1 class="auth-title">Log In</h1>
+        <p class="auth-subtitle">Access your courses and workbooks.</p>
+
+        <div class="auth-error" id="loginError" style="display: none;"></div>
+
+        <form class="auth-form" id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="you@email.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-input" placeholder="Your password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Log In</button>
+        </form>
+
+        <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RE UP. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    (function() {
+      var form = document.getElementById('loginForm');
+      var errorEl = document.getElementById('loginError');
+      var btn = document.getElementById('loginBtn');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        errorEl.style.display = 'none';
+        btn.disabled = true;
+        btn.textContent = 'Logging in...';
+
+        var data = {
+          email: form.email.value,
+          password: form.password.value
+        };
+
+        fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(res) { return res.json().then(function(json) { return { ok: res.ok, data: json }; }); })
+        .then(function(result) {
+          if (!result.ok) {
+            errorEl.textContent = result.data.error;
+            errorEl.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Log In';
+            return;
+          }
+          // Redirect to courses or wherever they came from
+          var params = new URLSearchParams(window.location.search);
+          var redirect = params.get('redirect') || '/pages/courses.html';
+          window.location.href = redirect;
+        })
+        .catch(function() {
+          errorEl.textContent = 'Something went wrong. Try again.';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Log In';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

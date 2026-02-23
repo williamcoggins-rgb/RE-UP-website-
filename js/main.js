@@ -712,4 +712,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- Initial Scroll Check ----
   handleScroll();
 
+  // ---- Auth-Aware Navigation ----
+  // Updates nav buttons based on login state
+  (function() {
+    fetch('/api/me')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var navActions = document.querySelector('.nav-actions');
+        var joinBtn = navActions ? navActions.querySelector('.btn-nav') : null;
+
+        if (data.user && joinBtn) {
+          // Logged in — show account state
+          joinBtn.textContent = 'My Courses';
+          joinBtn.href = '/pages/courses.html';
+
+          // Add logout link
+          var logoutBtn = document.createElement('a');
+          logoutBtn.href = '#';
+          logoutBtn.className = 'nav-link nav-logout';
+          logoutBtn.textContent = 'Log Out';
+          logoutBtn.style.cssText = 'font-size: 0.75rem; color: #666; margin-left: 12px; cursor: pointer;';
+          logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('/api/logout', { method: 'POST' }).then(function() {
+              window.location.href = '/';
+            });
+          });
+          navActions.insertBefore(logoutBtn, navActions.querySelector('.mobile-toggle'));
+        } else if (!data.user && joinBtn) {
+          // Not logged in — show Join Now pointing to signup
+          joinBtn.href = '/pages/signup.html';
+        }
+      })
+      .catch(function() {
+        // Server not running or static file hosting — do nothing
+      });
+  })();
+
 });
