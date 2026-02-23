@@ -168,19 +168,21 @@ function requireAuthAPI(req, res, next) {
   res.status(401).json({ error: 'Please log in to access this feature.' });
 }
 
-// Gate the courses page and individual course pages
+// Gate the courses page and every individual course page
 app.get('/pages/courses.html', requireAuth, function(req, res) {
   res.sendFile(path.join(__dirname, 'pages', 'courses.html'));
 });
 
-app.get('/pages/course-*.html', requireAuth, function(req, res) {
-  var filename = path.basename(req.path);
-  var filePath = path.join(__dirname, 'pages', filename);
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send('Course not found.');
-  }
+app.get('/pages/course-price-your-chair.html', requireAuth, function(req, res) {
+  res.sendFile(path.join(__dirname, 'pages', 'course-price-your-chair.html'));
+});
+
+app.get('/pages/course-wealth-of-barbers.html', requireAuth, function(req, res) {
+  res.sendFile(path.join(__dirname, 'pages', 'course-wealth-of-barbers.html'));
+});
+
+app.get('/pages/course-brand-blueprint.html', requireAuth, function(req, res) {
+  res.sendFile(path.join(__dirname, 'pages', 'course-brand-blueprint.html'));
 });
 
 // --- Workbook API ---
