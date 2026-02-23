@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wealth of Barbers | RE UP</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../images/reup-logo.svg" alt="RE UP" class="logo-img">
+        <span class="logo-text">RE UP</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+        <li><a href="membership.html" class="nav-link">Membership</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="membership.html" class="btn btn-nav">Join Now</a>
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="membership.html">Membership</a></li>
+      <li><a href="membership.html" class="btn btn-primary">Join Now</a></li>
+    </ul>
+  </div>
+
+  <!-- Course Header -->
+  <section class="course-page-header" id="main-content">
+    <div class="container">
+      <a href="courses.html" class="back-link">&larr; All Courses</a>
+      <span class="course-category">FINANCE &amp; GROWTH</span>
+      <h1 class="course-page-title">The Wealth of Barbers</h1>
+      <p class="course-page-desc">Our most comprehensive course. Master your finances from behind the chair — P&amp;L statements, tax strategy, saving systems, investing fundamentals, and building generational wealth as a barber.</p>
+    </div>
+  </section>
+
+  <!-- Course Content: Two-Column Layout -->
+  <section class="section section-dark course-content-section">
+    <div class="container">
+      <div class="course-layout">
+
+        <!-- Left: AI Chat Assistant -->
+        <div class="course-panel" id="chatPanel">
+          <div class="panel-header">
+            <h2 class="panel-title">Course Assistant</h2>
+            <p class="panel-subtitle">Ask questions about finance, wealth building, and this course</p>
+          </div>
+
+          <div class="chat-container" id="chatContainer">
+            <div class="chat-messages" id="chatMessages">
+              <div class="chat-message assistant">
+                <div class="message-avatar">RE</div>
+                <div class="message-content">
+                  <p>Welcome to <strong>The Wealth of Barbers</strong> — our deepest course. Ask me about P&amp;L statements, tax strategies, saving systems, investing, or anything related to building real wealth as a barber.</p>
+                </div>
+              </div>
+            </div>
+
+            <form class="chat-input-form" id="chatForm">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Ask about finance, taxes, investing..." autocomplete="off">
+              <button type="submit" class="btn btn-primary chat-send" id="chatSend">Send</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Workbook -->
+        <div class="course-panel" id="workbookPanel">
+          <div class="panel-header">
+            <div class="panel-header-row">
+              <h2 class="panel-title">Workbook</h2>
+              <div class="workbook-actions">
+                <span class="save-status" id="saveStatus"></span>
+                <button class="btn btn-sm btn-outline" id="saveWorkbook">Save Progress</button>
+              </div>
+            </div>
+            <p class="panel-subtitle">Your financial planning workbook — saves to your account</p>
+          </div>
+
+          <div class="workbook-container" id="workbookContainer">
+            <div class="workbook-section">
+              <h3 class="workbook-section-title">1. Financial Snapshot</h3>
+              <div class="workbook-field">
+                <label for="wb-monthly-income">What is your current monthly income (before taxes)?</label>
+                <input type="text" id="wb-monthly-income" class="workbook-input" data-field="monthly_income" placeholder="e.g. $6,000">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-monthly-expenses">List all your monthly business expenses</label>
+                <textarea id="wb-monthly-expenses" class="workbook-textarea workbook-textarea-lg" data-field="monthly_expenses" placeholder="Rent/booth fee: $__&#10;Products/supplies: $__&#10;Tools/equipment: $__&#10;Insurance: $__&#10;Phone/internet: $__&#10;Marketing: $__&#10;Education: $__&#10;Other: $__&#10;&#10;TOTAL: $__"></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-personal-expenses">List your monthly personal expenses</label>
+                <textarea id="wb-personal-expenses" class="workbook-textarea workbook-textarea-lg" data-field="personal_expenses" placeholder="Housing: $__&#10;Car/transport: $__&#10;Food: $__&#10;Utilities: $__&#10;Phone: $__&#10;Entertainment: $__&#10;Subscriptions: $__&#10;Other: $__&#10;&#10;TOTAL: $__"></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-net-income">What's left over each month after all expenses?</label>
+                <input type="text" id="wb-net-income" class="workbook-input" data-field="net_income" placeholder="e.g. $1,200">
+              </div>
+            </div>
+
+            <div class="workbook-section">
+              <h3 class="workbook-section-title">2. Profit & Loss Statement</h3>
+              <div class="workbook-field">
+                <label for="wb-revenue-sources">List all your revenue sources and average monthly amount</label>
+                <textarea id="wb-revenue-sources" class="workbook-textarea workbook-textarea-lg" data-field="revenue_sources" placeholder="Haircuts: $__&#10;Beard services: $__&#10;Products sold: $__&#10;Tips: $__&#10;Other services: $__&#10;&#10;TOTAL REVENUE: $__"></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-profit-margin">Calculate your profit margin (Revenue - Expenses) / Revenue x 100</label>
+                <input type="text" id="wb-profit-margin" class="workbook-input" data-field="profit_margin" placeholder="e.g. 35%">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-profit-goal">What profit margin are you targeting? How will you get there?</label>
+                <textarea id="wb-profit-goal" class="workbook-textarea" data-field="profit_goal" placeholder="Target margin and specific steps to achieve it..."></textarea>
+              </div>
+            </div>
+
+            <div class="workbook-section">
+              <h3 class="workbook-section-title">3. Tax Strategy</h3>
+              <div class="workbook-field">
+                <label for="wb-business-structure">What is your current business structure? (sole prop, LLC, S-Corp)</label>
+                <input type="text" id="wb-business-structure" class="workbook-input" data-field="business_structure" placeholder="e.g. Sole Proprietor">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-tax-deductions">What deductions are you currently claiming?</label>
+                <textarea id="wb-tax-deductions" class="workbook-textarea" data-field="tax_deductions" placeholder="List all deductions you claim..."></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-tax-set-aside">How much are you setting aside for taxes each month?</label>
+                <input type="text" id="wb-tax-set-aside" class="workbook-input" data-field="tax_set_aside" placeholder="e.g. $1,000/month or 25% of income">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-tax-improvements">After this module, what changes will you make to your tax strategy?</label>
+                <textarea id="wb-tax-improvements" class="workbook-textarea" data-field="tax_improvements" placeholder="New deductions to track, structure changes, quarterly payment plans..."></textarea>
+              </div>
+            </div>
+
+            <div class="workbook-section">
+              <h3 class="workbook-section-title">4. Saving System</h3>
+              <div class="workbook-field">
+                <label for="wb-emergency-fund">Do you have an emergency fund? How many months of expenses does it cover?</label>
+                <input type="text" id="wb-emergency-fund" class="workbook-input" data-field="emergency_fund" placeholder="e.g. $3,000 — covers 2 months">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-savings-rate">What percentage of your income will you commit to saving?</label>
+                <input type="text" id="wb-savings-rate" class="workbook-input" data-field="savings_rate" placeholder="e.g. 15%">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-savings-system">Design your automatic savings system</label>
+                <textarea id="wb-savings-system" class="workbook-textarea" data-field="savings_system" placeholder="How money flows: &#10;Income &rarr; Taxes (___%) &rarr; Savings (___%) &rarr; Business expenses &rarr; Personal"></textarea>
+              </div>
+            </div>
+
+            <div class="workbook-section">
+              <h3 class="workbook-section-title">5. Investing & Wealth Building</h3>
+              <div class="workbook-field">
+                <label for="wb-retirement-accounts">What retirement accounts do you have? (IRA, SEP-IRA, 401k)</label>
+                <input type="text" id="wb-retirement-accounts" class="workbook-input" data-field="retirement_accounts" placeholder="e.g. SEP-IRA with Fidelity">
+              </div>
+              <div class="workbook-field">
+                <label for="wb-investment-plan">What's your investment plan after this course?</label>
+                <textarea id="wb-investment-plan" class="workbook-textarea" data-field="investment_plan" placeholder="Amount to invest monthly, account types, timeline..."></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-5yr-financial-goal">Where do you want to be financially in 5 years?</label>
+                <textarea id="wb-5yr-financial-goal" class="workbook-textarea" data-field="five_year_goal" placeholder="Income, savings, investments, business ownership, lifestyle..."></textarea>
+              </div>
+            </div>
+
+            <div class="workbook-section">
+              <h3 class="workbook-section-title">6. Action Plan</h3>
+              <div class="workbook-field">
+                <label for="wb-this-week">What 3 financial actions will you take THIS WEEK?</label>
+                <textarea id="wb-this-week" class="workbook-textarea" data-field="this_week_actions" placeholder="1. &#10;2. &#10;3."></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-this-month">What financial systems will you set up THIS MONTH?</label>
+                <textarea id="wb-this-month" class="workbook-textarea" data-field="this_month_actions" placeholder="Separate accounts, auto-transfers, tracking system, etc."></textarea>
+              </div>
+              <div class="workbook-field">
+                <label for="wb-accountability">Who will hold you accountable? How will you check in with yourself?</label>
+                <textarea id="wb-accountability" class="workbook-textarea" data-field="accountability" placeholder="Accountability partner, monthly review schedule..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-logo">RE UP</span>
+          <p>The business education platform for barbers who already know how to cut.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Learn</h4>
+          <ul>
+            <li><a href="courses.html">All Courses</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="membership.html">Membership</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Instructors</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">YouTube</a></li>
+            <li><a href="#">TikTok</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 RE UP. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/course.js"></script>
+</body>
+</html>
