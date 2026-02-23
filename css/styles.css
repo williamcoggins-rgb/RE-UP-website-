@@ -1630,6 +1630,11 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
 }
 
+.pricing-grid-single {
+  grid-template-columns: 1fr;
+  max-width: 480px;
+}
+
 .pricing-card {
   background: var(--black-card);
   border: 1px solid rgba(255, 255, 255, 0.08);
