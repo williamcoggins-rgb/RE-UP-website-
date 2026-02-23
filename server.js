@@ -70,6 +70,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
+  name: 'reup_session',
   secret: process.env.SESSION_SECRET || 'reup-dev-secret-change-in-production',
   resave: false,
   saveUninitialized: false,
@@ -366,7 +367,11 @@ function generateFallbackResponse(course, message) {
 // --- Static files (after auth routes so gating works) ---
 app.use(express.static(__dirname));
 
-// --- Start ---
-app.listen(PORT, function() {
-  console.log('RE UP running on http://localhost:' + PORT);
-});
+// --- Start (local dev) / Export (Vercel) ---
+if (require.main === module) {
+  app.listen(PORT, function() {
+    console.log('RE UP running on http://localhost:' + PORT);
+  });
+}
+
+module.exports = app;
