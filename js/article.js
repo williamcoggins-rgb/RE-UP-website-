@@ -2,6 +2,9 @@
    RE UP Report — Article Detail Renderer
    Reads article ID from ?id= query param, finds it in the
    news feed, and renders the full story with impact outlook.
+
+   Free users see: headline + first paragraph (teaser)
+   RE UP Intel subscribers see: full body + outlook + action items
    ============================================================ */
 
 (function () {
@@ -11,6 +14,12 @@
     'supply-chain': { tagClass: 'news-tag--supply',    label: 'Supply Chain' },
     'clt-events':   { tagClass: 'news-tag--events',    label: 'CLT Events' }
   };
+
+  // Simple access check — replace with real auth when backend is ready
+  function hasAccess() {
+    try { return localStorage.getItem('reup_access') === 'intel'; }
+    catch (e) { return false; }
+  }
 
   function getArticleId() {
     var params = new URLSearchParams(window.location.search);
@@ -33,6 +42,75 @@
     return dateStr || '';
   }
 
+  function buildPaywall() {
+    return '' +
+      '<div class="paywall">' +
+        '<div class="paywall-fade"></div>' +
+        '<div class="paywall-gate">' +
+
+          '<div class="paywall-header">' +
+            '<span class="paywall-lock">&#9679;</span>' +
+            '<h2 class="paywall-title">This story continues with RE\u00a0UP Intel</h2>' +
+            '<p class="paywall-subtitle">Market intelligence built for barbers who run their chair like a business</p>' +
+          '</div>' +
+
+          '<div class="paywall-value">' +
+            '<h3 class="paywall-value-heading">What you get</h3>' +
+            '<ul class="paywall-features">' +
+              '<li>' +
+                '<strong>Full analysis &amp; deep context</strong>' +
+                '<span>Every story includes the full breakdown — not just what happened, but what it means for your bookings, pricing, and bottom line.</span>' +
+              '</li>' +
+              '<li>' +
+                '<strong>"How This Affects You" action briefs</strong>' +
+                '<span>Each article ends with a concrete outlook: what to do this week, this month, or this quarter based on the news. No guesswork.</span>' +
+              '</li>' +
+              '<li>' +
+                '<strong>Charlotte market data &amp; pricing benchmarks</strong>' +
+                '<span>See what shops across Charlotte are charging by service, neighborhood, and experience level. Know if you\'re underpriced before your clients do.</span>' +
+              '</li>' +
+              '<li>' +
+                '<strong>Event-driven booking strategy</strong>' +
+                '<span>We track every major Charlotte event — ACC Tournament, SHOUT!, race week, MLS — and tell you exactly how to capture the revenue spike.</span>' +
+              '</li>' +
+              '<li>' +
+                '<strong>Supply chain &amp; product alerts</strong>' +
+                '<span>Price changes on clippers, blades, and products — reported before they hit your distributor\'s invoice. Plan your costs, protect your margins.</span>' +
+              '</li>' +
+            '</ul>' +
+          '</div>' +
+
+          '<div class="paywall-plans">' +
+            '<div class="paywall-plan">' +
+              '<div class="paywall-plan-name">Intel Monthly</div>' +
+              '<div class="paywall-plan-price"><span class="paywall-currency">$</span>9<span class="paywall-period">/mo</span></div>' +
+              '<ul class="paywall-plan-includes">' +
+                '<li>Full articles &amp; outlook briefs</li>' +
+                '<li>Charlotte market dashboard</li>' +
+                '<li>Weekly email intel digest</li>' +
+              '</ul>' +
+              '<button class="btn btn-primary paywall-cta" data-plan="monthly">Start 7-Day Free Trial</button>' +
+            '</div>' +
+            '<div class="paywall-plan paywall-plan--featured">' +
+              '<div class="paywall-plan-badge">Best Value</div>' +
+              '<div class="paywall-plan-name">Intel Annual</div>' +
+              '<div class="paywall-plan-price"><span class="paywall-currency">$</span>79<span class="paywall-period">/yr</span></div>' +
+              '<div class="paywall-plan-savings">Save $29 vs monthly</div>' +
+              '<ul class="paywall-plan-includes">' +
+                '<li>Everything in Monthly</li>' +
+                '<li>Quarterly market reports</li>' +
+                '<li>Priority access to new tools</li>' +
+              '</ul>' +
+              '<button class="btn btn-primary paywall-cta" data-plan="annual">Start 7-Day Free Trial</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<p class="paywall-note">Cancel anytime. No charge during trial. Built by barbers, for barbers.</p>' +
+
+        '</div>' +
+      '</div>';
+  }
+
   function renderArticle(article) {
     var container = document.getElementById('article-container');
     if (!container) return;
@@ -48,6 +126,7 @@
     }
 
     var meta = DESK_META[article.desk] || { tagClass: 'news-tag--charlotte', label: article.desk };
+    var unlocked = hasAccess();
 
     // Set page title
     document.title = article.title + ' | RE UP Report';
@@ -59,15 +138,16 @@
       impactHtml = '<span class="news-impact ' + cls + '">' + article.impact.toUpperCase() + ' IMPACT</span>';
     }
 
-    // Body paragraphs
-    var bodyHtml = '';
+    // Body paragraphs — split into teaser (1st para) and gated (rest)
+    var teaserHtml = '';
+    var gatedHtml = '';
     if (article.body && article.body.length) {
-      for (var i = 0; i < article.body.length; i++) {
-        bodyHtml += '<p>' + escapeHtml(article.body[i]) + '</p>';
+      teaserHtml = '<p>' + escapeHtml(article.body[0]) + '</p>';
+      for (var i = 1; i < article.body.length; i++) {
+        gatedHtml += '<p>' + escapeHtml(article.body[i]) + '</p>';
       }
     } else {
-      // Fallback to summary if no body
-      bodyHtml = '<p>' + escapeHtml(article.summary) + '</p>';
+      teaserHtml = '<p>' + escapeHtml(article.summary) + '</p>';
     }
 
     // Outlook section
@@ -93,7 +173,8 @@
       tagsHtml += '</div>';
     }
 
-    container.innerHTML =
+    // Build the full article HTML
+    var html =
       '<article class="article-full">' +
         '<a href="../index.html#news-section" class="article-back">&larr; Back to News</a>' +
         '<div class="article-meta">' +
@@ -106,11 +187,48 @@
           '<span class="article-date">' + formatDate(article.date) + '</span>' +
         '</div>' +
         '<div class="article-body">' +
-          bodyHtml +
+          teaserHtml;
+
+    if (unlocked) {
+      // Full access — show everything
+      html += gatedHtml +
         '</div>' +
         outlookHtml +
-        tagsHtml +
-      '</article>';
+        tagsHtml;
+    } else {
+      // Gated — show blurred preview + paywall
+      html +=
+        '</div>' +
+        '<div class="article-gated-preview">' +
+          '<div class="article-gated-blur">' + gatedHtml + outlookHtml + '</div>' +
+        '</div>' +
+        buildPaywall() +
+        tagsHtml;
+    }
+
+    html += '</article>';
+    container.innerHTML = html;
+
+    // Attach CTA handlers
+    if (!unlocked) {
+      var buttons = container.querySelectorAll('.paywall-cta');
+      for (var b = 0; b < buttons.length; b++) {
+        buttons[b].addEventListener('click', function () {
+          var plan = this.getAttribute('data-plan');
+          handleSubscribe(plan);
+        });
+      }
+    }
+  }
+
+  function handleSubscribe(plan) {
+    // Placeholder — wire to Stripe, Gumroad, or custom backend
+    // For now show a signup prompt
+    var email = prompt('Enter your email to start your free trial (' + plan + ' plan):');
+    if (email && email.indexOf('@') > 0) {
+      alert('Thanks! We\u2019ll send your trial access to ' + email + '. Check your inbox.');
+      // In production: POST to /api/subscribe with email + plan
+    }
   }
 
   function init() {

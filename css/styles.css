@@ -1938,6 +1938,253 @@ a.news-card--link:hover .news-title {
 }
 
 /* ============================================
+   PAYWALL — RE UP Intel gate
+   ============================================ */
+
+/* Blurred preview of gated content */
+.article-gated-preview {
+  position: relative;
+  max-height: 180px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.article-gated-blur {
+  filter: blur(6px);
+  -webkit-filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.article-gated-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(10, 10, 10, 0.6) 50%,
+    var(--black) 100%
+  );
+  pointer-events: none;
+}
+
+/* Paywall container */
+.paywall {
+  position: relative;
+  margin-top: -20px;
+  margin-bottom: 40px;
+}
+
+.paywall-fade {
+  display: none; /* gradient handled by .article-gated-preview::after */
+}
+
+.paywall-gate {
+  background: var(--black-card);
+  border: 1px solid var(--gray-800);
+  border-radius: 12px;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+/* Header */
+.paywall-lock {
+  display: inline-block;
+  color: var(--accent);
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.paywall-title {
+  font-family: var(--font-display, 'Inter', sans-serif);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: var(--white);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.paywall-subtitle {
+  font-size: 14px;
+  color: var(--gray-400);
+  margin: 0 0 32px;
+  line-height: 1.5;
+}
+
+/* Value proposition */
+.paywall-value {
+  text-align: left;
+  margin-bottom: 36px;
+}
+
+.paywall-value-heading {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin: 0 0 18px;
+}
+
+.paywall-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.paywall-features li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.paywall-features li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.paywall-features li strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.paywall-features li span {
+  font-size: 13px;
+  color: var(--gray-400);
+  line-height: 1.5;
+}
+
+/* Plan cards */
+.paywall-plans {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.paywall-plan {
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  border-radius: 10px;
+  padding: 24px 20px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.paywall-plan--featured {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.paywall-plan-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 12px;
+  border-radius: 10px;
+}
+
+.paywall-plan-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.paywall-plan-price {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+
+.paywall-currency {
+  font-size: 20px;
+  vertical-align: super;
+  margin-right: 2px;
+}
+
+.paywall-period {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gray-500);
+}
+
+.paywall-plan-savings {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: -4px;
+}
+
+.paywall-plan-includes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.paywall-plan-includes li {
+  font-size: 12px;
+  color: var(--gray-400);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.paywall-plan-includes li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  color: var(--gray-500);
+  font-size: 11px;
+}
+
+.paywall-cta {
+  width: 100%;
+  margin-top: auto;
+  font-size: 13px;
+  padding: 10px 16px;
+}
+
+.paywall-note {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+/* ============================================
    RESPONSIVE — iPad / Tablet (max-width: 768px)
    iPad Mini portrait, small tablets
    ============================================ */
@@ -1994,6 +2241,16 @@ a.news-card--link:hover .news-title {
 
   .article-body p {
     font-size: 15px;
+  }
+
+  /* Paywall — tablet */
+  .paywall-gate {
+    padding: 32px 24px;
+  }
+
+  .paywall-plans {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 
   .bottom-ticker {
@@ -2108,6 +2365,41 @@ a.news-card--link:hover .news-title {
   .article-tag {
     font-size: 10px;
     padding: 3px 10px;
+  }
+
+  /* Paywall — phone */
+  .paywall-gate {
+    padding: 28px 16px;
+  }
+
+  .paywall-title {
+    font-size: 20px;
+  }
+
+  .paywall-subtitle {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .paywall-plans {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .paywall-plan {
+    padding: 20px 16px;
+  }
+
+  .paywall-features li strong {
+    font-size: 13px;
+  }
+
+  .paywall-features li span {
+    font-size: 12px;
+  }
+
+  .article-gated-preview {
+    max-height: 120px;
   }
 }
 
