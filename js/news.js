@@ -114,18 +114,32 @@
       outlook: { timeframe: "This Month", text: "If you\u2019re a price-conscious client in Charlotte, these two shops are worth your attention. For barbers and shop owners watching the pricing arms race, this is a reminder that volume-based models work when execution is consistent. You don\u2019t have to charge top dollar to run a full book." }
     },
     {
-      id: "f84ae1197a54", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
-      title: "Charlotte Barber Battle 2026 announced for April \u2014 registration now open",
-      summary: "The annual Charlotte Barber Battle returns this April with expanded categories. Registration dropped on Instagram and sold out the early-bird tier within 48 hours.",
-      url: "#clt-barber-battle-2026",
-      source: "RE UP Report", date: "2026-03-10", score: 76, impact: "high",
-      tags: ["event","barber-battle","competition","april"],
+      id: "32081e0d602e", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "ACC Tournament fills Spectrum Center this week \u2014 barbers near uptown prepare for surge",
+      summary: "The ACC Men\u2019s Basketball Tournament runs March 10-14 at Spectrum Center in uptown Charlotte, bringing thousands of fans and alumni to the city.",
+      url: "#acc-tournament-barber-surge-2026",
+      source: "RE UP Report", date: "2026-03-09", score: 75, impact: "high",
+      tags: ["acc-tournament","spectrum-center","uptown","bookings","revenue"],
       body: [
-        "The Charlotte Barber Battle is back for 2026, and it\u2019s bigger. Organizers announced the April competition on Instagram this week, revealing expanded categories that include best fade, best beard design, and a new freestyle creative division. Early-bird registration sold out within 48 hours.",
-        "Barbers from across the Carolinas are expected to compete. The event has grown steadily over the past few years, evolving from a local showcase into a regional draw. Competitors use the battle as a platform to build their brand, attract new clients, and connect with peers in the industry.",
-        "The freestyle creative division is the most interesting addition. It gives barbers a chance to showcase artistic work \u2014 designs, patterns, and creative cuts that go beyond the standard service menu. These are the cuts that go viral on social media, and the battle gives them a live stage."
+        "The ACC Men\u2019s Basketball Tournament is back at Spectrum Center this week, running March 10-14 in uptown Charlotte. Thousands of fans, alumni, and media from across the conference\u2019s footprint are descending on the city \u2014 and barbershops within a few miles of uptown are already feeling the effect.",
+        "Tournament weeks are reliable revenue drivers for Charlotte barbers. Visitors want to look sharp for games, watch parties, and the social events that surround the tournament. Shops in uptown, South End, and NoDa report that walk-in traffic spikes noticeably during multi-day events at Spectrum Center.",
+        "The smart play for barbers this week: post your location and availability on Instagram and Google. Out-of-town visitors search for \u2018barber near me\u2019 when they arrive, and the shops that show up first capture the walk-in business. Extended evening hours also help catch fans looking for a cut between games."
       ],
-      outlook: { timeframe: "This Month", text: "If you\u2019re a barber looking to compete, general registration is still open but moving fast. Even if you\u2019re not competing, attend as a spectator \u2014 battles are where you see what\u2019s next in technique and style. For clients, follow your barber\u2019s social media during battle season. You might see them debut a new look you want in your chair." }
+      outlook: { timeframe: "This Week", text: "If your shop is within a few miles of Spectrum Center, this is your week. Post your work and location on social media daily \u2014 tournament visitors are scrolling for local barbers right now. Consider extending hours through Friday to capture the full run of the tournament. Walk-in traffic will be strongest on game days." }
+    },
+    {
+      id: "79c2c1a486eb", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "Charlotte SHOUT! festival kicks off April 3 \u2014 uptown foot traffic expected to spike",
+      summary: "Charlotte SHOUT!, the city\u2019s major uptown arts and culture festival, runs April 3-19 with installations, live performances, and block parties.",
+      url: "#charlotte-shout-2026",
+      source: "RE UP Report", date: "2026-03-07", score: 74, impact: "high",
+      tags: ["charlotte-shout","festival","uptown","foot-traffic","april"],
+      body: [
+        "Charlotte SHOUT! returns April 3-19 with two-plus weeks of art installations, live performances, and block parties across uptown. The festival, which has grown into one of the city\u2019s signature cultural events, brings consistent foot traffic to the center city area throughout its run.",
+        "For barbershops near uptown and South End, SHOUT! is a sustained traffic boost rather than a single-day spike. Festival-goers explore the area on foot, and the evening events create demand for fresh cuts from people heading out to performances and parties. Shops that stay open later during SHOUT! capture clients they\u2019d otherwise miss.",
+        "The festival also presents a branding opportunity. Some shops have set up pop-up chairs at past SHOUT! events, offering quick trims and building name recognition with a festival audience that skews young and social-media active."
+      ],
+      outlook: { timeframe: "This Month", text: "Mark April 3-19 on your calendar. If you\u2019re near uptown, consider extending your evening hours during the festival. If you\u2019re looking for creative marketing, reach out to SHOUT! organizers about participating as a vendor or pop-up \u2014 the audience is exactly the demographic that shares barbershop experiences on social media." }
     },
     {
       id: "33e4b4bc03b4", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -269,17 +283,31 @@
     },
     {
       id: "c4acd406420e", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
-      title: "Carolina Barber Expo 2026 set for September with expanded vendor floor",
-      summary: "The Carolina Barber Expo returns in September 2026 with a larger vendor hall, more barber battle categories, and dedicated education workshops.",
+      title: "Carolina Barber Expo returns to Myrtle Beach in September \u2014 Charlotte barbers plan the trip",
+      summary: "The Carolina Barber Expo is set for September 2026 at House of Blues in North Myrtle Beach, SC. Charlotte barbers are organizing group trips to compete and network with brands.",
       url: "#carolina-barber-expo-2026",
-      source: "RE UP Report", date: "2026-02-24", score: 52, impact: "medium",
-      tags: ["event","expo","networking","education","vendors"],
+      source: "RE UP Report", date: "2026-02-24", score: 61, impact: "medium",
+      tags: ["event","expo","myrtle-beach","networking","education"],
       body: [
-        "The Carolina Barber Expo is scaling up for 2026. Organizers announced that the September event will feature a larger vendor floor, additional barber battle categories, and dedicated education workshops led by industry professionals. The expansion comes after record attendance in 2025 proved the demand.",
-        "The expo serves as the Carolinas\u2019 biggest networking event for barbers, shop owners, and product brands. For independent barbers, it\u2019s a chance to meet distributors, test new products hands-on, and connect with peers outside their home market. For brands, it\u2019s direct access to the professionals who influence purchasing decisions.",
-        "The education workshops are the most requested addition. Topics are expected to cover business fundamentals \u2014 pricing strategy, social media marketing, booth rent negotiation \u2014 alongside technical skill sessions on trending cuts and techniques."
+        "The Carolina Barber Expo is returning to House of Blues in North Myrtle Beach, SC this September, and Charlotte barbers are already making plans. After record attendance in 2025, organizers are expanding the vendor floor and adding education workshops alongside the signature barber battle competitions.",
+        "The expo is the biggest annual networking event for barbers across the Carolinas. Charlotte shops typically send teams to compete in battle categories and connect with distributors, product brands, and peers from other markets. Several Charlotte barbershops are organizing group trips, turning the expo into a team-building event.",
+        "For Charlotte barbers who haven\u2019t attended before, the education workshops alone are worth the trip. Topics cover business fundamentals \u2014 pricing strategy, social media marketing, booth rent negotiation \u2014 alongside technical sessions on trending cuts and techniques led by nationally recognized barbers."
       ],
-      outlook: { timeframe: "This Quarter", text: "Mark September on your calendar now. Whether you\u2019re looking to compete, learn, or network, the Carolina Barber Expo is the biggest event on the regional calendar. Early-bird tickets typically go on sale in late spring. If you\u2019re a brand or distributor, vendor booth space will move fast given the expanded floor." }
+      outlook: { timeframe: "This Quarter", text: "Mark September on your calendar and book your Myrtle Beach accommodations early \u2014 the beachfront hotels near House of Blues fill up during expo weekend. If you\u2019re looking to compete, watch the expo\u2019s social media for registration announcements. If you\u2019re a brand or distributor, vendor booth space goes fast." }
+    },
+    {
+      id: "82b0751671fb", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "Charlotte FC and MLS All-Star Game to bring summer booking wave",
+      summary: "Charlotte FC\u2019s 2026 season is underway at Bank of America Stadium, and the city will host the MLS All-Star Game this summer \u2014 a first for Charlotte.",
+      url: "#mls-allstar-clt-2026",
+      source: "RE UP Report", date: "2026-02-18", score: 67, impact: "medium",
+      tags: ["charlotte-fc","mls","all-star-game","bookings","summer"],
+      body: [
+        "Charlotte FC\u2019s 2026 MLS season is underway at Bank of America Stadium, and the city just landed a marquee addition to the summer calendar: the MLS All-Star Game. It\u2019s the first time Charlotte will host the event, and it\u2019s expected to bring national media attention and thousands of traveling fans to the city.",
+        "Barbershops near uptown and South End are already seeing match-day booking patterns emerge during Charlotte FC home games. The All-Star Game will amplify that effect significantly \u2014 it\u2019s a multi-day event with fan festivals, concerts, and the game itself, all concentrated near the stadium corridor.",
+        "The Charlotte FC effect on barbershops is becoming a real thing. Match-day bookings spike as fans, particularly younger demographics, want a fresh cut before heading to the stadium. Shops that post game-day content on social media \u2014 team colors, match-day specials \u2014 are capturing an audience that indexes high on grooming spend."
+      ],
+      outlook: { timeframe: "This Quarter", text: "Start thinking about your summer schedule now. Charlotte FC home games already drive match-day bookings, and the All-Star Game will be a peak event. Consider running match-day promotions or posting Charlotte FC content on your social media to attract the soccer crowd. The All-Star Game date will be announced soon \u2014 block that week off for extended hours." }
     },
     {
       id: "2c2368b92833", desk: "national-biz", type: "original", byline: "RE UP National Desk",

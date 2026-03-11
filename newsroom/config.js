@@ -69,10 +69,12 @@ var DESK_QUERIES = {
   ],
   'clt-events': [
     'Charlotte barber battle competition 2026',
-    'Charlotte NC barber expo event 2026',
+    'Carolina Barber Expo Myrtle Beach 2026',
     'Charlotte community haircut event',
-    'Charlotte Motor Speedway race week barber 2026',
-    'Charlotte NC spring events festival 2026'
+    'Charlotte Motor Speedway Coca-Cola 600 race week 2026',
+    'ACC Tournament Charlotte Spectrum Center 2026',
+    'Charlotte SHOUT festival 2026',
+    'Charlotte FC MLS All-Star Game 2026'
   ]
 };
 
