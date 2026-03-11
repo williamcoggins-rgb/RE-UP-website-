@@ -808,6 +808,247 @@ function renderGapFinder() {
     '<p class="tool-gap-method">Score based on: shop saturation (50pts), price headroom (30pts), competitor density (20pts). Higher score = more opportunity.</p>';
 }
 
+// --------------- GUIDED TOUR / ONBOARDING ---------------
+
+var TOUR_STEPS = [
+  {
+    target: null, // welcome screen — no target
+    title: 'Welcome to RE UP Intel',
+    body: 'You just unlocked the most detailed barbershop market data in Charlotte. This is your command center — real prices, real competitors, real opportunities. Let us show you around.',
+    cta: 'Show Me Around',
+    icon: 'welcome'
+  },
+  {
+    target: '#heatmap-grid',
+    title: 'Pricing Heat Map',
+    body: 'This is your bird\'s-eye view of Charlotte pricing. The redder the tile, the more expensive that zip code is. Dark tiles = cheaper areas. Tap the buttons up top to switch between Men\'s Cut, Fade, Beard, and Kids.',
+    tip: 'Use this to see which neighborhoods charge premium and where the value shops are.',
+    cta: 'Next'
+  },
+  {
+    target: '#pricing-table',
+    title: 'Pricing by Zip Code',
+    body: 'Every row is a zip code. Every column is a service. This is what shops in that area actually charge — pulled from Booksy, Squire, Fresha, and shop websites. Click any column header to sort.',
+    tip: 'Use the filter buttons above the table to highlight one service at a time.',
+    cta: 'Next'
+  },
+  {
+    target: '#tool-price-compare',
+    title: 'Price Comparison Tool',
+    body: 'Type in what you charge and pick your zip code. It instantly shows whether you\'re above or below the local average. The red dot on the bar is you — the lines are your area average and the whole-market average.',
+    tip: 'If you\'re $5+ below your area, you might be leaving money on the table.',
+    cta: 'Next'
+  },
+  {
+    target: '#tool-revenue',
+    title: 'Revenue Estimator',
+    body: 'Plug in your price per cut, how many clients you see per day, and how many days you work. It calculates your daily, weekly, monthly, and annual revenue. Change any number and watch it update live.',
+    tip: 'Try bumping your price by $5 — see how much that adds up over a year.',
+    cta: 'Next'
+  },
+  {
+    target: '#tool-gap-finder',
+    title: 'Market Gap Finder',
+    body: 'We scored every Charlotte zip code on how much room there is for a new barber. Green = high opportunity (few shops, good pricing). Red = saturated (lots of competition). This runs automatically from our data.',
+    tip: 'Thinking about a second chair or new location? Start here.',
+    cta: 'Next'
+  },
+  {
+    target: '#competitor-table',
+    title: 'Competitor Directory',
+    body: 'Every barbershop we track in Charlotte — 39 shops with their pricing, ratings, barber count, and business model. Use the search bar to find any shop by name, neighborhood, or zip code.',
+    tip: 'Sort by "Avg Cut" to see who\'s charging the most in your area.',
+    cta: 'Next'
+  },
+  {
+    target: '#social-table',
+    title: 'Social Leaderboard',
+    body: 'See which Charlotte shops and barbers have the biggest Instagram following. This tells you who\'s winning the local conversation and whose brand is growing the fastest.',
+    tip: 'If a competitor in your zip has 5x your followers, they\'re probably capturing walk-ins you\'re missing.',
+    cta: 'Next'
+  },
+  {
+    target: '#density-grid',
+    title: 'Shop Density Map',
+    body: 'See how many shops are packed into each zip code. The bigger the bar, the more shops. This is the competition heatmap — find the crowded zones and the gaps.',
+    tip: 'Low-density zips with growing neighborhoods = best expansion targets.',
+    cta: 'Got It'
+  }
+];
+
+function shouldShowTour() {
+  return !localStorage.getItem('reup_tour_done');
+}
+
+function completeTour() {
+  localStorage.setItem('reup_tour_done', '1');
+}
+
+function startGuidedTour() {
+  if (!shouldShowTour()) return;
+
+  var currentStep = 0;
+  var overlay = document.createElement('div');
+  overlay.id = 'tour-overlay';
+  overlay.className = 'tour-overlay';
+  document.body.appendChild(overlay);
+
+  var tooltip = document.createElement('div');
+  tooltip.id = 'tour-tooltip';
+  tooltip.className = 'tour-tooltip';
+  document.body.appendChild(tooltip);
+
+  function renderStep(idx) {
+    var step = TOUR_STEPS[idx];
+    var totalSteps = TOUR_STEPS.length;
+
+    // Build dots
+    var dotsHtml = '<div class="tour-dots">';
+    for (var d = 0; d < totalSteps; d++) {
+      dotsHtml += '<span class="tour-dot' + (d === idx ? ' tour-dot--active' : '') + (d < idx ? ' tour-dot--done' : '') + '"></span>';
+    }
+    dotsHtml += '</div>';
+
+    // Build tip callout
+    var tipHtml = step.tip
+      ? '<div class="tour-tip"><span class="tour-tip-icon">&rarr;</span> ' + step.tip + '</div>'
+      : '';
+
+    var isWelcome = idx === 0;
+    var isLast = idx === totalSteps - 1;
+
+    // Build tooltip content
+    tooltip.innerHTML =
+      (isWelcome ? '<div class="tour-welcome-badge">RE UP INTEL</div>' : '') +
+      '<div class="tour-step-counter">Step ' + (idx + 1) + ' of ' + totalSteps + '</div>' +
+      '<h2 class="tour-title">' + step.title + '</h2>' +
+      '<p class="tour-body">' + step.body + '</p>' +
+      tipHtml +
+      dotsHtml +
+      '<div class="tour-actions">' +
+        (idx > 0 ? '<button class="tour-btn tour-btn--back" id="tour-back">Back</button>' : '') +
+        '<button class="tour-btn tour-btn--primary" id="tour-next">' + step.cta + '</button>' +
+      '</div>' +
+      '<button class="tour-skip" id="tour-skip">' + (isLast ? '' : 'Skip tour') + '</button>';
+
+    // Position tooltip
+    if (isWelcome) {
+      // Welcome: centered on screen
+      tooltip.classList.add('tour-tooltip--welcome');
+      tooltip.classList.remove('tour-tooltip--positioned');
+      overlay.classList.add('tour-overlay--welcome');
+      overlay.classList.remove('tour-overlay--spotlight');
+    } else {
+      tooltip.classList.remove('tour-tooltip--welcome');
+      tooltip.classList.add('tour-tooltip--positioned');
+      overlay.classList.remove('tour-overlay--welcome');
+      overlay.classList.add('tour-overlay--spotlight');
+
+      // Scroll to target and position
+      var target = document.querySelector(step.target);
+      if (target) {
+        var rect = target.getBoundingClientRect();
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Scroll so element is in view
+        var targetTop = rect.top + scrollTop - 100;
+        window.scrollTo({ top: targetTop, behavior: 'smooth' });
+
+        // Wait for scroll, then position spotlight + tooltip
+        setTimeout(function () {
+          positionSpotlight(target);
+          positionTooltip(target);
+        }, 400);
+      }
+    }
+
+    // Wire buttons
+    var nextBtn = document.getElementById('tour-next');
+    var backBtn = document.getElementById('tour-back');
+    var skipBtn = document.getElementById('tour-skip');
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        if (idx < totalSteps - 1) {
+          currentStep++;
+          clearSpotlight();
+          renderStep(currentStep);
+        } else {
+          endTour();
+        }
+      });
+    }
+
+    if (backBtn) {
+      backBtn.addEventListener('click', function () {
+        if (idx > 0) {
+          currentStep--;
+          clearSpotlight();
+          renderStep(currentStep);
+        }
+      });
+    }
+
+    if (skipBtn) {
+      skipBtn.addEventListener('click', function () {
+        endTour();
+      });
+    }
+  }
+
+  function positionSpotlight(target) {
+    var rect = target.getBoundingClientRect();
+    var pad = 12;
+    overlay.style.setProperty('--spot-top', (rect.top - pad) + 'px');
+    overlay.style.setProperty('--spot-left', (rect.left - pad) + 'px');
+    overlay.style.setProperty('--spot-width', (rect.width + pad * 2) + 'px');
+    overlay.style.setProperty('--spot-height', (rect.height + pad * 2) + 'px');
+  }
+
+  function positionTooltip(target) {
+    var rect = target.getBoundingClientRect();
+    var tooltipRect = tooltip.getBoundingClientRect();
+    var viewW = window.innerWidth;
+
+    // Position below the target, centered horizontally
+    var top = rect.bottom + 16;
+    var left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+
+    // If tooltip would go off screen bottom, position above
+    if (top + tooltipRect.height > window.innerHeight - 60) {
+      top = rect.top - tooltipRect.height - 16;
+    }
+
+    // Keep within horizontal bounds
+    if (left < 16) left = 16;
+    if (left + tooltipRect.width > viewW - 16) left = viewW - tooltipRect.width - 16;
+
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+  }
+
+  function clearSpotlight() {
+    overlay.style.removeProperty('--spot-top');
+    overlay.style.removeProperty('--spot-left');
+    overlay.style.removeProperty('--spot-width');
+    overlay.style.removeProperty('--spot-height');
+  }
+
+  function endTour() {
+    completeTour();
+    clearSpotlight();
+    overlay.classList.add('tour-overlay--exiting');
+    tooltip.classList.add('tour-tooltip--exiting');
+    setTimeout(function () {
+      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+    }, 400);
+  }
+
+  // Kick off
+  renderStep(0);
+}
+
 // --------------- PAYWALL GATE ---------------
 
 function applyDashPaywall() {
@@ -876,4 +1117,18 @@ document.addEventListener("DOMContentLoaded", function () {
   setupCompetitorSearch();
   makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
   makeSortable("competitor-table", COMPETITORS, renderCompetitorTable);
+
+  // Show replay tour link for logged-in users
+  var replayLink = document.getElementById('replayTourLink');
+  if (replayLink) {
+    replayLink.style.display = 'inline';
+    replayLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('reup_tour_done');
+      startGuidedTour();
+    });
+  }
+
+  // Launch guided tour for first-time subscribers
+  setTimeout(function () { startGuidedTour(); }, 600);
 });
