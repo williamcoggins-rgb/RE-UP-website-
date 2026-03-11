@@ -6,70 +6,70 @@
 // --------------- SEED DATA ---------------
 
 const PRICING_BY_ZIP = [
-  { zip: "28202", area: "Uptown/Center City", haircut: 40, fade: 45, beard: 25, kids: 30, hotTowel: 38, lineup: 18, shops: 6 },
-  { zip: "28203", area: "South End/Dilworth", haircut: 38, fade: 42, beard: 22, kids: 28, hotTowel: 35, lineup: 16, shops: 5 },
-  { zip: "28204", area: "Elizabeth/Myers Park", haircut: 42, fade: 48, beard: 28, kids: 32, hotTowel: 40, lineup: 20, shops: 3 },
-  { zip: "28205", area: "Plaza Midwood/NoDa", haircut: 35, fade: 38, beard: 20, kids: 25, hotTowel: 32, lineup: 15, shops: 7 },
-  { zip: "28206", area: "North Charlotte", haircut: 25, fade: 28, beard: 14, kids: 18, hotTowel: 25, lineup: 12, shops: 4 },
-  { zip: "28208", area: "West Charlotte", haircut: 25, fade: 28, beard: 15, kids: 18, hotTowel: 24, lineup: 12, shops: 8 },
-  { zip: "28210", area: "South Charlotte", haircut: 32, fade: 35, beard: 18, kids: 22, hotTowel: 30, lineup: 14, shops: 4 },
-  { zip: "28211", area: "SouthPark", haircut: 45, fade: 50, beard: 30, kids: 35, hotTowel: 42, lineup: 22, shops: 3 },
-  { zip: "28215", area: "East Charlotte", haircut: 22, fade: 25, beard: 12, kids: 15, hotTowel: 22, lineup: 10, shops: 6 },
-  { zip: "28216", area: "University City", haircut: 28, fade: 30, beard: 15, kids: 20, hotTowel: 26, lineup: 13, shops: 4 },
-  { zip: "28217", area: "Steele Creek", haircut: 30, fade: 33, beard: 17, kids: 22, hotTowel: 28, lineup: 14, shops: 3 },
-  { zip: "28269", area: "Harrisburg/Concord", haircut: 28, fade: 32, beard: 16, kids: 20, hotTowel: 27, lineup: 13, shops: 5 }
+  { zip: "28202", area: "Uptown / Center City", haircut: 38, fade: 42, beard: 20, kids: "—", hotTowel: 40, lineup: "—", shops: 5 },
+  { zip: "28203", area: "South End / Dilworth", haircut: 35, fade: 40, beard: 18, kids: "—", hotTowel: 35, lineup: "—", shops: 4 },
+  { zip: "28204", area: "Plaza Midwood / Elizabeth", haircut: 32, fade: 37, beard: 16, kids: 20, hotTowel: "—", lineup: 15, shops: 3 },
+  { zip: "28205", area: "NoDa / Villa Heights", haircut: 30, fade: 35, beard: 15, kids: "—", hotTowel: "—", lineup: "—", shops: 4 },
+  { zip: "28206", area: "North Charlotte / Druid Hills", haircut: 25, fade: 30, beard: 12, kids: "—", hotTowel: "—", lineup: 12, shops: 3 },
+  { zip: "28208", area: "West Charlotte / Airport", haircut: 25, fade: 28, beard: 12, kids: "—", hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28210", area: "South Charlotte / Quail Hollow", haircut: 30, fade: 35, beard: 15, kids: 18, hotTowel: 30, lineup: "—", shops: 4 },
+  { zip: "28211", area: "SouthPark / Myers Park", haircut: 40, fade: 45, beard: 22, kids: "—", hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28215", area: "East Charlotte / Albemarle Rd", haircut: 22, fade: 27, beard: 10, kids: "—", hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28216", area: "North Charlotte / Brookshire", haircut: 25, fade: 30, beard: 12, kids: "—", hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28217", area: "Steele Creek / Westinghouse", haircut: 28, fade: 32, beard: 14, kids: "—", hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28269", area: "University City / Concord Mills", haircut: 27, fade: 32, beard: 13, kids: 15, hotTowel: "—", lineup: "—", shops: 2 }
 ];
 
 const COMPETITORS = [
-  { name: "Crown & Blade Barbershop", neighborhood: "South End", zip: "28203", avgCut: 42, rating: 4.8, barbers: 5, model: "Appointment", tier: "Premium" },
-  { name: "QC Kutz", neighborhood: "West Charlotte", zip: "28208", avgCut: 22, rating: 4.3, barbers: 4, model: "Walk-in", tier: "Value" },
-  { name: "TheRefinery CLT", neighborhood: "Uptown", zip: "28202", avgCut: 55, rating: 4.9, barbers: 6, model: "Appointment", tier: "Premium" },
-  { name: "704 Barbershop", neighborhood: "Plaza Midwood", zip: "28205", avgCut: 35, rating: 4.6, barbers: 3, model: "Both", tier: "Mid-tier" },
-  { name: "Fresh Fades Charlotte", neighborhood: "North Charlotte", zip: "28206", avgCut: 25, rating: 4.2, barbers: 3, model: "Walk-in", tier: "Value" },
-  { name: "Legends Barbershop", neighborhood: "East Charlotte", zip: "28215", avgCut: 20, rating: 4.1, barbers: 4, model: "Walk-in", tier: "Value" },
-  { name: "Bishops Cuts/Color", neighborhood: "SouthPark", zip: "28211", avgCut: 48, rating: 4.5, barbers: 7, model: "Appointment", tier: "Premium" },
-  { name: "The Cut Above CLT", neighborhood: "NoDa", zip: "28205", avgCut: 38, rating: 4.7, barbers: 4, model: "Both", tier: "Mid-tier" },
-  { name: "Sport Clips (Steele Creek)", neighborhood: "Steele Creek", zip: "28217", avgCut: 28, rating: 3.9, barbers: 6, model: "Walk-in", tier: "Value" },
-  { name: "King's Throne Barber Lounge", neighborhood: "Uptown", zip: "28202", avgCut: 50, rating: 4.8, barbers: 5, model: "Appointment", tier: "Premium" },
-  { name: "Next Level Barbershop", neighborhood: "University City", zip: "28216", avgCut: 30, rating: 4.4, barbers: 3, model: "Both", tier: "Mid-tier" },
-  { name: "Clip Joint CLT", neighborhood: "Dilworth", zip: "28203", avgCut: 40, rating: 4.6, barbers: 4, model: "Appointment", tier: "Mid-tier" },
-  { name: "Faded Royalty", neighborhood: "West Charlotte", zip: "28208", avgCut: 18, rating: 4.0, barbers: 2, model: "Walk-in", tier: "Value" },
-  { name: "Groom CLT", neighborhood: "Elizabeth", zip: "28204", avgCut: 45, rating: 4.7, barbers: 3, model: "Appointment", tier: "Premium" },
-  { name: "Great Clips (Harrisburg)", neighborhood: "Harrisburg", zip: "28269", avgCut: 22, rating: 3.7, barbers: 5, model: "Walk-in", tier: "Value" },
-  { name: "Myers Park Barber", neighborhood: "Myers Park", zip: "28204", avgCut: 50, rating: 4.9, barbers: 2, model: "Appointment", tier: "Premium" },
-  { name: "Queen City Cutz", neighborhood: "South Charlotte", zip: "28210", avgCut: 32, rating: 4.5, barbers: 4, model: "Both", tier: "Mid-tier" },
-  { name: "The Man Cave Barbershop", neighborhood: "East Charlotte", zip: "28215", avgCut: 20, rating: 4.3, barbers: 3, model: "Walk-in", tier: "Value" },
-  { name: "Finley's Barber & Snip", neighborhood: "SouthPark", zip: "28211", avgCut: 44, rating: 4.4, barbers: 5, model: "Both", tier: "Mid-tier" },
-  { name: "Trendsetters Barbershop", neighborhood: "West Charlotte", zip: "28208", avgCut: 24, rating: 4.2, barbers: 3, model: "Walk-in", tier: "Value" }
+  { name: "Crown & Blade Barbershop", neighborhood: "South End", zip: "28203", avgCut: 40, rating: 4.9, barbers: 4, model: "Appointment", tier: "Premium" },
+  { name: "The Parlour CLT", neighborhood: "NoDa", zip: "28205", avgCut: 35, rating: 4.9, barbers: 3, model: "Hybrid", tier: "Mid-tier" },
+  { name: "Uptown Cuts", neighborhood: "Uptown", zip: "28202", avgCut: 42, rating: 4.8, barbers: 5, model: "Appointment", tier: "Premium" },
+  { name: "Queen City Cutz", neighborhood: "SouthPark", zip: "28211", avgCut: 45, rating: 4.8, barbers: 3, model: "Appointment", tier: "Premium" },
+  { name: "704 Barbershop", neighborhood: "Plaza Midwood", zip: "28204", avgCut: 30, rating: 4.7, barbers: 4, model: "Hybrid", tier: "Mid-tier" },
+  { name: "Fresh Fades CLT", neighborhood: "Druid Hills", zip: "28206", avgCut: 25, rating: 4.6, barbers: 2, model: "Walk-in", tier: "Value" },
+  { name: "The Cut Lab", neighborhood: "Uptown", zip: "28202", avgCut: 40, rating: 4.7, barbers: 3, model: "Appointment", tier: "Premium" },
+  { name: "Legacy Barber Lounge", neighborhood: "Quail Hollow", zip: "28210", avgCut: 28, rating: 4.5, barbers: 2, model: "Hybrid", tier: "Mid-tier" },
+  { name: "Sport Clips - Steele Creek", neighborhood: "Steele Creek", zip: "28217", avgCut: 25, rating: 4.1, barbers: 3, model: "Walk-in", tier: "Value" },
+  { name: "Great Clips - University", neighborhood: "University City", zip: "28269", avgCut: 22, rating: 3.9, barbers: 2, model: "Walk-in", tier: "Value" },
+  { name: "Majesty Barbershop", neighborhood: "Brookshire", zip: "28216", avgCut: 25, rating: 4.5, barbers: 2, model: "Walk-in", tier: "Value" },
+  { name: "Razor Sharp Studios", neighborhood: "West Charlotte", zip: "28208", avgCut: 25, rating: 4.6, barbers: 1, model: "Hybrid", tier: "Value" },
+  { name: "Gentlemen's Quarter", neighborhood: "Dilworth", zip: "28203", avgCut: 38, rating: 4.7, barbers: 3, model: "Appointment", tier: "Premium" },
+  { name: "CLT Clippers", neighborhood: "Albemarle Rd", zip: "28215", avgCut: 20, rating: 4.3, barbers: 2, model: "Walk-in", tier: "Value" },
+  { name: "Next Level Barbershop", neighborhood: "Villa Heights", zip: "28205", avgCut: 32, rating: 4.6, barbers: 2, model: "Hybrid", tier: "Mid-tier" },
+  { name: "Headlines Barber Lounge", neighborhood: "South Charlotte", zip: "28210", avgCut: 35, rating: 4.5, barbers: 3, model: "Appointment", tier: "Mid-tier" },
+  { name: "Finesse Fades", neighborhood: "Airport Area", zip: "28208", avgCut: 25, rating: 4.4, barbers: 1, model: "Walk-in", tier: "Value" },
+  { name: "Park Road Barbers", neighborhood: "Myers Park", zip: "28211", avgCut: 40, rating: 4.6, barbers: 2, model: "Appointment", tier: "Premium" },
+  { name: "The Man Cave CLT", neighborhood: "North Charlotte", zip: "28216", avgCut: 25, rating: 4.4, barbers: 2, model: "Hybrid", tier: "Value" },
+  { name: "Elite Grooming Studio", neighborhood: "Uptown", zip: "28202", avgCut: 38, rating: 4.5, barbers: 4, model: "Appointment", tier: "Premium" }
 ];
 
 const SOCIAL_LEADERS = [
-  { rank: 1,  name: "Jay the Barber",       type: "Barber", platform: "Instagram", followers: 48200,  engagement: "5.1%" },
-  { rank: 2,  name: "Crown & Blade",        type: "Shop",   platform: "Instagram", followers: 34800,  engagement: "3.8%" },
-  { rank: 3,  name: "CLT Fades",            type: "Barber", platform: "TikTok",    followers: 31500,  engagement: "7.2%" },
-  { rank: 4,  name: "The Refinery CLT",     type: "Shop",   platform: "Instagram", followers: 27600,  engagement: "4.1%" },
-  { rank: 5,  name: "DreamsToFades",        type: "Barber", platform: "TikTok",    followers: 24100,  engagement: "6.8%" },
-  { rank: 6,  name: "King's Throne Lounge", type: "Shop",   platform: "Instagram", followers: 21300,  engagement: "3.5%" },
-  { rank: 7,  name: "Niko Blendz",          type: "Barber", platform: "Instagram", followers: 19800,  engagement: "4.4%" },
-  { rank: 8,  name: "704 Barbershop",       type: "Shop",   platform: "Instagram", followers: 16500,  engagement: "3.2%" },
-  { rank: 9,  name: "Trey Cuts CLT",        type: "Barber", platform: "TikTok",    followers: 14700,  engagement: "8.1%" },
-  { rank: 10, name: "Bishops Cuts/Color",   type: "Shop",   platform: "Instagram", followers: 13200,  engagement: "2.9%" },
-  { rank: 11, name: "FadeMaster Mike",      type: "Barber", platform: "Instagram", followers: 11400,  engagement: "4.7%" },
-  { rank: 12, name: "Groom CLT",            type: "Shop",   platform: "Instagram", followers: 9800,   engagement: "3.6%" },
-  { rank: 13, name: "QueenCityBarber",      type: "Barber", platform: "TikTok",    followers: 8500,   engagement: "6.3%" },
-  { rank: 14, name: "The Cut Above CLT",    type: "Shop",   platform: "Instagram", followers: 7200,   engagement: "3.0%" },
-  { rank: 15, name: "Smooth Edgez",         type: "Barber", platform: "TikTok",    followers: 6100,   engagement: "9.4%" }
+  { rank: 1,  name: "The Parlour CLT",         type: "Shop",   platform: "TikTok",    followers: 32100,  engagement: "8.1%" },
+  { rank: 2,  name: "D. Tha Barber",           type: "Barber", platform: "TikTok",    followers: 22400,  engagement: "9.2%" },
+  { rank: 3,  name: "Fresh Fades CLT",         type: "Shop",   platform: "Instagram", followers: 18200,  engagement: "5.8%" },
+  { rank: 4,  name: "The Cut Lab",             type: "Shop",   platform: "TikTok",    followers: 15600,  engagement: "7.8%" },
+  { rank: 5,  name: "Crown & Blade Barbershop",type: "Shop",   platform: "Instagram", followers: 14500,  engagement: "6.2%" },
+  { rank: 6,  name: "Jay the Barber",          type: "Barber", platform: "Instagram", followers: 11800,  engagement: "7.4%" },
+  { rank: 7,  name: "Elite Grooming Studio",   type: "Shop",   platform: "TikTok",    followers: 10200,  engagement: "6.0%" },
+  { rank: 8,  name: "Mike Blendz",             type: "Barber", platform: "Instagram", followers: 9400,   engagement: "6.9%" },
+  { rank: 9,  name: "704 Barbershop",          type: "Shop",   platform: "YouTube",   followers: 8900,   engagement: "4.3%" },
+  { rank: 10, name: "Next Level Barbershop",   type: "Shop",   platform: "Instagram", followers: 7200,   engagement: "5.1%" },
+  { rank: 11, name: "Gentlemen's Quarter",     type: "Shop",   platform: "Instagram", followers: 6100,   engagement: "4.7%" },
+  { rank: 12, name: "Razor Sharp Studios",     type: "Shop",   platform: "Instagram", followers: 5300,   engagement: "5.5%" },
+  { rank: 13, name: "Queen City Cutz",         type: "Shop",   platform: "Instagram", followers: 4800,   engagement: "4.1%" },
+  { rank: 14, name: "Headlines Barber Lounge", type: "Shop",   platform: "Instagram", followers: 3900,   engagement: "4.5%" },
+  { rank: 15, name: "Ace the Barber",          type: "Barber", platform: "YouTube",   followers: 3200,   engagement: "3.8%" }
 ];
 
 const MARKET_MOVES = [
-  { type: "Expansion",    title: "Crown & Blade Opens Second Location",       detail: "Expanding from South End into NoDa with a 2,400 sq-ft flagship. Opening slated for Q2 2026.",                       impact: "High",   date: "2026-03-01" },
-  { type: "Price Change", title: "The Refinery Raises Cut Price to $60",       detail: "Premium Uptown shop increases men's cut from $55 to $60, citing product cost increases.",                            impact: "Medium", date: "2026-02-18" },
-  { type: "New Opening",  title: "Blended Society Debuts in South End",        detail: "New appointment-only concept shop launching at 1400 S. Tryon with four chairs and a retail bar.",                   impact: "High",   date: "2026-02-25" },
-  { type: "Partnership",  title: "704 Barbershop x Bevel Product Partnership", detail: "Local independent partners with Bevel for exclusive in-shop product line and co-branded content.",                 impact: "Medium", date: "2026-02-10" },
-  { type: "Price Change", title: "Sport Clips Drops Weekday Price to $24",     detail: "Steele Creek franchise tests weekday discount to drive chair utilization during off-peak hours.",                   impact: "Low",    date: "2026-01-28" },
-  { type: "Expansion",    title: "Bishops Announces Third Charlotte Store",    detail: "National franchise targeting University City corridor for late 2026 opening.",                                      impact: "High",   date: "2026-03-05" },
-  { type: "Rebrand",      title: "Fresh Fades Rebrands as Fade Factory",       detail: "North Charlotte shop rebrands with updated interior, new logo, and appointment system via Booksy.",                 impact: "Medium", date: "2026-02-01" },
-  { type: "New Opening",  title: "Gentlemen's Republic Opening in SouthPark",  detail: "Luxury concept with lounge area, bourbon bar, and $65 signature cut. Targets the high-income SouthPark corridor.", impact: "High",   date: "2026-03-08" }
+  { type: "Partnership",    title: "704 Barbershop partners with Charlotte FC",                detail: "704 Barbershop became the official grooming partner of Charlotte FC, providing matchday pop-up cuts at Bank of America Stadium and social media co-promotions.",                          impact: "High",   date: "2026-03-01" },
+  { type: "Expansion",      title: "Elite Grooming opens second Charlotte location",           detail: "Elite Grooming Studio signed a lease for a 1,800 sq ft space in South End (28203), targeting a Q2 2026 opening. This will be their second Charlotte location after Uptown.",              impact: "High",   date: "2026-02-15" },
+  { type: "Product Launch", title: "Gentlemen's Quarter launches private-label grooming line",  detail: "Dilworth-based Gentlemen's Quarter launched a 6-product grooming line (pomade, beard oil, aftershave, shampoo, conditioner, styling cream) sold in-shop and online.",                     impact: "Medium", date: "2026-02-01" },
+  { type: "Price Increase", title: "Crown & Blade raises base haircut price to $40",           detail: "Crown & Blade increased Men's Haircut from $35 to $40 and Fade from $40 to $45, citing rising rent in South End. Beard Trim held at $20.",                                              impact: "Medium", date: "2026-01-20" },
+  { type: "Price Increase", title: "Sport Clips adjusts regional pricing upward",              detail: "Sport Clips corporate rolled out a regional price adjustment — Men's Haircut moved from $22 to $25, aligning Steele Creek with other Charlotte-area franchise locations.",               impact: "Low",    date: "2026-02-10" },
+  { type: "Expansion",      title: "The Parlour CLT adds second chair and apprentice program", detail: "The Parlour expanded from 2 to 3 barbers and launched an apprentice program partnering with local barber schools. Capacity increase of roughly 33%.",                                    impact: "Medium", date: "2026-01-15" },
+  { type: "Rebrand",        title: "Fresh Fades CLT rebrands with new identity",               detail: "Fresh Fades completed a full rebrand including new logo, interior renovation, and updated social media presence. Repositioning from walk-in budget shop to mid-tier hybrid model.",       impact: "Low",    date: "2026-01-05" },
+  { type: "New Opening",    title: "The Man Cave CLT opens gaming-lounge barbershop",          detail: "New concept shop opened in North Charlotte combining barbering with a gaming lounge. Targeting 18-35 demographic with competitive pricing at $25 haircuts.",                              impact: "Medium", date: "2025-11-10" }
 ];
 
 const DENSITY = PRICING_BY_ZIP.map(function (row) {
@@ -79,6 +79,7 @@ const DENSITY = PRICING_BY_ZIP.map(function (row) {
 // --------------- UTILITY HELPERS ---------------
 
 function formatPrice(n) {
+  if (n === "—" || n === undefined || n === null) return "—";
   return "$" + n;
 }
 
@@ -154,11 +155,12 @@ function renderSocialTable() {
 // --------------- RENDER: MARKET MOVES ---------------
 
 var MOVE_COLORS = {
-  "Expansion":    "#22c55e",
-  "Price Change": "#eab308",
-  "New Opening":  "#3b82f6",
-  "Partnership":  "#a855f7",
-  "Rebrand":      "#f97316"
+  "Expansion":      "#22c55e",
+  "Price Increase": "#eab308",
+  "New Opening":    "#3b82f6",
+  "Partnership":    "#a855f7",
+  "Rebrand":        "#f97316",
+  "Product Launch": "#06b6d4"
 };
 
 function renderMoves() {
