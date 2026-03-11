@@ -6,7 +6,7 @@
   <title>Charlotte Market Dashboard | RE UP Report</title>
   <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body class="body-dashboard">
+<body class="body-dashboard has-ticker">
 
   <!-- Navigation -->
   <nav class="navbar navbar-dashboard" role="navigation">
@@ -179,6 +179,22 @@
       </div>
     </section>
 
+    <!-- Industry News -->
+    <section class="dash-section">
+      <div class="dash-section-header">
+        <h2 class="dash-section-title">Industry News</h2>
+        <p class="dash-section-sub">Real headlines from Charlotte barber shops and barber tech companies</p>
+        <div class="news-tabs">
+          <button class="news-tab active" data-news-filter="all">All</button>
+          <button class="news-tab" data-news-filter="charlotte">Charlotte</button>
+          <button class="news-tab" data-news-filter="tech">Barber Tech</button>
+        </div>
+      </div>
+      <div class="news-grid" id="news-grid">
+        <!-- Populated by js/news.js with verified articles only -->
+      </div>
+    </section>
+
   </main>
 
   <!-- Footer -->
@@ -190,6 +206,18 @@
     </div>
   </footer>
 
+  <!-- Bottom Ticker — Live Market Prices -->
+  <div class="bottom-ticker" aria-label="Live market pricing ticker">
+    <div class="ticker-label-fixed">CLT LIVE</div>
+    <div class="ticker-track">
+      <div class="ticker-scroll" id="ticker-scroll">
+        <!-- Populated by js/ticker.js -->
+      </div>
+    </div>
+  </div>
+
   <script src="../js/dashboard.js"></script>
+  <script src="../js/ticker.js"></script>
+  <script src="../js/news.js"></script>
 </body>
 </html>
