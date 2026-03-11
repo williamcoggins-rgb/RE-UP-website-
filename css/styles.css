@@ -21,9 +21,11 @@
   --gray-200: #ccc;
   --gray-100: #eee;
   --white: #ffffff;
+  --accent: #e50914;
+  --accent-hover: #ff1a1a;
+  --accent-dim: rgba(229, 9, 20, 0.15);
+  --accent-glow: rgba(229, 9, 20, 0.3);
   --green: #10b981;
-  --green-dim: rgba(16, 185, 129, 0.15);
-  --green-glow: rgba(16, 185, 129, 0.3);
   --red: #ef4444;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
@@ -106,7 +108,7 @@ table {
   top: 0;
   left: 0;
   height: 2px;
-  background: var(--green);
+  background: var(--accent);
   z-index: 10000;
   transition: width 0.1s linear;
 }
@@ -162,7 +164,7 @@ table {
 }
 
 .logo-accent {
-  color: var(--green);
+  color: var(--accent);
 }
 
 .nav-menu {
@@ -208,14 +210,14 @@ table {
 }
 
 .btn-nav.btn-primary {
-  background: var(--green);
-  border-color: var(--green);
+  background: var(--accent);
+  border-color: var(--accent);
   color: var(--black);
 }
 
 .btn-nav.btn-primary:hover {
-  background: #0ea472;
-  border-color: #0ea472;
+  background: #cc0812;
+  border-color: #cc0812;
 }
 
 /* Dashboard nav center */
@@ -297,7 +299,7 @@ table {
   align-items: center;
   padding-top: 56px;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 50%, rgba(229, 9, 20, 0.04) 0%, transparent 60%),
     linear-gradient(180deg, var(--black) 0%, var(--black-soft) 100%);
 }
 
@@ -322,12 +324,12 @@ table {
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  background: var(--green-dim);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: var(--accent-dim);
+  border: 1px solid rgba(229, 9, 20, 0.2);
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
-  color: var(--green);
+  color: var(--accent);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -336,13 +338,13 @@ table {
 .badge-dot {
   width: 6px;
   height: 6px;
-  background: var(--green);
+  background: var(--accent);
   border-radius: 50%;
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--green-glow); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow); }
   50% { opacity: 0.7; box-shadow: 0 0 0 6px transparent; }
 }
 
@@ -458,7 +460,7 @@ table {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
-  color: var(--green);
+  color: var(--accent);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -467,7 +469,7 @@ table {
   content: '';
   width: 6px;
   height: 6px;
-  background: var(--green);
+  background: var(--accent);
   border-radius: 50%;
   animation: pulse-dot 2s ease-in-out infinite;
 }
@@ -543,7 +545,7 @@ table {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
-  color: var(--green);
+  color: var(--accent);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -579,7 +581,7 @@ table {
 .value-card {
   background: var(--black-card);
   border: 1px solid var(--gray-800);
-  border-left: 3px solid var(--green);
+  border-left: 3px solid var(--accent);
   border-radius: 6px;
   padding: 28px 24px;
   transition: border-color 0.2s, background 0.2s;
@@ -588,7 +590,7 @@ table {
 .value-card:hover {
   background: var(--black-hover);
   border-color: var(--gray-700);
-  border-left-color: var(--green);
+  border-left-color: var(--accent);
 }
 
 .value-icon {
@@ -597,10 +599,10 @@ table {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--green-dim);
+  background: var(--accent-dim);
   border-radius: 6px;
   margin-bottom: 16px;
-  color: var(--green);
+  color: var(--accent);
   font-size: 18px;
 }
 
@@ -793,7 +795,7 @@ table {
 .section-cta-report {
   padding: 100px 0;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(229, 9, 20, 0.06) 0%, transparent 60%),
     var(--black);
   text-align: center;
 }
@@ -832,7 +834,7 @@ table {
 
 .cta-feature svg,
 .cta-feature i {
-  color: var(--green);
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -858,15 +860,15 @@ table {
 }
 
 .btn-primary {
-  background: var(--green);
+  background: var(--accent);
   color: var(--black);
-  border-color: var(--green);
+  border-color: var(--accent);
 }
 
 .btn-primary:hover {
-  background: #0ea472;
-  border-color: #0ea472;
-  box-shadow: 0 0 20px var(--green-glow);
+  background: #cc0812;
+  border-color: #cc0812;
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
 .btn-ghost {
@@ -1002,7 +1004,7 @@ table {
 .kpi-card {
   background: var(--black-card);
   border: 1px solid var(--gray-800);
-  border-top: 2px solid var(--green);
+  border-top: 2px solid var(--accent);
   border-radius: 6px;
   padding: 20px;
   transition: background 0.2s;
@@ -1048,7 +1050,7 @@ table {
 .move-card {
   background: var(--black-card);
   border: 1px solid var(--gray-800);
-  border-left: 3px solid var(--green);
+  border-left: 3px solid var(--accent);
   border-radius: 6px;
   padding: 20px;
   transition: background 0.2s;
@@ -1061,7 +1063,7 @@ table {
 .move-type {
   font-size: 10px;
   font-weight: 600;
-  color: var(--green);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 8px;
@@ -1091,8 +1093,8 @@ table {
   border-radius: 3px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  background: var(--green-dim);
-  color: var(--green);
+  background: var(--accent-dim);
+  color: var(--accent);
 }
 
 .move-impact.negative {
@@ -1226,7 +1228,7 @@ table {
    UTILITIES
    ============================================ */
 .text-accent {
-  color: var(--green);
+  color: var(--accent);
 }
 
 /* ============================================
@@ -1402,13 +1404,13 @@ table {
 
 /* Column highlight for pricing filter */
 .col-highlight {
-  background: var(--green-dim) !important;
+  background: var(--accent-dim) !important;
 }
 
 /* Sort arrow on table headers */
 .sort-arrow {
   font-size: 0.6rem;
-  color: var(--green);
+  color: var(--white);
   margin-left: 4px;
 }
 
