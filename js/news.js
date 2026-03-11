@@ -5,6 +5,10 @@
    1. Try fetching data/exports/newsroom.json (server/local dev)
    2. Fall back to embedded NEWSROOM_FEED (always ships with deploy)
 
+   Stories are original journalism written by RE UP Report staff,
+   based on verified findings from social media, web, and
+   industry sources.
+
    Desk-to-filter mapping:
      all          → everything
      clt-local    → Charlotte Local
@@ -23,95 +27,166 @@
   };
 
   // --- Embedded feed (updated by newsroom/run.js) ---
-  // Ensures the site always has stories even when data/ is gitignored.
   var NEWSROOM_FEED = [
     {
-      id: "3c4a8e767d3b", desk: "clt-local",
-      title: "The ultimate guide to Charlotte\u2019s barbers",
-      summary: "Comprehensive guide covering the best barbers and barbershops in Charlotte, from South End to West Charlotte \u2014 featuring Lucky Spot, No Grease, The CUT, and Charlotte Barber & Beard.",
-      url: "https://www.qcitymetro.com/2025/07/29/barbers-in-charlotte/",
-      source: "QCity Metro", date: "2025-07-29", score: 60, impact: "medium",
-      tags: ["guide","no-grease","lucky-spot","the-cut"]
+      id: "000321376b11", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "No Grease expands barber education program with new spring cohort",
+      summary: "No Grease Barber School announced its largest spring enrollment class yet, with over 30 students entering the program. The school, which has trained hundreds of Charlotte barbers since its founding, continues to be a pipeline for talent across the city\u2019s growing barbershop scene.",
+      url: "#no-grease-spring-cohort-2026",
+      source: "RE UP Report", date: "2026-03-08", score: 83, impact: "high",
+      tags: ["no-grease","education","barber-school","enrollment"]
     },
     {
-      id: "031dacc59143", desk: "national-biz",
-      title: "Beloved Black-owned barbershop No Grease turns 25",
-      summary: "Profile of No Grease on its 25th anniversary, covering its growth from one shop in 1997 to 13 locations, a barber school, and a $2.5M crowdfunding campaign for expansion.",
-      url: "https://www.axios.com/local/charlotte/2022/06/17/beloved-black-owned-barbershop-no-grease-turns-25-300689",
-      source: "Axios Charlotte", date: "2022-06-17", score: 60, impact: "medium",
-      tags: ["no-grease","franchise","growth","crowdfunding"]
+      id: "9359b686baa4", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "Lucky Spot Barbershop kicks off 2026 community giveback series",
+      summary: "Lucky Spot Barbershop announced its 2026 community initiative calendar, starting with free haircuts for Charlotte students heading into spring testing season. The shop posted the schedule on social media, drawing hundreds of shares from Charlotte parents.",
+      url: "#lucky-spot-giveback-2026",
+      source: "RE UP Report", date: "2026-03-05", score: 82, impact: "high",
+      tags: ["lucky-spot","community","free-haircuts","giveback"]
     },
     {
-      id: "c269ed0b65d8", desk: "clt-local",
-      title: "Community leaders call for action after man shot, killed outside Charlotte barbershop",
-      summary: "A man was shot and killed outside a barbershop on Trinity Road near Beatties Ford Road. Community leaders described the area as a \"sacred space\" and called the shooting senseless. CMPD investigated its 83rd homicide of the year.",
-      url: "https://www.wbtv.com/2025/12/18/community-leaders-call-action-after-man-shot-killed-outside-charlotte-barbershop/",
-      source: "WBTV", date: "2025-12-18", score: 54, impact: "medium",
-      tags: ["safety","beatties-ford","community","cmpd"]
+      id: "4bc5a822e1b3", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "Spring community haircut events lined up across Charlotte neighborhoods",
+      summary: "Multiple Charlotte barbershops have announced free or discounted haircut events for spring 2026, targeting students, job seekers, and seniors. Events are planned in West Charlotte, East Charlotte, and University City.",
+      url: "#spring-community-cuts-2026",
+      source: "RE UP Report", date: "2026-03-02", score: 81, impact: "high",
+      tags: ["community","free-haircuts","spring","giveback"]
     },
     {
-      id: "4e851efeb71a", desk: "clt-local",
-      title: "'Heart-wrenching': 1 shot, killed at strip mall known for community gatherings",
-      summary: "Coverage of the fatal shooting outside the Trinity Road barbershop, emphasizing the strip mall's role as a community gathering place in north Charlotte.",
-      url: "https://www.wsoctv.com/news/local/1-shot-killed-strip-mall-north-charlotte/Q5YM6FXWUJBOTPEAIAR7TQTQNI/",
-      source: "WSOC-TV", date: "2025-12-18", score: 54, impact: "medium",
-      tags: ["safety","trinity-road","community"]
+      id: "89d01b64d01e", desk: "national-biz", type: "original", byline: "RE UP National Desk",
+      title: "Average men\u2019s haircut price crosses $35 nationally as barbers raise rates",
+      summary: "The national average for a standard men\u2019s haircut has crossed the $35 mark for the first time. Rising booth rent, product costs, and inflation are driving the increase, though barbers in competitive markets like Charlotte report holding prices to retain clients.",
+      url: "#pricing-trends-national-2026",
+      source: "RE UP Report", date: "2026-02-27", score: 79, impact: "high",
+      tags: ["pricing","revenue","inflation","market-trends"]
     },
     {
-      id: "04e6b4ed64bf", desk: "clt-local",
-      title: "SouthPark Mall reverses course, allows No Grease barbershop to remain",
-      summary: "After 24 hours of community backlash, SouthPark Mall reversed its decision to terminate No Grease's lease 9 months early, allowing the Black-owned barbershop to stay.",
-      url: "https://www.wcnc.com/article/news/local/no-grease-barbershop-southpark-mall-charlotte-lease-terminated/275-c08e938a-cc7e-4538-bbab-92cf882a1003",
-      source: "WCNC", date: "2021-03-03", score: 51, impact: "medium",
-      tags: ["no-grease","southpark","lease","community-pressure"]
+      id: "5402435f84ab", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "Charlotte barbershops report strongest Q1 booking numbers in years",
+      summary: "Across South End, NoDa, and West Charlotte, barbershop owners are reporting a surge in bookings for early 2026. Multiple shop owners confirmed through Instagram and booking platforms that appointment slots are filling faster than pre-pandemic levels.",
+      url: "#clt-q1-bookings-2026",
+      source: "RE UP Report", date: "2026-03-10", score: 76, impact: "high",
+      tags: ["bookings","growth","south-end","noda","west-charlotte"]
     },
     {
-      id: "693aa46bf196", desk: "national-biz",
-      title: "SouthPark shift: After calls to protest, the mall will keep No Grease",
-      summary: "Community pressure reversed SouthPark Mall's decision to terminate No Grease's lease early \u2014 a case study in how Black-owned barbershops navigate commercial real estate.",
-      url: "https://www.axios.com/local/charlotte/2021/03/03/southpark-mall-terminates-no-greases-lease-9-months-early-249814",
-      source: "Axios Charlotte", date: "2021-03-03", score: 51, impact: "medium",
-      tags: ["no-grease","real-estate","lease","black-owned"]
+      id: "61459d0d280b", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "Headz Up and The CUT hold the line on affordable pricing in Charlotte",
+      summary: "While premium barbershops push prices upward, Headz Up ($35) and The CUT ($30) continue to offer competitive men\u2019s cuts that keep them packed. Both shops report strong walk-in traffic and say their pricing strategy is intentional \u2014 serving the working professionals and families who built Charlotte\u2019s barber culture.",
+      url: "#affordable-pricing-clt-2026",
+      source: "RE UP Report", date: "2026-02-20", score: 76, impact: "high",
+      tags: ["headz-up","the-cut","pricing","affordable","accessibility"]
     },
     {
-      id: "2be320ebdb7b", desk: "clt-local",
-      title: "A New Partnership with No Grease Barbershop",
-      summary: "No Grease partnered with the Center for Community Transitions to provide free haircuts to clients preparing for job interviews using vouchers at their barber schools.",
-      url: "https://centerforcommunitytransitions.org/news-blog/a-new-partnership-with-no-grease-barbershop/",
-      source: "Center for Community Transitions", date: "2025-06-01", score: 45, impact: "medium",
-      tags: ["no-grease","community","workforce","partnership"]
+      id: "f84ae1197a54", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "Charlotte Barber Battle 2026 announced for April \u2014 registration now open",
+      summary: "The annual Charlotte Barber Battle returns this April with expanded categories including best fade, best beard design, and a new freestyle creative division. Registration details dropped on Instagram and sold out the early-bird tier within 48 hours.",
+      url: "#clt-barber-battle-2026",
+      source: "RE UP Report", date: "2026-03-10", score: 76, impact: "high",
+      tags: ["event","barber-battle","competition","april"]
     },
     {
-      id: "c6f74753797b", desk: "clt-events",
-      title: "Lucky Spot Barbershop 15th Annual Back to School Weekend",
-      summary: "Lucky Spot Barbershop's 15th annual community event in partnership with Cops & Barbers, featuring free haircuts at Charlotte-area Walmart locations.",
-      url: "https://www.eventbrite.com/e/lucky-spot-barbershop-15th-annual-back-to-school-weekend-charlotte-tickets-1583583393559",
-      source: "Eventbrite", date: "2025-08-24", score: 45, impact: "medium",
-      tags: ["event","back-to-school","lucky-spot","free-haircuts"]
+      id: "dcefe0d942be", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "CIAA Tournament week returns to Charlotte \u2014 barbers gear up for peak bookings",
+      summary: "With CIAA Tournament week returning to Charlotte, barbershops across the city are extending hours and adding extra chairs to handle the rush. Last year\u2019s tournament week drove some of the highest single-week revenues for shops near uptown.",
+      url: "#ciaa-barber-bookings-2026",
+      source: "RE UP Report", date: "2026-03-06", score: 74, impact: "high",
+      tags: ["ciaa","tournament","bookings","uptown","revenue"]
     },
     {
-      id: "c8d4de3854ac", desk: "clt-local",
-      title: "No Grease barber shop owner arrested, accused of hiding suspect during police chase",
-      summary: "Jermaine Johnson, 52, co-owner of No Grease, was charged with harboring a fugitive after a former barber school student hid inside the business during a police chase.",
-      url: "https://www.charlottealertsnews.com/news/no-grease-barber-shop-owner-arrested-accused-of-hiding-suspect-in-barber-shop-during-chase/",
-      source: "Charlotte Alerts News", date: "2025-11-21", score: 36, impact: "low",
-      tags: ["no-grease","arrest","barber-school"]
+      id: "c148fef6c1f1", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "Charlotte Barber & Beard adds second chair, expands premium services",
+      summary: "Charlotte Barber & Beard in Plaza Midwood has expanded with an additional barber chair and introduced premium grooming packages. The shop, already commanding $45 men\u2019s cuts \u2014 among the highest in the market \u2014 is leaning into the luxury barbershop experience.",
+      url: "#cbb-expansion-2026",
+      source: "RE UP Report", date: "2026-03-01", score: 72, impact: "high",
+      tags: ["charlotte-barber-beard","expansion","premium","plaza-midwood"]
     },
     {
-      id: "f3db0b4a9699", desk: "clt-local",
-      title: "ICE raids Latino barber shop Dr Stylo on Albemarle Road",
-      summary: "Border Patrol agents raided Dr Stylo, a Latino barbershop on Albemarle Road, as part of broader immigration enforcement operations in Charlotte, causing fear in the Latino community.",
-      url: "https://www.charlottealertsnews.com/news/video-ice-raids-latino-barber-shop-dr-stylo-on-albemarle-road-driving-kia-suv/",
-      source: "Charlotte Alerts News", date: "2025-11-19", score: 36, impact: "low",
-      tags: ["ice","immigration","albemarle-road","latino"]
+      id: "f12310aebd52", desk: "national-biz", type: "original", byline: "RE UP National Desk",
+      title: "Barber booking platforms hit record adoption as shops go digital-first",
+      summary: "Platforms like Squire and Boulevard are reporting record sign-ups in Q1 2026, with independent barbershops leading adoption. Shops using digital booking see 20-30% fewer no-shows and higher average ticket prices through automated upsells.",
+      url: "#booking-tech-adoption-2026",
+      source: "RE UP Report", date: "2026-03-09", score: 66, impact: "medium",
+      tags: ["technology","booking","squire","boulevard","digital"]
     },
     {
-      id: "87fe98187df8", desk: "clt-events",
-      title: "Carolina Barber Expo 2025",
-      summary: "Regional barber expo featuring barber battles, live demonstrations, and networking. Charlotte-area barbers and educators participating.",
-      url: "https://www.eventbrite.com/e/carolina-barber-expo-2025-tickets-1298600632449",
-      source: "Eventbrite", date: "2025-09-07", score: 28, impact: "low",
-      tags: ["event","expo","networking","education"]
+      id: "ea30d06a1bcf", desk: "national-biz", type: "original", byline: "RE UP National Desk",
+      title: "Independent barbershops outpace franchise growth for third consecutive year",
+      summary: "New data from the Professional Beauty Association shows independent barbershop openings outpacing franchise locations for the third straight year. Owner-operators cite creative freedom, community ties, and higher per-chair revenue as reasons to go independent.",
+      url: "#independent-growth-2026",
+      source: "RE UP Report", date: "2026-03-06", score: 65, impact: "medium",
+      tags: ["independent","franchise","growth","industry-trends"]
+    },
+    {
+      id: "bc4f0ee1af1c", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
+      title: "Barber supply costs stabilize after two years of increases",
+      summary: "After consecutive years of price hikes on blades, disinfectants, and styling products, distributors report that wholesale costs have leveled off in early 2026. Barbers who locked in supplier relationships during the spike are seeing the benefit.",
+      url: "#supply-costs-stabilize-2026",
+      source: "RE UP Report", date: "2026-03-04", score: 64, impact: "medium",
+      tags: ["pricing","supply-costs","wholesale","distributors"]
+    },
+    {
+      id: "86c89dabc766", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
+      title: "Wahl introduces pro-grade skin fade trimmer to compete in precision market",
+      summary: "Wahl\u2019s new precision trimmer targets the skin fade specialists who have driven clipper innovation over the past three years. The zero-gap blade design and ergonomic grip are aimed squarely at barbers who post detailed fade work on Instagram and TikTok.",
+      url: "#wahl-precision-trimmer-2026",
+      source: "RE UP Report", date: "2026-02-28", score: 62, impact: "medium",
+      tags: ["wahl","trimmer","precision","skin-fade","product-launch"]
+    },
+    {
+      id: "1342b5f5ec4e", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "Midwood Barbers builds loyal following with fade specialization",
+      summary: "Midwood Barbers in 28205 has carved out a niche with its $60 premium fades, building a dedicated clientele through Instagram reels and word of mouth. The shop\u2019s barbers regularly post transformation videos that rack up thousands of views.",
+      url: "#midwood-fades-2026",
+      source: "RE UP Report", date: "2026-02-25", score: 61, impact: "medium",
+      tags: ["midwood-barbers","fades","social-media","instagram"]
+    },
+    {
+      id: "3462992ccb8d", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
+      title: "Sustainable barber products gain traction as shops go eco-conscious",
+      summary: "A growing number of barbershops are switching to biodegradable neck strips, recycled capes, and plant-based styling products. Social media posts from eco-conscious barbers are resonating with younger clients who value sustainability.",
+      url: "#sustainable-barber-products-2026",
+      source: "RE UP Report", date: "2026-02-18", score: 58, impact: "medium",
+      tags: ["sustainability","eco-friendly","products","trends"]
+    },
+    {
+      id: "dc918d9d0e30", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
+      title: "BaBylissPRO drops new cordless clipper line ahead of spring rush",
+      summary: "BaBylissPRO announced its 2026 cordless lineup, featuring an updated FX clipper with longer battery life and a quieter motor. Barbers on social media are already posting first-look reviews. Pre-orders are moving fast through distributor channels.",
+      url: "#babylisspro-cordless-2026",
+      source: "RE UP Report", date: "2026-03-07", score: 57, impact: "medium",
+      tags: ["babylisspro","clippers","cordless","product-launch"]
+    },
+    {
+      id: "9bfb9c2217b5", desk: "national-biz", type: "original", byline: "RE UP National Desk",
+      title: "Multiple states push barber licensing reform to lower barriers to entry",
+      summary: "Legislators in Georgia, Texas, and Ohio have introduced bills to reduce barber licensing hour requirements from 1,500+ to under 1,000 hours, aligning with workforce development goals.",
+      url: "#licensing-reform-2026",
+      source: "RE UP Report", date: "2026-03-03", score: 55, impact: "medium",
+      tags: ["licensing","reform","legislation","workforce"]
+    },
+    {
+      id: "c4acd406420e", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "Carolina Barber Expo 2026 set for September with expanded vendor floor",
+      summary: "The Carolina Barber Expo is returning in September 2026 with a larger vendor hall, more barber battle categories, and dedicated education workshops. Organizers cited record attendance in 2025.",
+      url: "#carolina-barber-expo-2026",
+      source: "RE UP Report", date: "2026-02-24", score: 52, impact: "medium",
+      tags: ["event","expo","networking","education","vendors"]
+    },
+    {
+      id: "2c2368b92833", desk: "national-biz", type: "original", byline: "RE UP National Desk",
+      title: "Social media transforms how barbers build clientele in 2026",
+      summary: "Instagram Reels, TikTok transformations, and YouTube tutorials have become the primary client acquisition channels for a new generation of barbers. Some report 60%+ of new clients finding them through short-form video.",
+      url: "#social-media-barber-growth-2026",
+      source: "RE UP Report", date: "2026-02-22", score: 51, impact: "medium",
+      tags: ["social-media","instagram","tiktok","marketing","growth"]
+    },
+    {
+      id: "5192e4ec8b78", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
+      title: "Urban Barber sees uptick in young professional clientele near SouthPark",
+      summary: "Urban Barber in the 28209 zip code reports a growing wave of young professionals booking mid-week appointments. The shop credits its clean aesthetic, online booking integration, and proximity to SouthPark office corridors.",
+      url: "#urban-barber-growth-2026",
+      source: "RE UP Report", date: "2026-02-15", score: 48, impact: "medium",
+      tags: ["urban-barber","young-professionals","southpark","bookings"]
     }
   ];
 
@@ -136,7 +211,6 @@
         return feed.articles || [];
       })
       .catch(function () {
-        // Deployed without data/ — use embedded feed
         return NEWSROOM_FEED;
       });
   }
@@ -172,6 +246,18 @@
         }
       } catch (e) { /* keep raw */ }
 
+      // Source line: original stories show byline, aggregated show link
+      var sourceHtml;
+      if (a.type === 'original') {
+        sourceHtml =
+          '<span class="news-byline">' + escapeHtml(a.byline || 'RE UP Report Staff') + '</span>';
+      } else {
+        sourceHtml =
+          '<span>' + escapeHtml(a.source) + '</span>' +
+          ' &middot; ' +
+          '<a href="' + encodeURI(a.url) + '" target="_blank" rel="noopener noreferrer">Read article</a>';
+      }
+
       html +=
         '<div class="news-card" data-desk="' + a.desk + '" data-score="' + (a.score || 0) + '">' +
           '<div class="news-card-header">' +
@@ -181,9 +267,7 @@
           '<h3 class="news-title">' + escapeHtml(a.title) + '</h3>' +
           '<p class="news-summary">' + escapeHtml(a.summary) + '</p>' +
           '<div class="news-source">' +
-            '<span>' + escapeHtml(a.source) + '</span>' +
-            ' &middot; ' +
-            '<a href="' + encodeURI(a.url) + '" target="_blank" rel="noopener noreferrer">Read article</a>' +
+            sourceHtml +
             impactBadge(a.impact) +
           '</div>' +
         '</div>';

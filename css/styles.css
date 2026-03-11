@@ -1720,6 +1720,13 @@ body.has-ticker {
   text-decoration: underline;
 }
 
+.news-byline {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
 .news-empty {
   grid-column: 1 / -1;
   text-align: center;

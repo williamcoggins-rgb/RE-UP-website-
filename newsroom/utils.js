@@ -79,7 +79,7 @@ function dedup(articles) {
 function formatArticle(desk, raw) {
   var id = articleId(raw.url);
   var score = scoreArticle(raw);
-  return {
+  var article = {
     id: id,
     desk: desk,
     title: raw.title || 'Untitled',
@@ -92,6 +92,12 @@ function formatArticle(desk, raw) {
     tags: raw.tags || [],
     gathered: new Date().toISOString()
   };
+  // Original stories get byline and type
+  if (raw.type === 'original') {
+    article.type = 'original';
+    article.byline = raw.byline || 'RE UP Report Staff';
+  }
+  return article;
 }
 
 module.exports = {

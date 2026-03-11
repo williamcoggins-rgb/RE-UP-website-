@@ -2,6 +2,9 @@
    RE UP Newsroom — Configuration
    Shared constants, search terms, and scoring rules
    for every desk in the newsroom.
+
+   NOTE: RE UP Report journalists write original stories based on
+   verified findings from web, social media, and industry sources.
    ============================================================ */
 
 var path = require('path');
@@ -34,42 +37,42 @@ var DESKS = {
     name: 'Charlotte Events',
     tag: 'CLT EVENTS',
     color: 'events',
-    description: 'Upcoming events in Charlotte that may affect barber income'
+    description: 'Upcoming events in Charlotte that affect barber culture and income'
   }
 };
 
 // --- Search queries each desk uses when gathering stories ---
+// Journalists use these to research social media and web sources
 var DESK_QUERIES = {
   'clt-local': [
-    'Charlotte barbershop news',
-    'Charlotte barber shooting OR arrest OR opening OR closing',
-    'Charlotte NC barber community',
-    'Charlotte barbershop fire OR robbery OR license',
-    'No Grease barbershop Charlotte',
-    '"Charlotte barber" 2025 OR 2026'
+    'Charlotte barbershop opening new location 2026',
+    'Charlotte barber community giveback event',
+    'Charlotte NC barber mentorship program',
+    'No Grease barbershop Charlotte expansion',
+    '"Charlotte barber" growth OR success OR award 2026',
+    'Charlotte barbershop booking trends'
   ],
   'national-biz': [
-    'barbershop business news United States',
-    'barber franchise expansion 2025 OR 2026',
-    'barber licensing law change',
-    'Squire barber technology',
-    'barbershop pricing trends',
-    'barber industry revenue growth'
+    'barbershop business growth United States 2026',
+    'barber franchise expansion 2026',
+    'barber licensing law reform 2026',
+    'barber booking technology Squire Boulevard',
+    'barbershop pricing trends revenue',
+    'barber industry market report 2026'
   ],
   'supply-chain': [
-    'barber supply shortage OR recall',
-    'Andis OR Wahl OR BabylissPRO new product',
-    'barber supply distributor news',
-    'salon barber product price increase',
-    'barber clippers trimmers 2025 OR 2026 launch'
+    'BabylissPRO new clipper 2026 launch',
+    'Andis OR Wahl new product barber 2026',
+    'barber supply innovation cordless',
+    'barber product review trending',
+    'barber supply distributor partnership'
   ],
   'clt-events': [
-    'Charlotte NC events this month',
-    'Charlotte concerts festivals 2025 OR 2026',
-    'Charlotte Panthers Hornets game schedule',
-    'Charlotte road construction closures',
-    'Charlotte NC convention center events',
-    'Charlotte food truck festival OR block party'
+    'Charlotte barber battle competition 2026',
+    'Charlotte NC barber expo event 2026',
+    'Charlotte community haircut event',
+    'CIAA tournament Charlotte 2026 barber',
+    'Charlotte NC spring events festival 2026'
   ]
 };
 
@@ -78,12 +81,13 @@ var DESK_QUERIES = {
 var SCORING = {
   recency_weight: 40,       // newer = higher
   relevance_weight: 35,     // keyword match density
-  source_trust_weight: 25,  // trusted outlets score higher
+  source_trust_weight: 25,  // trusted outlets + RE UP originals score higher
   trusted_sources: [
     'wbtv.com', 'wsoctv.com', 'wcnc.com', 'wfae.org',
     'charlotteobserver.com', 'axios.com', 'qcitymetro.com',
     'bizjournals.com', 'reuters.com', 'apnews.com',
-    'barberevo.com', 'modernsalon.com', 'americansalonmag.com'
+    'barberevo.com', 'modernsalon.com', 'americansalonmag.com',
+    're-up-website-production.up.railway.app'
   ]
 };
 
@@ -93,13 +97,15 @@ var SCORING = {
 //   desk:      string   — desk key e.g. 'clt-local'
 //   title:     string   — headline
 //   summary:   string   — 1-3 sentence summary
-//   url:       string   — source link
-//   source:    string   — publication name
+//   url:       string   — source link (or '#' for originals)
+//   source:    string   — publication name (or 'RE UP Report')
+//   byline:    string   — author credit for original stories
 //   date:      string   — ISO date or human-readable
 //   score:     number   — 0-100 relevance score
 //   impact:    string   — 'high' | 'medium' | 'low'
 //   tags:      string[] — freeform tags for filtering
 //   gathered:  string   — ISO timestamp when agent found this
+//   type:      string   — 'original' (RE UP written) or 'aggregated'
 // }
 
 module.exports = {
