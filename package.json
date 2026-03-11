@@ -1,7 +1,7 @@
 {
   "name": "re-up-website-",
   "version": "1.0.0",
-  "description": "",
+  "description": "RE UP Report — Barbershop Market Intelligence",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
@@ -15,9 +15,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.6.2",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0"
+    "express": "^5.2.1"
   }
 }

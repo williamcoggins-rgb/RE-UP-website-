@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charlotte Market Dashboard | RE UP Report</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="body-dashboard">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-dashboard" role="navigation">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <span class="logo-text">RE UP <span class="logo-accent">REPORT</span></span>
+      </a>
+      <div class="dash-nav-center">
+        <span class="dash-market-label">
+          <span class="badge-dot"></span>
+          Charlotte, NC — Live Market
+        </span>
+      </div>
+      <div class="nav-actions">
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <main class="dashboard">
+
+    <!-- Market Overview Cards -->
+    <section class="dash-section">
+      <h2 class="dash-section-title">Market Overview</h2>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Shops Tracked</span>
+          <span class="kpi-value">40</span>
+          <span class="kpi-sub">Across Charlotte metro</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Men's Haircut</span>
+          <span class="kpi-value">$32</span>
+          <span class="kpi-sub">Range: $15 – $65</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Fade</span>
+          <span class="kpi-value">$35</span>
+          <span class="kpi-sub">Range: $20 – $60</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Barbers Profiled</span>
+          <span class="kpi-value">46</span>
+          <span class="kpi-sub">Active in CLT market</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Beard Trim</span>
+          <span class="kpi-value">$18</span>
+          <span class="kpi-sub">Range: $10 – $35</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Rating</span>
+          <span class="kpi-value">4.5</span>
+          <span class="kpi-sub">Across all shops</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing by Zip -->
+    <section class="dash-section">
+      <div class="dash-section-header">
+        <h2 class="dash-section-title">Pricing by Zip Code</h2>
+        <div class="dash-filters">
+          <button class="dash-filter-btn active" data-service="all">All Services</button>
+          <button class="dash-filter-btn" data-service="haircut">Men's Cut</button>
+          <button class="dash-filter-btn" data-service="fade">Fade</button>
+          <button class="dash-filter-btn" data-service="beard">Beard</button>
+          <button class="dash-filter-btn" data-service="kids">Kids</button>
+        </div>
+      </div>
+      <div class="data-table-wrapper">
+        <table class="data-table" id="pricing-table">
+          <thead>
+            <tr>
+              <th>Zip</th>
+              <th>Area</th>
+              <th>Men's Cut</th>
+              <th>Fade</th>
+              <th>Beard</th>
+              <th>Kids</th>
+              <th>Hot Towel</th>
+              <th>Lineup</th>
+              <th>Shops</th>
+            </tr>
+          </thead>
+          <tbody id="pricing-tbody">
+            <!-- Populated by JS from /api/market/pricing-by-zip or seed data -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Competitor Directory -->
+    <section class="dash-section">
+      <div class="dash-section-header">
+        <h2 class="dash-section-title">Competitor Directory</h2>
+        <div class="dash-search">
+          <input type="text" class="dash-search-input" placeholder="Search shops, neighborhoods..." id="competitor-search">
+        </div>
+      </div>
+      <div class="competitor-table-wrapper">
+        <table class="data-table" id="competitor-table">
+          <thead>
+            <tr>
+              <th>Shop Name</th>
+              <th>Neighborhood</th>
+              <th>Zip</th>
+              <th>Avg Cut</th>
+              <th>Rating</th>
+              <th>Barbers</th>
+              <th>Model</th>
+            </tr>
+          </thead>
+          <tbody id="competitor-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Social Leaderboard -->
+    <section class="dash-section">
+      <div class="dash-section-header">
+        <h2 class="dash-section-title">Social Media Leaderboard</h2>
+        <p class="dash-section-sub">Top barbers and shops by Instagram following and engagement</p>
+      </div>
+      <div class="data-table-wrapper">
+        <table class="data-table" id="social-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Platform</th>
+              <th>Followers</th>
+              <th>Engagement</th>
+            </tr>
+          </thead>
+          <tbody id="social-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Market Moves -->
+    <section class="dash-section">
+      <div class="dash-section-header">
+        <h2 class="dash-section-title">Recent Market Moves</h2>
+        <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
+      </div>
+      <div class="moves-grid" id="moves-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Shop Density Map Placeholder -->
+    <section class="dash-section">
+      <div class="dash-section-header">
+        <h2 class="dash-section-title">Shop Density by Zip Code</h2>
+        <p class="dash-section-sub">Where the competition is concentrated — and where the gaps are</p>
+      </div>
+      <div class="density-grid" id="density-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer footer-dashboard">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RE UP Report. Charlotte market data updated regularly.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

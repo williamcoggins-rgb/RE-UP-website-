@@ -1,6 +1,6 @@
 /* ============================================
-   RE UP — Main JavaScript
-   UX Engine: Motion, micro-interactions, state mgmt
+   RE UP Report — Main JavaScript
+   Market intelligence platform for barbers
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,120 +13,53 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.prepend(scrollProgress);
 
   function updateScrollProgress() {
-    const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
     scrollProgress.style.width = progress + '%';
   }
 
-  // ---- Cursor Glow (desktop only) ----
-  let cursorGlow = null;
-  if (window.matchMedia('(pointer: fine)').matches && window.innerWidth > 768) {
-    cursorGlow = document.createElement('div');
-    cursorGlow.classList.add('cursor-glow');
-    document.body.appendChild(cursorGlow);
+  // ---- Navbar Scroll Effect ----
+  const navbar = document.querySelector('.navbar');
 
-    let mouseX = 0, mouseY = 0;
-    let glowX = 0, glowY = 0;
+  function handleScroll() {
+    updateScrollProgress();
 
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursorGlow.classList.add('active');
-    });
-
-    document.addEventListener('mouseleave', () => {
-      cursorGlow.classList.remove('active');
-    });
-
-    function animateGlow() {
-      glowX += (mouseX - glowX) * 0.08;
-      glowY += (mouseY - glowY) * 0.08;
-      cursorGlow.style.left = glowX + 'px';
-      cursorGlow.style.top = glowY + 'px';
-      requestAnimationFrame(animateGlow);
+    if (navbar) {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
     }
-    animateGlow();
   }
 
-  // ---- Card Spotlight Effect ----
-  const cards = document.querySelectorAll('.course-card, .pricing-card');
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', x + 'px');
-      card.style.setProperty('--mouse-y', y + 'px');
-    });
-  });
-
-  // ---- Button Ripple Effect ----
-  document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      btn.style.setProperty('--ripple-x', x + '%');
-      btn.style.setProperty('--ripple-y', y + '%');
-    });
-  });
-
-  // ---- Magnetic Button Effect (desktop only) ----
-  if (window.matchMedia('(pointer: fine)').matches) {
-    const magneticBtns = document.querySelectorAll('.btn-primary, .btn-lg');
-    const magnetStrength = 0.3;
-    const magnetRadius = 80;
-
-    magneticBtns.forEach(btn => {
-      btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const deltaX = e.clientX - centerX;
-        const deltaY = e.clientY - centerY;
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-        if (distance < magnetRadius) {
-          const pull = (1 - distance / magnetRadius) * magnetStrength;
-          btn.style.transform = 'translate(' + (deltaX * pull) + 'px, ' + (deltaY * pull) + 'px)';
-        }
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        handleScroll();
+        scrollTicking = false;
       });
+      scrollTicking = true;
+    }
+  }, { passive: true });
 
-      btn.addEventListener('mouseleave', () => {
-        btn.style.transform = '';
-      });
-    });
-  }
-
-  // ---- 3D Card Tilt Effect (desktop only) ----
-  if (window.matchMedia('(pointer: fine)').matches) {
-    const tiltCards = document.querySelectorAll('.course-card, .pricing-card, .feature-card');
-    const maxTilt = 6;
-
-    tiltCards.forEach(card => {
-      card.style.transformStyle = 'preserve-3d';
-      card.style.willChange = 'transform';
-
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        const rotateX = (0.5 - y) * maxTilt;
-        const rotateY = (x - 0.5) * maxTilt;
-
-        card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.02, 1.02, 1.02)';
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-      });
-    });
-  }
+  handleScroll();
 
   // ---- Mobile Menu Toggle ----
   const mobileToggle = document.querySelector('.mobile-toggle');
   const mobileMenu = document.querySelector('.mobile-menu');
+
+  function closeMobileMenu() {
+    if (!mobileToggle || !mobileMenu) return;
+    mobileToggle.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    setTimeout(() => {
+      mobileMenu.style.display = 'none';
+    }, 300);
+    document.body.style.overflow = '';
+    mobileToggle.setAttribute('aria-expanded', 'false');
+  }
 
   if (mobileToggle && mobileMenu) {
     mobileToggle.addEventListener('click', () => {
@@ -151,25 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileToggle.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        setTimeout(() => {
-          mobileMenu.style.display = 'none';
-        }, 300);
-        document.body.style.overflow = '';
-        mobileToggle.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', closeMobileMenu);
     });
   }
 
-  // ---- Scroll Animations (IntersectionObserver) ----
-  const animatedElements = document.querySelectorAll('[data-animate], [data-reveal]');
+  // ---- Escape Key Closes Mobile Menu ----
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (mobileToggle && mobileToggle.classList.contains('active')) {
+        closeMobileMenu();
+      }
+    }
+  });
 
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -60px 0px'
-  };
+  // ---- Scroll Animations (IntersectionObserver) ----
+  const animatedElements = document.querySelectorAll('[data-animate]');
 
   const scrollObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -178,12 +107,45 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollObserver.unobserve(entry.target);
       }
     });
-  }, observerOptions);
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
 
   animatedElements.forEach(el => scrollObserver.observe(el));
 
-  // ---- Counter Animation (Stats) ----
-  const statNumbers = document.querySelectorAll('.stat-number');
+  // ---- Counter Animation for Hero Stats ----
+  const statNumbers = document.querySelectorAll('.hero-stat-number[data-count]');
+
+  function easeOutExpo(t) {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  function animateCounter(element) {
+    const target = parseInt(element.getAttribute('data-count'), 10);
+    if (isNaN(target)) return;
+
+    const duration = 1500;
+    const start = performance.now();
+
+    // Preserve any suffix text (like +, %, etc.) after the number
+    const originalText = element.textContent.trim();
+    const suffix = originalText.replace(/[\d,]+/, '');
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutExpo(progress);
+      const current = Math.round(eased * target);
+      element.textContent = current.toLocaleString() + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
 
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -196,557 +158,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   statNumbers.forEach(el => counterObserver.observe(el));
 
-  function animateCounter(element) {
-    const text = element.textContent.trim();
-    const match = text.match(/^(\d+)(\+?)(%?)$/);
-    if (!match) return;
+  // ---- Smooth Scroll for Anchor Links ----
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href === '#') return;
 
-    const target = parseInt(match[1], 10);
-    const suffix = (match[2] || '') + (match[3] || '');
-    const duration = 1800;
-    const start = performance.now();
+      const target = document.querySelector(href);
+      if (!target) return;
 
-    function easeOutExpo(t) {
-      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-    }
-
-    function update(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutExpo(progress);
-      const current = Math.round(eased * target);
-      element.textContent = current + suffix;
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      }
-    }
-
-    requestAnimationFrame(update);
-  }
-
-  // ---- Course Filter (with smooth transitions) ----
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  const filterableCards = document.querySelectorAll('.course-card[data-category], .blog-card[data-category]');
-
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filterGroup = btn.closest('.course-filters');
-      filterGroup.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const filter = btn.dataset.filter;
-
-      filterableCards.forEach(card => {
-        if (filter === 'all' || card.dataset.category === filter) {
-          card.style.display = '';
-          card.classList.remove('filter-hide');
-          // Re-trigger entrance
-          card.classList.remove('visible');
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              card.classList.add('visible');
-            });
-          });
-        } else {
-          card.classList.add('filter-hide');
-          setTimeout(() => {
-            card.style.display = 'none';
-          }, 300);
-        }
-      });
-    });
-  });
-
-  // ---- FAQ Accordion (Smooth animation) ----
-  const faqItems = document.querySelectorAll('.faq-item');
-
-  faqItems.forEach(item => {
-    const question = item.querySelector('.faq-question');
-    const answer = item.querySelector('.faq-answer');
-
-    if (!question || !answer) return;
-
-    question.addEventListener('click', () => {
-      const isActive = item.classList.contains('active');
-
-      // Close all
-      faqItems.forEach(i => {
-        i.classList.remove('active');
-        const a = i.querySelector('.faq-answer');
-        if (a) a.style.maxHeight = '0';
-      });
-
-      // Open clicked if wasn't already open
-      if (!isActive) {
-        item.classList.add('active');
-        answer.style.maxHeight = answer.scrollHeight + 'px';
-      }
-    });
-  });
-
-  // ---- Navbar Scroll Effects ----
-  const navbar = document.querySelector('.navbar');
-  let lastScrollY = 0;
-
-  function handleScroll() {
-    const scrollY = window.scrollY;
-
-    // Progress bar
-    updateScrollProgress();
-
-    // Navbar styling
-    if (navbar) {
-      if (scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    }
-
-    lastScrollY = scrollY;
-  }
-
-  window.addEventListener('scroll', handleScroll, { passive: true });
-
-  // ---- Newsletter Form (with state feedback) ----
-  const newsletterForm = document.querySelector('.inline-form');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const input = newsletterForm.querySelector('.form-input');
-      const submitBtn = newsletterForm.querySelector('.btn');
 
-      if (!input || !input.value) return;
+      const navbarHeight = navbar ? navbar.offsetHeight : 0;
+      const targetPosition = target.getBoundingClientRect().top + window.scrollY - navbarHeight;
 
-      // Validate email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(input.value)) {
-        input.classList.add('is-error');
-        showFormMessage(newsletterForm, 'Please enter a valid email address.', 'error');
-        setTimeout(() => input.classList.remove('is-error'), 2000);
-        return;
-      }
-
-      // Simulate loading
-      submitBtn.classList.add('is-loading');
-      submitBtn.disabled = true;
-
-      setTimeout(() => {
-        input.value = '';
-        input.classList.add('is-success');
-        submitBtn.classList.remove('is-loading');
-        submitBtn.disabled = false;
-
-        showFormMessage(newsletterForm, "You're in! Welcome to RE UP.", 'success');
-        showToast("You're subscribed! Check your inbox.", 'success');
-
-        setTimeout(() => {
-          input.classList.remove('is-success');
-        }, 3000);
-      }, 800);
-    });
-  }
-
-  // ---- Form Message Helper ----
-  function showFormMessage(form, text, type) {
-    let msg = form.parentElement.querySelector('.form-message');
-    if (!msg) {
-      msg = document.createElement('p');
-      msg.classList.add('form-message');
-      form.parentElement.appendChild(msg);
-    }
-    msg.textContent = text;
-    msg.className = 'form-message ' + type;
-    requestAnimationFrame(() => {
-      msg.classList.add('visible');
-    });
-    setTimeout(() => {
-      msg.classList.remove('visible');
-    }, 4000);
-  }
-
-  // ---- Toast Notification System ----
-  function showToast(message, type) {
-    const toast = document.createElement('div');
-    toast.classList.add('toast', type || '');
-    toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'polite');
-
-    const icon = type === 'success' ? '\u2713' : type === 'error' ? '\u2717' : '\u24D8';
-    toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span>' + message + '</span>';
-
-    document.body.appendChild(toast);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toast.classList.add('visible');
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
       });
-    });
 
-    setTimeout(() => {
-      toast.classList.remove('visible');
-      setTimeout(() => toast.remove(), 500);
-    }, 4000);
-  }
-
-  // ---- Smooth Parallax for Visual Card ----
-  const visualCard = document.querySelector('.visual-card');
-  if (visualCard && window.matchMedia('(pointer: fine)').matches) {
-    const splitSection = visualCard.closest('.section-split');
-    if (splitSection) {
-      window.addEventListener('scroll', () => {
-        const rect = splitSection.getBoundingClientRect();
-        const progress = -rect.top / (rect.height + window.innerHeight);
-        const translateY = (progress - 0.5) * 40;
-        visualCard.style.transform = 'translateY(' + translateY + 'px)';
-      }, { passive: true });
-    }
-  }
-
-  // ---- Staggered Grid Animations ----
-  const grids = document.querySelectorAll('.course-grid, .blog-page-grid, .features-grid, .pricing-grid');
-  grids.forEach(grid => {
-    const children = grid.querySelectorAll('[data-animate]');
-    children.forEach((child, index) => {
-      child.style.transitionDelay = (index * 80) + 'ms';
-    });
-  });
-
-  // ---- Carousels — Immersive Sliding Captions with Parallax Drag ----
-  var allCarousels = document.querySelectorAll('.hero-carousel');
-  var carouselInstances = [];
-
-  allCarousels.forEach(function(container) {
-    var track = container.querySelector('.carousel-track');
-    var captionTrack = container.querySelector('.carousel-captions-track');
-    var slides = container.querySelectorAll('.carousel-slide');
-    var dots = container.querySelectorAll('.carousel-dot');
-
-    if (!track || slides.length === 0) return;
-
-    var s = {
-      current: 0,
-      total: slides.length,
-      dragging: false,
-      locked: false,
-      startX: 0,
-      startY: 0,
-      translate: 0,
-      prevTranslate: 0,
-      velocity: 0,
-      lastX: 0,
-      lastTime: 0
-    };
-
-    // Physics
-    var RUBBER = 0.18;         // Edge rubber-band resistance
-    var DRAG_DAMP = 0.92;      // Slide follows at 92% of finger — weighted feel
-    var CAPTION_LAG = 0.75;    // Captions slide at 75% of image speed — gentle trail
-
-    function slideW() { return container.offsetWidth; }
-    function captionW() {
-      var el = container.querySelector('.carousel-captions');
-      return el ? el.offsetWidth : slideW();
-    }
-    function minT() { return -(s.total - 1) * slideW(); }
-
-    function applyRubber(t) {
-      var min = minT();
-      if (t > 0) return t * RUBBER;
-      if (t < min) return min + (t - min) * RUBBER;
-      return t;
-    }
-
-    // Render both tracks — images move at full speed, captions trail behind
-    function render(imgTranslate, smooth) {
-      var ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
-
-      if (smooth) {
-        track.style.transition = 'transform 0.5s ' + ease;
-      } else {
-        track.style.transition = 'none';
-      }
-      track.style.transform = 'translate3d(' + imgTranslate + 'px, 0, 0)';
-
-      if (captionTrack) {
-        // Caption translate: same slide index but scaled to caption container width,
-        // and lagged during drag for that gentle trailing feel
-        var cw = captionW();
-        var sw = slideW();
-        var ratio = (sw !== 0) ? (imgTranslate / sw) : 0;
-        var captionTranslate = ratio * cw;
-
-        if (smooth) {
-          // On snap: captions use a slightly longer, softer easing
-          captionTrack.style.transition = 'transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)';
-        } else {
-          captionTrack.style.transition = 'none';
-          // During drag: apply the parallax lag
-          var baseCaption = -s.current * cw;
-          var captionDelta = captionTranslate - baseCaption;
-          captionTranslate = baseCaption + (captionDelta * CAPTION_LAG);
-        }
-        captionTrack.style.transform = 'translate3d(' + captionTranslate + 'px, 0, 0)';
-      }
-    }
-
-    function goTo(index, smooth) {
-      if (index < 0) index = 0;
-      if (index >= s.total) index = s.total - 1;
-      s.current = index;
-      s.translate = -s.current * slideW();
-      s.prevTranslate = s.translate;
-      render(s.translate, smooth !== false);
-      dots.forEach(function(d, i) { d.classList.toggle('active', i === s.current); });
-    }
-
-    function snapFromDrag() {
-      s.dragging = false;
-      s.locked = false;
-      container.classList.remove('is-swiping');
-
-      var distance = s.translate - s.prevTranslate;
-      var sw = slideW();
-      var velocityThreshold = 0.4;
-      var distanceThreshold = sw * 0.18;
-
-      var next = s.current;
-      if (Math.abs(s.velocity) > velocityThreshold) {
-        next = s.velocity < 0 ? s.current + 1 : s.current - 1;
-      } else if (distance < -distanceThreshold) {
-        next = s.current + 1;
-      } else if (distance > distanceThreshold) {
-        next = s.current - 1;
-      }
-
-      s.prevTranslate = -s.current * sw;
-      goTo(next, true);
-    }
-
-    // --- Pointer start ---
-    function onStart(x, y) {
-      s.dragging = true;
-      s.locked = false;
-      s.startX = x;
-      s.startY = y;
-      s.lastX = x;
-      s.lastTime = Date.now();
-      s.velocity = 0;
-      s.prevTranslate = -s.current * slideW();
-      s.translate = s.prevTranslate;
-      container.classList.add('is-swiping');
-    }
-
-    // --- Pointer move ---
-    function onMove(x, y) {
-      if (!s.dragging) return false;
-
-      var dx = x - s.startX;
-      var dy = y - s.startY;
-
-      if (!s.locked) {
-        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return false;
-        if (Math.abs(dy) > Math.abs(dx)) {
-          s.dragging = false;
-          container.classList.remove('is-swiping');
-          return false;
-        }
-        s.locked = true;
-      }
-
-      // Smoothed velocity
-      var now = Date.now();
-      var dt = now - s.lastTime;
-      if (dt > 0) {
-        var instantV = (x - s.lastX) / dt;
-        s.velocity = s.velocity * 0.3 + instantV * 0.7;
-      }
-      s.lastX = x;
-      s.lastTime = now;
-
-      // Damped drag
-      var dampedDx = dx * DRAG_DAMP;
-      s.translate = applyRubber(s.prevTranslate + dampedDx);
-      render(s.translate, false);
-
-      return true;
-    }
-
-    // --- Pointer end ---
-    function onEnd() {
-      if (!s.dragging) return;
-      snapFromDrag();
-    }
-
-    // Dot click
-    dots.forEach(function(dot) {
-      dot.addEventListener('click', function(e) {
-        e.stopPropagation();
-        goTo(parseInt(dot.dataset.slide, 10), true);
-      });
-    });
-
-    // --- Touch ---
-    container.addEventListener('touchstart', function(e) {
-      if (e.target.closest('.btn, .carousel-dot')) return;
-      onStart(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-
-    container.addEventListener('touchmove', function(e) {
-      var handled = onMove(e.touches[0].clientX, e.touches[0].clientY);
-      if (handled && s.locked) e.preventDefault();
-    }, { passive: false });
-
-    container.addEventListener('touchend', onEnd);
-    container.addEventListener('touchcancel', onEnd);
-
-    // --- Mouse ---
-    container.addEventListener('mousedown', function(e) {
-      if (e.target.closest('.btn, .carousel-dot, a')) return;
-      onStart(e.clientX, e.clientY);
-      e.preventDefault();
-    });
-
-    container.addEventListener('mousemove', function(e) {
-      onMove(e.clientX, e.clientY);
-    });
-
-    container.addEventListener('mouseup', onEnd);
-    container.addEventListener('mouseleave', onEnd);
-
-    // Prevent native image drag
-    container.querySelectorAll('img').forEach(function(img) {
-      img.addEventListener('dragstart', function(e) { e.preventDefault(); });
-    });
-
-    // Resize
-    window.addEventListener('resize', function() { goTo(s.current, false); });
-
-    // Init
-    goTo(0, false);
-
-    carouselInstances.push({ container: container, state: s, goTo: goTo });
-  });
-
-  // ---- Course Carousel Scroll Reveal ----
-  var courseCarousels = document.querySelectorAll('.course-carousel');
-  if (courseCarousels.length > 0) {
-    var carouselRevealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          carouselRevealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.25 });
-
-    courseCarousels.forEach(function(c) { carouselRevealObserver.observe(c); });
-  }
-
-  // Keyboard — control carousel closest to viewport center
-  document.addEventListener('keydown', function(e) {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    if (carouselInstances.length === 0) return;
-
-    var viewCenter = window.innerHeight / 2;
-    var closest = carouselInstances[0];
-    var closestDist = Infinity;
-
-    carouselInstances.forEach(function(inst) {
-      var rect = inst.container.getBoundingClientRect();
-      var center = rect.top + rect.height / 2;
-      var dist = Math.abs(center - viewCenter);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closest = inst;
-      }
-    });
-
-    if (e.key === 'ArrowLeft') closest.goTo(closest.state.current - 1, true);
-    if (e.key === 'ArrowRight') closest.goTo(closest.state.current + 1, true);
-  });
-
-  // ---- Hero Parallax Depth ----
-  const hero = document.querySelector('.hero');
-  const heroContent = document.querySelector('.hero-content');
-  if (hero && heroContent && window.matchMedia('(pointer: fine)').matches) {
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const heroHeight = hero.offsetHeight;
-      if (scrollY < heroHeight) {
-        const progress = scrollY / heroHeight;
-        heroContent.style.transform = 'translateY(' + (progress * 60) + 'px)';
-        heroContent.style.opacity = 1 - (progress * 0.6);
-      }
-    }, { passive: true });
-  }
-
-  // ---- Keyboard Navigation ----
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      // Close mobile menu
+      // Close mobile menu if open
       if (mobileToggle && mobileToggle.classList.contains('active')) {
-        mobileToggle.click();
+        closeMobileMenu();
       }
-      // Close any open FAQ
-      faqItems.forEach(item => {
-        item.classList.remove('active');
-        const answer = item.querySelector('.faq-answer');
-        if (answer) answer.style.maxHeight = '0';
-      });
-    }
+    });
   });
-
-  // ---- Performance: Throttled scroll handler ----
-  let scrollTicking = false;
-  window.addEventListener('scroll', () => {
-    if (!scrollTicking) {
-      requestAnimationFrame(() => {
-        handleScroll();
-        scrollTicking = false;
-      });
-      scrollTicking = true;
-    }
-  }, { passive: true });
-
-  // ---- Initial Scroll Check ----
-  handleScroll();
-
-  // ---- Auth-Aware Navigation ----
-  // Updates nav buttons based on login state
-  (function() {
-    fetch('/api/me')
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        var navActions = document.querySelector('.nav-actions');
-        var joinBtn = navActions ? navActions.querySelector('.btn-nav') : null;
-
-        if (data.user && joinBtn) {
-          // Logged in — show account state
-          joinBtn.textContent = 'My Courses';
-          joinBtn.href = '/pages/courses.html';
-
-          // Add logout link
-          var logoutBtn = document.createElement('a');
-          logoutBtn.href = '#';
-          logoutBtn.className = 'nav-link nav-logout';
-          logoutBtn.textContent = 'Log Out';
-          logoutBtn.style.cssText = 'font-size: 0.75rem; color: #666; margin-left: 12px; cursor: pointer;';
-          logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            fetch('/api/logout', { method: 'POST' }).then(function() {
-              window.location.href = '/';
-            });
-          });
-          navActions.insertBefore(logoutBtn, navActions.querySelector('.mobile-toggle'));
-        } else if (!data.user && joinBtn) {
-          // Not logged in — show Join Now pointing to signup
-          joinBtn.href = '/pages/signup.html';
-        }
-      })
-      .catch(function() {
-        // Server not running or static file hosting — do nothing
-      });
-  })();
 
 });

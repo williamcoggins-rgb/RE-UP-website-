@@ -3,33 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RE UP | Elevate Your Business</title>
+  <title>RE UP Report | Barbershop Market Intelligence</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
-  <!-- Skip Nav (Accessibility) -->
-  <a href="#main-content" class="skip-nav">Skip to main content</a>
-
-  <!-- Announcement Bar -->
-  <div class="announcement-bar" role="banner">
-    <p>NEW DROP: Chair Utilization Mastery — <a href="pages/courses.html">Enroll Now</a></p>
-  </div>
 
   <!-- Navigation -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
-        <img src="images/reup-logo.svg" alt="RE UP" class="logo-img">
-        <span class="logo-text">RE UP</span>
+        <span class="logo-text">RE UP <span class="logo-accent">REPORT</span></span>
       </a>
       <ul class="nav-menu">
-        <li><a href="pages/courses.html" class="nav-link">Courses</a></li>
-        <li><a href="pages/blog.html" class="nav-link">Blog</a></li>
-        <li><a href="pages/membership.html" class="nav-link">Membership</a></li>
+        <li><a href="pages/dashboard.html" class="nav-link">Charlotte Market</a></li>
+        <li><a href="#pricing-section" class="nav-link">Pricing Data</a></li>
+        <li><a href="#competitors-section" class="nav-link">Competitors</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="pages/membership.html" class="btn btn-nav">Join Now</a>
+        <a href="pages/dashboard.html" class="btn btn-nav">View Market Data</a>
         <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
@@ -42,325 +33,364 @@
   <!-- Mobile Menu -->
   <div class="mobile-menu">
     <ul>
-      <li><a href="pages/courses.html">Courses</a></li>
-      <li><a href="pages/blog.html">Blog</a></li>
-      <li><a href="pages/membership.html">Membership</a></li>
-      <li><a href="pages/membership.html" class="btn btn-primary">Join Now</a></li>
+      <li><a href="pages/dashboard.html">Charlotte Market</a></li>
+      <li><a href="#pricing-section">Pricing Data</a></li>
+      <li><a href="#competitors-section">Competitors</a></li>
+      <li><a href="pages/dashboard.html" class="btn btn-primary">View Market Data</a></li>
     </ul>
   </div>
 
-  <!-- ============================================
-       HERO CAROUSEL — What RE UP is about
-       ============================================ -->
-  <section class="hero-carousel" id="main-content">
-    <div class="carousel-track">
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder">
-          <span class="slide-placeholder-text">ELEVATE</span>
+  <!-- Hero — Data-forward, Bloomberg style -->
+  <section class="hero-report" id="main-content">
+    <div class="hero-report-inner">
+      <div class="hero-report-content">
+        <div class="market-badge">
+          <span class="badge-dot"></span>
+          LIVE MARKET DATA
         </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder">
-          <span class="slide-placeholder-text">BUSINESS</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder">
-          <span class="slide-placeholder-text">EDUCATION</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder">
-          <span class="slide-placeholder-text">FOR BARBERS</span>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-overlay">
-      <div class="carousel-captions">
-        <div class="carousel-captions-track">
-          <div class="carousel-caption">
-            <p class="carousel-tag">RE UP EDUCATION</p>
-            <h1 class="carousel-title">ELEVATE<br>YOUR CRAFT</h1>
-            <p class="carousel-subtitle">Business education for barbers who already know how to cut.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Courses</a>
+        <h1 class="hero-report-title">The Barbershop<br>Market Report</h1>
+        <p class="hero-report-subtitle">Real pricing data, competitor intelligence, and market analytics for the barbering industry. No opinions. No courses. Just the numbers.</p>
+        <div class="hero-report-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-number" data-count="40">40</span>
+            <span class="hero-stat-label">Shops Tracked</span>
           </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">BUSINESS MASTERY</p>
-            <h1 class="carousel-title">MASTER<br>YOUR BUSINESS</h1>
-            <p class="carousel-subtitle">Stop trading time for money. Build the business systems that let you scale.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Start Learning</a>
+          <div class="hero-stat">
+            <span class="hero-stat-number" data-count="161">161</span>
+            <span class="hero-stat-label">Price Points</span>
           </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">REAL KNOWLEDGE</p>
-            <h1 class="carousel-title">EDUCATION<br>THAT HITS</h1>
-            <p class="carousel-subtitle">No fluff. No theory. Straight game from barbers pulling six figures.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">See Courses</a>
+          <div class="hero-stat">
+            <span class="hero-stat-number" data-count="46">46</span>
+            <span class="hero-stat-label">Barbers Profiled</span>
           </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">BUILT FOR YOU</p>
-            <h1 class="carousel-title">MADE FOR<br>BARBERS</h1>
-            <p class="carousel-subtitle">Every lesson, every workbook, every strategy — designed for the chair.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Get Started</a>
+          <div class="hero-stat">
+            <span class="hero-stat-number">CLT</span>
+            <span class="hero-stat-label">Market: Charlotte</span>
           </div>
         </div>
-      </div>
-      <div class="carousel-dots">
-        <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
-        <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
-        <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
-        <button class="carousel-dot" data-slide="3" aria-label="Slide 4"></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================
-       MARKETING CAROUSEL — Brand & client attraction
-       ============================================ -->
-  <section class="hero-carousel course-carousel">
-    <div class="carousel-track">
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #1a0000, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">BRAND</span>
+        <div class="hero-report-actions">
+          <a href="pages/dashboard.html" class="btn btn-primary btn-lg">Open Charlotte Dashboard</a>
+          <a href="#how-it-works" class="btn btn-ghost btn-lg">How It Works</a>
         </div>
       </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #1a0505, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">SOCIAL</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #200000, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">CONTENT</span>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-overlay">
-      <div class="carousel-captions">
-        <div class="carousel-captions-track">
-          <div class="carousel-caption">
-            <p class="carousel-tag">MARKETING</p>
-            <h2 class="carousel-title">BUILD YOUR<br>BRAND</h2>
-            <p class="carousel-subtitle">Your brand is your reputation. Learn to craft one that clients remember and refer.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Branding</a>
+      <div class="hero-report-ticker">
+        <div class="ticker-card">
+          <div class="ticker-header">
+            <span class="ticker-market">CLT</span>
+            <span class="ticker-label">Charlotte Metro</span>
+            <span class="ticker-live">LIVE</span>
           </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">SOCIAL MEDIA</p>
-            <h2 class="carousel-title">OWN YOUR<br>FEED</h2>
-            <p class="carousel-subtitle">Turn followers into clients. Master the content that books chairs.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Social</a>
+          <div class="ticker-grid">
+            <div class="ticker-item">
+              <span class="ticker-service">Men's Haircut</span>
+              <span class="ticker-price">$32</span>
+              <span class="ticker-range">$15 – $65</span>
+            </div>
+            <div class="ticker-item">
+              <span class="ticker-service">Fade</span>
+              <span class="ticker-price">$35</span>
+              <span class="ticker-range">$20 – $60</span>
+            </div>
+            <div class="ticker-item">
+              <span class="ticker-service">Beard Trim</span>
+              <span class="ticker-price">$18</span>
+              <span class="ticker-range">$10 – $35</span>
+            </div>
+            <div class="ticker-item">
+              <span class="ticker-service">Kids Cut</span>
+              <span class="ticker-price">$22</span>
+              <span class="ticker-range">$12 – $40</span>
+            </div>
+            <div class="ticker-item">
+              <span class="ticker-service">Hot Towel Shave</span>
+              <span class="ticker-price">$30</span>
+              <span class="ticker-range">$15 – $50</span>
+            </div>
+            <div class="ticker-item">
+              <span class="ticker-service">Lineup</span>
+              <span class="ticker-price">$15</span>
+              <span class="ticker-range">$10 – $25</span>
+            </div>
           </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">CONTENT STRATEGY</p>
-            <h2 class="carousel-title">CREATE<br>CONTENT</h2>
-            <p class="carousel-subtitle">Photos, reels, stories — learn to shoot and edit content that actually converts.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Content</a>
+          <div class="ticker-footer">
+            <span>Avg across 40 shops</span>
+            <span>Updated Mar 2026</span>
           </div>
         </div>
-      </div>
-      <div class="carousel-dots">
-        <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
-        <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
-        <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
       </div>
     </div>
   </section>
 
-  <!-- ============================================
-       FINANCE CAROUSEL — Money management
-       ============================================ -->
-  <section class="hero-carousel course-carousel">
-    <div class="carousel-track">
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #000a1a, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">PROFIT</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #00051a, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">TAXES</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #000f20, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">INVEST</span>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-overlay">
-      <div class="carousel-captions">
-        <div class="carousel-captions-track">
-          <div class="carousel-caption">
-            <p class="carousel-tag">FINANCE</p>
-            <h2 class="carousel-title">MAXIMIZE<br>YOUR PROFIT</h2>
-            <p class="carousel-subtitle">Pricing strategy and profit margins that turn a good hustle into real wealth.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Pricing</a>
-          </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">TAX GAME</p>
-            <h2 class="carousel-title">HANDLE<br>YOUR TAXES</h2>
-            <p class="carousel-subtitle">Write-offs, quarterly payments, LLC setup — stop giving money back to the IRS.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Taxes</a>
-          </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">WEALTH BUILDING</p>
-            <h2 class="carousel-title">INVEST<br>YOUR BREAD</h2>
-            <p class="carousel-subtitle">Build wealth beyond the chair. Real estate, stocks, and passive income for barbers.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Investing</a>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-dots">
-        <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
-        <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
-        <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================
-       OPERATIONS CAROUSEL — Running the shop
-       ============================================ -->
-  <section class="hero-carousel course-carousel">
-    <div class="carousel-track">
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #0a1a00, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">SYSTEMS</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #051a05, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">BOOKING</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #0a2000, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">RETENTION</span>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-overlay">
-      <div class="carousel-captions">
-        <div class="carousel-captions-track">
-          <div class="carousel-caption">
-            <p class="carousel-tag">OPERATIONS</p>
-            <h2 class="carousel-title">BUILD<br>YOUR SYSTEMS</h2>
-            <p class="carousel-subtitle">The daily operations that separate amateurs from professionals who print money.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Systems</a>
-          </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">BOOKING</p>
-            <h2 class="carousel-title">FILL<br>YOUR BOOK</h2>
-            <p class="carousel-subtitle">Booking systems and chair utilization strategies that eliminate dead time.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Booking</a>
-          </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">CLIENT RETENTION</p>
-            <h2 class="carousel-title">KEEP EVERY<br>CLIENT</h2>
-            <p class="carousel-subtitle">Retention is cheaper than acquisition. Build loyalty that keeps them coming back.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Retention</a>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-dots">
-        <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
-        <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
-        <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================
-       GROWTH CAROUSEL — Scaling up
-       ============================================ -->
-  <section class="hero-carousel course-carousel">
-    <div class="carousel-track">
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #1a0a00, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">SCALE</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #1a0f00, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">EXPAND</span>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <div class="slide-image-placeholder" style="background: linear-gradient(160deg, #201000, #0a0a0a 50%, #111);">
-          <span class="slide-placeholder-text">LEAD</span>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-overlay">
-      <div class="carousel-captions">
-        <div class="carousel-captions-track">
-          <div class="carousel-caption">
-            <p class="carousel-tag">GROWTH</p>
-            <h2 class="carousel-title">SCALE<br>YOUR EMPIRE</h2>
-            <p class="carousel-subtitle">From booth rent to shop owner. Multi-location strategy that builds real wealth.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Scaling</a>
-          </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">EXPANSION</p>
-            <h2 class="carousel-title">EXPAND<br>YOUR REACH</h2>
-            <p class="carousel-subtitle">Second location, product lines, online revenue — diversify beyond the chair.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Expansion</a>
-          </div>
-          <div class="carousel-caption">
-            <p class="carousel-tag">LEADERSHIP</p>
-            <h2 class="carousel-title">LEAD<br>YOUR TEAM</h2>
-            <p class="carousel-subtitle">Hiring, training, culture — build a business that runs without you in the chair.</p>
-            <a href="pages/courses.html" class="btn btn-primary btn-lg">Explore Leadership</a>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-dots">
-        <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
-        <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
-        <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================
-       MEMBERSHIP CTA — Full-bleed dark
-       ============================================ -->
-  <section class="section section-cta-full">
+  <!-- Value Proposition -->
+  <section class="section section-dark" id="how-it-works">
     <div class="container">
-      <div class="cta-content">
-        <p class="section-tag">STOP SETTLING</p>
-        <h2 class="cta-title">Ready to<br><span class="text-accent">RE UP?</span></h2>
-        <p class="cta-text">Every business course, every workbook, and new content dropped regularly — all for one flat monthly rate.</p>
-        <div class="cta-pricing">
-          <div class="price-tag">
-            <span class="price-amount">$29</span>
-            <span class="price-period">/month</span>
+      <div class="section-header">
+        <p class="section-tag">WHY THIS EXISTS</p>
+        <h2 class="section-title">Everyone has a course.<br>Nobody has the data.</h2>
+        <p class="section-desc">The barber industry runs on gut feeling. RE UP Report brings Wall Street-level market intelligence to the chair.</p>
+      </div>
+      <div class="value-grid">
+        <div class="value-card" data-animate>
+          <div class="value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
           </div>
-          <span class="price-note">Cancel anytime. No contracts.</span>
+          <h3 class="value-title">Pricing Intelligence</h3>
+          <p class="value-desc">See what every shop in your market charges for every service. Know where you stand. Price with confidence.</p>
         </div>
-        <a href="pages/membership.html" class="btn btn-primary btn-lg">Unlock Full Access</a>
+        <div class="value-card" data-animate>
+          <div class="value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3 class="value-title">Competitor Tracking</h3>
+          <p class="value-desc">40 shops across Charlotte. Names, locations, pricing, reviews, social presence — all in one dashboard.</p>
+        </div>
+        <div class="value-card" data-animate>
+          <div class="value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9"/></svg>
+          </div>
+          <h3 class="value-title">Market Coverage</h3>
+          <p class="value-desc">Starting with Charlotte. Every zip code, every neighborhood. Real data from real shops on the ground.</p>
+        </div>
+        <div class="value-card" data-animate>
+          <div class="value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3 class="value-title">Trend Analysis</h3>
+          <p class="value-desc">Price history over time. See which services are trending up, which neighborhoods are heating up, where the opportunity is.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================
-       FOOTER — Nike-minimal centered
-       ============================================ -->
+  <!-- Market Preview — Pricing table -->
+  <section class="section section-black" id="pricing-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">CHARLOTTE PRICING DATA</p>
+        <h2 class="section-title">Average Service Prices by Zip Code</h2>
+        <p class="section-desc">A sample of what's inside the full dashboard. Real prices from real Charlotte shops.</p>
+      </div>
+      <div class="data-table-wrapper" data-animate>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Zip Code</th>
+              <th>Neighborhood</th>
+              <th>Men's Cut</th>
+              <th>Fade</th>
+              <th>Beard</th>
+              <th>Kids</th>
+              <th>Shops</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cell-mono">28202</td>
+              <td>Uptown</td>
+              <td class="cell-price">$40</td>
+              <td class="cell-price">$45</td>
+              <td class="cell-price">$25</td>
+              <td class="cell-price">$30</td>
+              <td class="cell-count">6</td>
+            </tr>
+            <tr>
+              <td class="cell-mono">28203</td>
+              <td>South End / Dilworth</td>
+              <td class="cell-price">$38</td>
+              <td class="cell-price">$42</td>
+              <td class="cell-price">$22</td>
+              <td class="cell-price">$28</td>
+              <td class="cell-count">5</td>
+            </tr>
+            <tr>
+              <td class="cell-mono">28205</td>
+              <td>Plaza Midwood / NoDa</td>
+              <td class="cell-price">$35</td>
+              <td class="cell-price">$38</td>
+              <td class="cell-price">$20</td>
+              <td class="cell-price">$25</td>
+              <td class="cell-count">7</td>
+            </tr>
+            <tr>
+              <td class="cell-mono">28208</td>
+              <td>West Charlotte</td>
+              <td class="cell-price">$25</td>
+              <td class="cell-price">$28</td>
+              <td class="cell-price">$15</td>
+              <td class="cell-price">$18</td>
+              <td class="cell-count">8</td>
+            </tr>
+            <tr>
+              <td class="cell-mono">28210</td>
+              <td>South Charlotte</td>
+              <td class="cell-price">$32</td>
+              <td class="cell-price">$35</td>
+              <td class="cell-price">$18</td>
+              <td class="cell-price">$22</td>
+              <td class="cell-count">4</td>
+            </tr>
+            <tr>
+              <td class="cell-mono">28215</td>
+              <td>East Charlotte</td>
+              <td class="cell-price">$22</td>
+              <td class="cell-price">$25</td>
+              <td class="cell-price">$12</td>
+              <td class="cell-price">$15</td>
+              <td class="cell-count">6</td>
+            </tr>
+            <tr>
+              <td class="cell-mono">28216</td>
+              <td>University City</td>
+              <td class="cell-price">$28</td>
+              <td class="cell-price">$30</td>
+              <td class="cell-price">$15</td>
+              <td class="cell-price">$20</td>
+              <td class="cell-count">4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-cta">
+        <a href="pages/dashboard.html" class="btn btn-primary">See All 40 Shops &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Competitor Preview -->
+  <section class="section section-dark" id="competitors-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">COMPETITOR INTELLIGENCE</p>
+        <h2 class="section-title">Know Your Market</h2>
+        <p class="section-desc">Every barbershop in Charlotte — tracked, analyzed, and compared so you never operate blind.</p>
+      </div>
+      <div class="competitor-grid" data-animate>
+        <div class="competitor-card">
+          <div class="comp-header">
+            <h4 class="comp-name">The Classic Barbershop</h4>
+            <span class="comp-zip">28202</span>
+          </div>
+          <div class="comp-stats">
+            <div class="comp-stat">
+              <span class="comp-stat-label">Avg Cut</span>
+              <span class="comp-stat-value">$42</span>
+            </div>
+            <div class="comp-stat">
+              <span class="comp-stat-label">Rating</span>
+              <span class="comp-stat-value">4.8</span>
+            </div>
+            <div class="comp-stat">
+              <span class="comp-stat-label">Barbers</span>
+              <span class="comp-stat-value">6</span>
+            </div>
+          </div>
+          <div class="comp-tags">
+            <span class="comp-tag">Premium</span>
+            <span class="comp-tag">Walk-ins</span>
+          </div>
+        </div>
+        <div class="competitor-card">
+          <div class="comp-header">
+            <h4 class="comp-name">Fresh Fades CLT</h4>
+            <span class="comp-zip">28205</span>
+          </div>
+          <div class="comp-stats">
+            <div class="comp-stat">
+              <span class="comp-stat-label">Avg Cut</span>
+              <span class="comp-stat-value">$35</span>
+            </div>
+            <div class="comp-stat">
+              <span class="comp-stat-label">Rating</span>
+              <span class="comp-stat-value">4.6</span>
+            </div>
+            <div class="comp-stat">
+              <span class="comp-stat-label">Barbers</span>
+              <span class="comp-stat-value">4</span>
+            </div>
+          </div>
+          <div class="comp-tags">
+            <span class="comp-tag">Mid-tier</span>
+            <span class="comp-tag">Appointment</span>
+          </div>
+        </div>
+        <div class="competitor-card">
+          <div class="comp-header">
+            <h4 class="comp-name">Kings Chair Barbers</h4>
+            <span class="comp-zip">28208</span>
+          </div>
+          <div class="comp-stats">
+            <div class="comp-stat">
+              <span class="comp-stat-label">Avg Cut</span>
+              <span class="comp-stat-value">$25</span>
+            </div>
+            <div class="comp-stat">
+              <span class="comp-stat-label">Rating</span>
+              <span class="comp-stat-value">4.3</span>
+            </div>
+            <div class="comp-stat">
+              <span class="comp-stat-label">Barbers</span>
+              <span class="comp-stat-value">3</span>
+            </div>
+          </div>
+          <div class="comp-tags">
+            <span class="comp-tag">Value</span>
+            <span class="comp-tag">Walk-ins</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-cta">
+        <a href="pages/dashboard.html" class="btn btn-primary">View All 40 Competitors &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA — Subscribe -->
+  <section class="section section-cta-report">
+    <div class="container">
+      <div class="cta-report-content">
+        <p class="section-tag">MARKET ACCESS</p>
+        <h2 class="section-title">Stop guessing.<br>Start knowing.</h2>
+        <p class="section-desc">The RE UP Report gives you the same market intelligence that every other industry takes for granted. It's time barbers had it too.</p>
+        <div class="cta-report-features">
+          <div class="cta-feature">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Full Charlotte market data</span>
+          </div>
+          <div class="cta-feature">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>40 shops, 161 price points</span>
+          </div>
+          <div class="cta-feature">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Competitor profiles &amp; reviews</span>
+          </div>
+          <div class="cta-feature">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Social media analytics</span>
+          </div>
+          <div class="cta-feature">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Updated regularly</span>
+          </div>
+        </div>
+        <a href="pages/dashboard.html" class="btn btn-primary btn-lg">Access the Dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-top">
-        <span class="footer-logo">RE UP</span>
+        <span class="footer-logo">RE UP <span class="logo-accent">REPORT</span></span>
       </div>
       <div class="footer-nav">
-        <a href="pages/courses.html">Courses</a>
-        <a href="pages/blog.html">Blog</a>
-        <a href="pages/membership.html">Membership</a>
-        <a href="#">About</a>
-        <a href="#">Instagram</a>
-        <a href="#">YouTube</a>
-        <a href="#">TikTok</a>
+        <a href="pages/dashboard.html">Dashboard</a>
+        <a href="#pricing-section">Pricing Data</a>
+        <a href="#competitors-section">Competitors</a>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 RE UP. All rights reserved.</p>
+        <p>&copy; 2026 RE UP Report. Market intelligence for the barbering industry.</p>
       </div>
     </div>
   </footer>
