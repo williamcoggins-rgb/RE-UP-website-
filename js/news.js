@@ -128,18 +128,18 @@
       outlook: { timeframe: "This Month", text: "If you\u2019re a barber looking to compete, general registration is still open but moving fast. Even if you\u2019re not competing, attend as a spectator \u2014 battles are where you see what\u2019s next in technique and style. For clients, follow your barber\u2019s social media during battle season. You might see them debut a new look you want in your chair." }
     },
     {
-      id: "dcefe0d942be", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
-      title: "CIAA Tournament week returns to Charlotte \u2014 barbers gear up for peak bookings",
-      summary: "Charlotte barbershops are extending hours and adding chairs to handle the CIAA Tournament week rush. Last year\u2019s tournament drove some of the highest single-week revenues near uptown.",
-      url: "#ciaa-barber-bookings-2026",
+      id: "33e4b4bc03b4", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
+      title: "Race week and Coca-Cola 600 expected to drive barbershop surge across Charlotte",
+      summary: "Charlotte Motor Speedway\u2019s Memorial Day race week brings tens of thousands of visitors to the metro area every year. Barbershops from uptown to Concord are preparing for the annual booking spike.",
+      url: "#race-week-barber-surge-2026",
       source: "RE UP Report", date: "2026-03-06", score: 74, impact: "high",
-      tags: ["ciaa","tournament","bookings","uptown","revenue"],
+      tags: ["coca-cola-600","race-week","bookings","concord","revenue"],
       body: [
-        "CIAA Tournament week is Charlotte\u2019s Super Bowl for barbershops. With the tournament returning to the city, shops near uptown are already preparing for what many describe as their highest-revenue week of the year. Extended hours, additional barbers, and walk-in-only policies are all on the table.",
-        "Last year\u2019s CIAA week was a benchmark. Shops within a few miles of the convention center and uptown hotels saw booking surges of 40-60% over a normal week. The demand comes from visitors who want a fresh cut for tournament events, parties, and the social scene that surrounds CIAA weekend.",
-        "Smart shop owners start preparing weeks in advance. That means stocking up on product, confirming their barbers\u2019 availability, and posting on social media to capture out-of-town visitors searching for Charlotte barbers. The shops that win CIAA week aren\u2019t just talented \u2014 they\u2019re organized."
+        "Memorial Day weekend in Charlotte means one thing for barbershops: race week. The Coca-Cola 600 at Charlotte Motor Speedway draws tens of thousands of visitors to the metro area every year, and the ripple effect on local businesses \u2014 including barbershops \u2014 is significant. Shops from uptown Charlotte to Concord report annual booking spikes during the week leading up to the race.",
+        "The demand isn\u2019t just from race fans. Race week coincides with the unofficial start of summer, and Charlotte residents use the long weekend as a reset. Barbers see a surge from regulars wanting a fresh cut for cookouts, parties, and summer kickoff events happening across the city.",
+        "Shops near the speedway corridor and along I-85 in Concord and Kannapolis see the biggest lift, but the effect reaches across the metro. Smart shop owners are already posting race week availability on Instagram and extending hours for the holiday weekend. The barbers who prepare early capture the walk-in overflow that less organized shops miss."
       ],
-      outlook: { timeframe: "This Week", text: "If you\u2019re a barber near uptown, extend your hours and stock up. CIAA visitors are active on Instagram looking for local barbers \u2014 post your work and location now. If you\u2019re visiting Charlotte for the tournament, book ahead. The best chairs fill up fast during CIAA week." }
+      outlook: { timeframe: "This Month", text: "Start planning your race week schedule now. If your shop is anywhere near the I-85 corridor or uptown, extend your hours for the Memorial Day weekend. Post your availability on social media early \u2014 out-of-town visitors search Instagram for local barbers. Stock up on product and confirm your team\u2019s availability for the busiest weekend of Q2." }
     },
     {
       id: "c148fef6c1f1", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",

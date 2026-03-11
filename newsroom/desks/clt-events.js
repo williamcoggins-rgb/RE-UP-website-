@@ -28,13 +28,13 @@ CltEventsDesk.prototype.SEED_STORIES = [
     type: 'original'
   },
   {
-    title: 'CIAA Tournament week returns to Charlotte — barbers gear up for peak bookings',
-    summary: 'With CIAA Tournament week returning to Charlotte, barbershops across the city are extending hours and adding extra chairs to handle the rush. Last year\'s tournament week drove some of the highest single-week revenues for shops near uptown, and barbers say 2026 is shaping up to be even bigger.',
-    url: '#ciaa-barber-bookings-2026',
+    title: 'Race week and Coca-Cola 600 expected to drive barbershop surge across Charlotte',
+    summary: 'Charlotte Motor Speedway\'s Memorial Day race week brings tens of thousands of visitors to the metro area every year. Barbershops from uptown to Concord are preparing for the annual booking spike, with shops near the speedway and NoDa seeing the biggest lifts.',
+    url: '#race-week-barber-surge-2026',
     source: 'RE UP Report',
     byline: 'RE UP Events Desk',
     date: '2026-03-06',
-    tags: ['ciaa', 'tournament', 'bookings', 'uptown', 'revenue'],
+    tags: ['coca-cola-600', 'race-week', 'bookings', 'concord', 'revenue'],
     type: 'original'
   },
   {

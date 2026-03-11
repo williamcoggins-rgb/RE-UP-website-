@@ -71,7 +71,7 @@ var DESK_QUERIES = {
     'Charlotte barber battle competition 2026',
     'Charlotte NC barber expo event 2026',
     'Charlotte community haircut event',
-    'CIAA tournament Charlotte 2026 barber',
+    'Charlotte Motor Speedway race week barber 2026',
     'Charlotte NC spring events festival 2026'
   ]
 };
