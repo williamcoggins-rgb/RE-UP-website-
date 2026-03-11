@@ -1765,9 +1765,193 @@ body.has-ticker {
   color: var(--white);
 }
 
+/* Clickable news cards */
+a.news-card--link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+a.news-card--link:hover {
+  border-color: var(--accent);
+}
+
+a.news-card--link:hover .news-title {
+  color: var(--accent);
+}
+
+/* ============================================================
+   Article Detail Page
+   ============================================================ */
+.article-page {
+  min-height: 80vh;
+  padding: 100px 20px 60px;
+}
+
+.article-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.article-loading,
+.article-not-found {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-500);
+}
+
+.article-not-found h2 {
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.article-not-found .btn {
+  margin-top: 20px;
+}
+
+.article-back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--gray-400);
+  text-decoration: none;
+  margin-bottom: 28px;
+  transition: color 0.15s;
+}
+
+.article-back:hover {
+  color: var(--accent);
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.article-headline {
+  font-family: var(--font-display, 'Inter', sans-serif);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.25;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.article-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--gray-800);
+}
+
+.article-byline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+
+.article-date {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+.article-body {
+  margin-bottom: 36px;
+}
+
+.article-body p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--gray-300);
+  margin-bottom: 20px;
+}
+
+.article-body p:first-child::first-letter {
+  font-size: 3em;
+  font-weight: 700;
+  color: var(--white);
+  float: left;
+  line-height: 0.8;
+  margin-right: 8px;
+  margin-top: 6px;
+}
+
+/* Impact Outlook Box */
+.article-outlook {
+  background: rgba(255, 59, 48, 0.06);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 32px;
+}
+
+.article-outlook-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.article-outlook-icon {
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.article-outlook-timeframe {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.article-outlook-text {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--gray-300);
+  margin: 0;
+}
+
+/* Tags */
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-800);
+}
+
+.article-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 14px;
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  color: var(--gray-500);
+}
+
 @media (max-width: 768px) {
   .news-grid {
     grid-template-columns: 1fr;
+  }
+
+  .article-page {
+    padding: 80px 16px 40px;
+  }
+
+  .article-body p:first-child::first-letter {
+    font-size: 2.4em;
+  }
+
+  .article-outlook {
+    padding: 18px 16px;
   }
 
   .bottom-ticker {

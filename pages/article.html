@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading... | RE UP Report</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="has-ticker">
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <span class="logo-text">RE UP <span class="logo-accent">REPORT</span></span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="dashboard.html" class="nav-link">Charlotte Market</a></li>
+        <li><a href="../index.html#pricing-section" class="nav-link">Pricing Data</a></li>
+        <li><a href="../index.html#competitors-section" class="nav-link">Competitors</a></li>
+        <li><a href="../index.html#news-section" class="nav-link">News</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn btn-nav">View Market Data</a>
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="dashboard.html">Charlotte Market</a></li>
+      <li><a href="../index.html#pricing-section">Pricing Data</a></li>
+      <li><a href="../index.html#competitors-section">Competitors</a></li>
+      <li><a href="../index.html#news-section">News</a></li>
+    </ul>
+  </div>
+
+  <!-- Article Content -->
+  <main class="article-page">
+    <div class="article-container" id="article-container">
+      <!-- Populated by js/article.js -->
+      <div class="article-loading">Loading story...</div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="../index.html#pricing-section">Pricing Data</a>
+        <a href="../index.html#news-section">News</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 RE UP Report. Market intelligence for the barbering industry.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bottom Ticker -->
+  <div class="bottom-ticker" aria-label="Live market pricing ticker">
+    <div class="ticker-label-fixed">CLT LIVE</div>
+    <div class="ticker-track">
+      <div class="ticker-scroll" id="ticker-scroll"></div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/ticker.js"></script>
+  <script src="../js/news.js"></script>
+  <script src="../js/article.js"></script>
+</body>
+</html>
