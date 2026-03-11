@@ -50,7 +50,8 @@ var dataRoutes = {
   '/api/market/social':        'social.json',
   '/api/market/reviews':       'reviews.json',
   '/api/market/moves':         'competitor_moves.json',
-  '/api/market/rnd':           'rnd_projects.json'
+  '/api/market/rnd':           'rnd_projects.json',
+  '/api/newsroom':             'newsroom.json'
 };
 
 Object.keys(dataRoutes).forEach(function(route) {

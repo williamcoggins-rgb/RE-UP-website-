@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "newsroom": "node newsroom/run.js",
+    "newsroom:status": "node newsroom/run.js --status",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
