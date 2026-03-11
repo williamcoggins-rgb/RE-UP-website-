@@ -112,6 +112,81 @@ const DENSITY = PRICING_BY_ZIP.map(function (row) {
   return { zip: row.zip, area: row.area, count: row.shops };
 });
 
+// --------------- ACCESS CHECK ---------------
+
+function hasAccess() {
+  return localStorage.getItem('reup_access') === 'intel';
+}
+
+function buildDashPaywall() {
+  return '<div class="dash-paywall">' +
+    '<div class="dash-paywall-header">' +
+      '<h2 class="paywall-title">Unlock the full Charlotte market dashboard</h2>' +
+      '<p class="paywall-subtitle">You\u2019re seeing the snapshot. RE UP Intel gives you the complete picture \u2014 every shop, every price, every neighborhood.</p>' +
+    '</div>' +
+
+    '<div class="dash-paywall-grid">' +
+      '<div class="dash-paywall-card">' +
+        '<h3 class="dash-paywall-card-title">Pricing by Zip Code</h3>' +
+        '<p class="dash-paywall-card-desc">See exactly what shops charge for every service across 14 Charlotte zip codes. Compare your rates against real market data \u2014 not guesses.</p>' +
+        '<span class="dash-paywall-card-tag">14 zips tracked</span>' +
+      '</div>' +
+      '<div class="dash-paywall-card">' +
+        '<h3 class="dash-paywall-card-title">Competitor Directory</h3>' +
+        '<p class="dash-paywall-card-desc">39 shops profiled with pricing, ratings, barber count, and business model. Search by name, neighborhood, or zip to find your direct competition.</p>' +
+        '<span class="dash-paywall-card-tag">39 shops</span>' +
+      '</div>' +
+      '<div class="dash-paywall-card">' +
+        '<h3 class="dash-paywall-card-title">Social Leaderboard</h3>' +
+        '<p class="dash-paywall-card-desc">See which Charlotte shops and barbers are winning on Instagram. Ranked by follower count so you know who\u2019s dominating the local conversation.</p>' +
+        '<span class="dash-paywall-card-tag">19 accounts ranked</span>' +
+      '</div>' +
+      '<div class="dash-paywall-card">' +
+        '<h3 class="dash-paywall-card-title">Shop Density Map</h3>' +
+        '<p class="dash-paywall-card-desc">See where the competition is concentrated \u2014 and where the gaps are. Find underserved zip codes where a new chair or second location could thrive.</p>' +
+        '<span class="dash-paywall-card-tag">14 zones mapped</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="dash-paywall-cta-section">' +
+      '<p class="dash-paywall-use-case">How barbers use this data:</p>' +
+      '<ul class="dash-paywall-use-list">' +
+        '<li><strong>Price confidently</strong> \u2014 Know what your neighborhood charges before you set your rates</li>' +
+        '<li><strong>Find your edge</strong> \u2014 Spot gaps in service coverage and underserved zip codes</li>' +
+        '<li><strong>Track competitors</strong> \u2014 See who\u2019s expanding, who\u2019s raising prices, and who\u2019s growing online</li>' +
+        '<li><strong>Plan your next move</strong> \u2014 Whether it\u2019s a second chair, a new location, or a price adjustment \u2014 use real data, not instinct</li>' +
+      '</ul>' +
+    '</div>' +
+
+    '<div class="paywall-plans">' +
+      '<div class="paywall-plan">' +
+        '<div class="paywall-plan-name">Intel Monthly</div>' +
+        '<div class="paywall-plan-price"><span class="paywall-currency">$</span>9<span class="paywall-period">/mo</span></div>' +
+        '<ul class="paywall-plan-includes">' +
+          '<li>Full market dashboard</li>' +
+          '<li>All articles & outlook briefs</li>' +
+          '<li>Weekly email intel digest</li>' +
+        '</ul>' +
+        '<button class="btn btn-primary paywall-cta" data-plan="monthly">Start 7-Day Free Trial</button>' +
+      '</div>' +
+      '<div class="paywall-plan paywall-plan--featured">' +
+        '<div class="paywall-plan-badge">Best Value</div>' +
+        '<div class="paywall-plan-name">Intel Annual</div>' +
+        '<div class="paywall-plan-price"><span class="paywall-currency">$</span>79<span class="paywall-period">/yr</span></div>' +
+        '<div class="paywall-plan-savings">Save $29 vs monthly</div>' +
+        '<ul class="paywall-plan-includes">' +
+          '<li>Everything in Monthly</li>' +
+          '<li>Quarterly market reports</li>' +
+          '<li>Priority access to new tools</li>' +
+        '</ul>' +
+        '<button class="btn btn-primary paywall-cta" data-plan="annual">Start 7-Day Free Trial</button>' +
+      '</div>' +
+    '</div>' +
+
+    '<p class="paywall-note">Cancel anytime. No charge during trial. Built by barbers, for barbers.</p>' +
+  '</div>';
+}
+
 // --------------- UTILITY HELPERS ---------------
 
 function formatPrice(n) {
@@ -400,9 +475,52 @@ function renderPricingTableFromData(data) {
   }
 }
 
+// --------------- PAYWALL GATE ---------------
+
+function applyDashPaywall() {
+  var gated = document.getElementById('dash-gated');
+  if (!gated) return;
+
+  // Show a blurred teaser of the first table (pricing), hide the rest
+  // Render just the pricing table so there's content to blur
+  renderPricingTable();
+
+  // Get all sections inside gated
+  var sections = gated.querySelectorAll('.dash-section');
+  for (var i = 1; i < sections.length; i++) {
+    sections[i].style.display = 'none';
+  }
+
+  // Apply blur class to the gated container
+  gated.classList.add('dash-gated--locked');
+
+  // Insert paywall after the gated container
+  var paywallDiv = document.createElement('div');
+  paywallDiv.innerHTML = buildDashPaywall();
+  gated.parentNode.insertBefore(paywallDiv.firstChild, gated.nextSibling);
+
+  // Attach CTA handlers
+  var buttons = document.querySelectorAll('.paywall-cta');
+  for (var b = 0; b < buttons.length; b++) {
+    buttons[b].addEventListener('click', function () {
+      var plan = this.getAttribute('data-plan');
+      var email = prompt('Enter your email to start your free trial (' + plan + ' plan):');
+      if (email && email.indexOf('@') > 0) {
+        alert('Thanks! We\u2019ll send your trial access to ' + email + '. Check your inbox.');
+      }
+    });
+  }
+}
+
 // --------------- INIT ---------------
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Check access
+  if (!hasAccess()) {
+    applyDashPaywall();
+    return;  // Don't render the gated data
+  }
+
   // Render all sections
   renderPricingTable();
   renderCompetitorTable();

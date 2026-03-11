@@ -30,10 +30,20 @@
     </div>
   </nav>
 
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="dashboard.html">Charlotte Market</a></li>
+      <li><a href="../index.html#pricing-section">Pricing Data</a></li>
+      <li><a href="../index.html#competitors-section">Competitors</a></li>
+      <li><a href="../index.html#news-section">News</a></li>
+    </ul>
+  </div>
+
   <!-- Dashboard -->
   <main class="dashboard">
 
-    <!-- Market Overview Cards -->
+    <!-- Market Overview Cards — FREE PREVIEW -->
     <section class="dash-section">
       <h2 class="dash-section-title">Market Overview</h2>
       <div class="kpi-grid">
@@ -70,132 +80,137 @@
       </div>
     </section>
 
-    <!-- Pricing by Zip -->
-    <section class="dash-section">
-      <div class="dash-section-header">
-        <h2 class="dash-section-title">Pricing by Zip Code</h2>
-        <div class="dash-filters">
-          <button class="dash-filter-btn active" data-service="all">All Services</button>
-          <button class="dash-filter-btn" data-service="haircut">Men's Cut</button>
-          <button class="dash-filter-btn" data-service="fade">Fade</button>
-          <button class="dash-filter-btn" data-service="beard">Beard</button>
-          <button class="dash-filter-btn" data-service="kids">Kids</button>
+    <!-- GATED CONTENT — visible but locked behind paywall -->
+    <div id="dash-gated">
+
+      <!-- Pricing by Zip -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Pricing by Zip Code</h2>
+          <div class="dash-filters">
+            <button class="dash-filter-btn active" data-service="all">All Services</button>
+            <button class="dash-filter-btn" data-service="haircut">Men's Cut</button>
+            <button class="dash-filter-btn" data-service="fade">Fade</button>
+            <button class="dash-filter-btn" data-service="beard">Beard</button>
+            <button class="dash-filter-btn" data-service="kids">Kids</button>
+          </div>
         </div>
-      </div>
-      <div class="data-table-wrapper">
-        <table class="data-table" id="pricing-table">
-          <thead>
-            <tr>
-              <th>Zip</th>
-              <th>Area</th>
-              <th>Men's Cut</th>
-              <th>Fade</th>
-              <th>Beard</th>
-              <th>Kids</th>
-              <th>Hot Towel</th>
-              <th>Lineup</th>
-              <th>Shops</th>
-            </tr>
-          </thead>
-          <tbody id="pricing-tbody">
-            <!-- Populated by JS from /api/market/pricing-by-zip or seed data -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Competitor Directory -->
-    <section class="dash-section">
-      <div class="dash-section-header">
-        <h2 class="dash-section-title">Competitor Directory</h2>
-        <div class="dash-search">
-          <input type="text" class="dash-search-input" placeholder="Search shops, neighborhoods..." id="competitor-search">
+        <div class="data-table-wrapper">
+          <table class="data-table" id="pricing-table">
+            <thead>
+              <tr>
+                <th>Zip</th>
+                <th>Area</th>
+                <th>Men's Cut</th>
+                <th>Fade</th>
+                <th>Beard</th>
+                <th>Kids</th>
+                <th>Hot Towel</th>
+                <th>Lineup</th>
+                <th>Shops</th>
+              </tr>
+            </thead>
+            <tbody id="pricing-tbody">
+              <!-- Populated by JS from /api/market/pricing-by-zip or seed data -->
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="competitor-table-wrapper">
-        <table class="data-table" id="competitor-table">
-          <thead>
-            <tr>
-              <th>Shop Name</th>
-              <th>Neighborhood</th>
-              <th>Zip</th>
-              <th>Avg Cut</th>
-              <th>Rating</th>
-              <th>Barbers</th>
-              <th>Model</th>
-            </tr>
-          </thead>
-          <tbody id="competitor-tbody">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
+      </section>
 
-    <!-- Social Leaderboard -->
-    <section class="dash-section">
-      <div class="dash-section-header">
-        <h2 class="dash-section-title">Social Media Leaderboard</h2>
-        <p class="dash-section-sub">Top barbers and shops by Instagram following and engagement</p>
-      </div>
-      <div class="data-table-wrapper">
-        <table class="data-table" id="social-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Platform</th>
-              <th>Followers</th>
-              <th>Engagement</th>
-            </tr>
-          </thead>
-          <tbody id="social-tbody">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Market Moves -->
-    <section class="dash-section">
-      <div class="dash-section-header">
-        <h2 class="dash-section-title">Recent Market Moves</h2>
-        <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
-      </div>
-      <div class="moves-grid" id="moves-grid">
-        <!-- Populated by JS -->
-      </div>
-    </section>
-
-    <!-- Shop Density Map Placeholder -->
-    <section class="dash-section">
-      <div class="dash-section-header">
-        <h2 class="dash-section-title">Shop Density by Zip Code</h2>
-        <p class="dash-section-sub">Where the competition is concentrated — and where the gaps are</p>
-      </div>
-      <div class="density-grid" id="density-grid">
-        <!-- Populated by JS -->
-      </div>
-    </section>
-
-    <!-- Industry News -->
-    <section class="dash-section">
-      <div class="dash-section-header">
-        <h2 class="dash-section-title">Industry News</h2>
-        <p class="dash-section-sub">Original reporting from the RE UP newsroom covering Charlotte barbershops and industry trends</p>
-        <div class="news-tabs">
-          <button class="news-tab active" data-news-filter="all">All Desks</button>
-          <button class="news-tab" data-news-filter="clt-local">CLT Local</button>
-          <button class="news-tab" data-news-filter="national-biz">National</button>
-          <button class="news-tab" data-news-filter="supply-chain">Supply Chain</button>
-          <button class="news-tab" data-news-filter="clt-events">CLT Events</button>
+      <!-- Competitor Directory -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Competitor Directory</h2>
+          <div class="dash-search">
+            <input type="text" class="dash-search-input" placeholder="Search shops, neighborhoods..." id="competitor-search">
+          </div>
         </div>
-      </div>
-      <div class="news-grid" id="news-grid">
-        <!-- Populated by js/news.js from newsroom feed -->
-      </div>
-    </section>
+        <div class="competitor-table-wrapper">
+          <table class="data-table" id="competitor-table">
+            <thead>
+              <tr>
+                <th>Shop Name</th>
+                <th>Neighborhood</th>
+                <th>Zip</th>
+                <th>Avg Cut</th>
+                <th>Rating</th>
+                <th>Barbers</th>
+                <th>Model</th>
+              </tr>
+            </thead>
+            <tbody id="competitor-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Social Leaderboard -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Social Media Leaderboard</h2>
+          <p class="dash-section-sub">Top barbers and shops by Instagram following and engagement</p>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table" id="social-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Platform</th>
+                <th>Followers</th>
+                <th>Engagement</th>
+              </tr>
+            </thead>
+            <tbody id="social-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Market Moves -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Recent Market Moves</h2>
+          <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
+        </div>
+        <div class="moves-grid" id="moves-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Shop Density Map Placeholder -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Shop Density by Zip Code</h2>
+          <p class="dash-section-sub">Where the competition is concentrated — and where the gaps are</p>
+        </div>
+        <div class="density-grid" id="density-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Industry News -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Industry News</h2>
+          <p class="dash-section-sub">Original reporting from the RE UP newsroom covering Charlotte barbershops and industry trends</p>
+          <div class="news-tabs">
+            <button class="news-tab active" data-news-filter="all">All Desks</button>
+            <button class="news-tab" data-news-filter="clt-local">CLT Local</button>
+            <button class="news-tab" data-news-filter="national-biz">National</button>
+            <button class="news-tab" data-news-filter="supply-chain">Supply Chain</button>
+            <button class="news-tab" data-news-filter="clt-events">CLT Events</button>
+          </div>
+        </div>
+        <div class="news-grid" id="news-grid">
+          <!-- Populated by js/news.js from newsroom feed -->
+        </div>
+      </section>
+
+    </div><!-- end #dash-gated -->
 
   </main>
 
