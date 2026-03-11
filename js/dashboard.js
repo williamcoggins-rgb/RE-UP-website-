@@ -112,10 +112,70 @@ const DENSITY = PRICING_BY_ZIP.map(function (row) {
   return { zip: row.zip, area: row.area, count: row.shops };
 });
 
-// --------------- ACCESS CHECK ---------------
+// --------------- ADMIN LOGIN ---------------
+
+var ADMIN_PASSWORD = 'Sanford8715!';
 
 function hasAccess() {
   return localStorage.getItem('reup_access') === 'intel';
+}
+
+function setupAdminLogin() {
+  var isLoggedIn = hasAccess();
+  var loginLink = document.getElementById('adminLoginLink');
+  var logoutLink = document.getElementById('adminLogoutLink');
+  var modal = document.getElementById('adminModal');
+  var closeBtn = document.getElementById('adminModalClose');
+  var submitBtn = document.getElementById('adminSubmitBtn');
+  var passwordInput = document.getElementById('adminPasswordInput');
+  var errorMsg = document.getElementById('adminError');
+
+  if (isLoggedIn) {
+    if (loginLink) loginLink.style.display = 'none';
+    if (logoutLink) logoutLink.style.display = 'inline';
+  }
+
+  if (loginLink) {
+    loginLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (modal) modal.style.display = 'flex';
+      if (passwordInput) passwordInput.focus();
+    });
+  }
+
+  if (logoutLink) {
+    logoutLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('reup_access');
+      location.reload();
+    });
+  }
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', function () { modal.style.display = 'none'; });
+  }
+
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+  }
+
+  if (submitBtn && passwordInput) {
+    submitBtn.addEventListener('click', function () {
+      if (passwordInput.value === ADMIN_PASSWORD) {
+        localStorage.setItem('reup_access', 'intel');
+        location.reload();
+      } else {
+        if (errorMsg) errorMsg.style.display = 'block';
+        passwordInput.value = '';
+      }
+    });
+
+    passwordInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') submitBtn.click();
+    });
+  }
 }
 
 function buildDashPaywall() {
@@ -475,6 +535,279 @@ function renderPricingTableFromData(data) {
   }
 }
 
+// --------------- RENDER: HEAT MAP ---------------
+
+function renderHeatMap(service) {
+  service = service || 'haircut';
+  var grid = document.getElementById('heatmap-grid');
+  if (!grid) return;
+
+  var MIN_PRICE = 20;
+  var MAX_PRICE = 65;
+  var LOW_R = 60, LOW_G = 5, LOW_B = 5;
+  var HIGH_R = 229, HIGH_G = 9, HIGH_B = 20;
+
+  var withPrice = [];
+  var noData = [];
+
+  PRICING_BY_ZIP.forEach(function (entry) {
+    var price = entry[service];
+    if (price === '—' || price === undefined || price === null || price === '') {
+      noData.push(entry);
+    } else {
+      withPrice.push({ entry: entry, price: Number(price) });
+    }
+  });
+
+  withPrice.sort(function (a, b) { return b.price - a.price; });
+  grid.innerHTML = '';
+
+  function interpolateColor(price) {
+    var t = (price - MIN_PRICE) / (MAX_PRICE - MIN_PRICE);
+    t = Math.max(0, Math.min(1, t));
+    return {
+      r: Math.round(LOW_R + (HIGH_R - LOW_R) * t),
+      g: Math.round(LOW_G + (HIGH_G - LOW_G) * t),
+      b: Math.round(LOW_B + (HIGH_B - LOW_B) * t)
+    };
+  }
+
+  function createTile(entry, price, hasData) {
+    var tile = document.createElement('div');
+    tile.className = 'heatmap-tile';
+
+    if (hasData) {
+      var color = interpolateColor(price);
+      var intensity = Math.max(0, Math.min(1, (price - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)));
+      tile.style.backgroundColor = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
+      tile.style.boxShadow = '0 0 ' + Math.round(8 + intensity * 16) + 'px rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.3 + intensity * 0.4).toFixed(2) + ')';
+      tile.style.border = '1px solid rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.4 + intensity * 0.4).toFixed(2) + ')';
+      if (intensity > 0.5) tile.classList.add('heatmap-tile--hot');
+
+      tile.innerHTML =
+        '<div class="heatmap-zip">' + entry.zip + '</div>' +
+        '<div class="heatmap-area">' + entry.area + '</div>' +
+        '<div class="heatmap-price">$' + price + '</div>' +
+        '<div class="heatmap-shops">' + entry.shops + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
+    } else {
+      tile.style.backgroundColor = 'rgba(255,255,255,0.03)';
+      tile.style.border = '1px solid rgba(255,255,255,0.06)';
+
+      tile.innerHTML =
+        '<div class="heatmap-zip">' + entry.zip + '</div>' +
+        '<div class="heatmap-area">' + entry.area + '</div>' +
+        '<span class="heatmap-nodata">NO DATA</span>' +
+        '<div class="heatmap-shops">' + entry.shops + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
+    }
+
+    return tile;
+  }
+
+  withPrice.forEach(function (item) {
+    grid.appendChild(createTile(item.entry, item.price, true));
+  });
+  noData.forEach(function (entry) {
+    grid.appendChild(createTile(entry, null, false));
+  });
+}
+
+function setupHeatMapButtons() {
+  var buttons = document.querySelectorAll('.heatmap-filter-btn');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderHeatMap(btn.getAttribute('data-service') || 'haircut');
+    });
+  });
+}
+
+// --------------- RENDER: INTERACTIVE TOOLS ---------------
+
+function renderPriceCompare() {
+  var container = document.getElementById('tool-price-compare');
+  if (!container) return;
+
+  var marketMin = 20, marketMax = 65, marketAvg = 33;
+  var zipOptions = '';
+  PRICING_BY_ZIP.forEach(function (d) {
+    zipOptions += '<option value="' + d.zip + '">' + d.zip + ' \u2014 ' + d.area + '</option>';
+  });
+
+  container.innerHTML =
+    '<h3 class="tool-card-title">Price Comparison Calculator</h3>' +
+    '<p class="tool-card-desc">See how your pricing stacks up against your neighborhood and the Charlotte market</p>' +
+    '<div class="tool-inputs">' +
+      '<div class="tool-input-group">' +
+        '<label>Your Men\'s Cut Price</label>' +
+        '<input type="number" id="tool-pc-price" min="0" max="200" step="1" value="30" placeholder="$30">' +
+      '</div>' +
+      '<div class="tool-input-group">' +
+        '<label>Your Zip Code</label>' +
+        '<select id="tool-pc-zip">' + zipOptions + '</select>' +
+      '</div>' +
+    '</div>' +
+    '<div class="tool-result" id="tool-pc-results"></div>';
+
+  var priceInput = document.getElementById('tool-pc-price');
+  var zipSelect = document.getElementById('tool-pc-zip');
+  var resultsDiv = document.getElementById('tool-pc-results');
+
+  function update() {
+    var userPrice = parseFloat(priceInput.value);
+    var zipData = PRICING_BY_ZIP.find(function (d) { return d.zip === zipSelect.value; });
+    if (isNaN(userPrice) || !zipData) { resultsDiv.innerHTML = ''; return; }
+
+    var areaAvg = zipData.haircut;
+    if (areaAvg === '—' || !areaAvg) {
+      resultsDiv.innerHTML =
+        '<div class="tool-result-line">No pricing data available for ' + zipData.area + ' yet.</div>' +
+        '<div class="tool-result-line">Market-wide average: <strong>$' + marketAvg + '</strong></div>';
+      return;
+    }
+
+    var diff = userPrice - areaAvg;
+    var diffAbs = Math.abs(diff).toFixed(0);
+    var diffLabel = diff > 0
+      ? '<span class="tool-above">+$' + diffAbs + ' above market</span>'
+      : diff < 0
+        ? '<span class="tool-below">-$' + diffAbs + ' below market</span>'
+        : '<span style="color:var(--gray-300);">At market rate</span>';
+
+    var barPos = Math.max(0, Math.min(100, ((userPrice - marketMin) / (marketMax - marketMin)) * 100));
+    var avgPos = ((marketAvg - marketMin) / (marketMax - marketMin)) * 100;
+    var areaPos = ((areaAvg - marketMin) / (marketMax - marketMin)) * 100;
+
+    resultsDiv.innerHTML =
+      '<div class="tool-result-line">You charge <strong>$' + userPrice.toFixed(0) + '</strong>. Average in <strong>' + zipData.area + '</strong> is <strong>$' + areaAvg + '</strong>.</div>' +
+      '<div class="tool-result-line">' + diffLabel + '</div>' +
+      '<div class="tool-result-line" style="color:var(--gray-500);font-size:13px;">Market-wide average: $' + marketAvg + '</div>' +
+      '<div class="tool-compare-bar">' +
+        '<div class="tool-compare-line" style="left:' + avgPos + '%" title="Market avg"></div>' +
+        '<div class="tool-compare-line tool-compare-line--area" style="left:' + areaPos + '%" title="Area avg"></div>' +
+        '<div class="tool-compare-marker" style="left:' + barPos + '%"></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:16px;font-size:11px;color:var(--gray-500);margin-top:8px;">' +
+        '<span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span> Your price</span>' +
+        '<span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:2px;background:var(--green);"></span> Area avg</span>' +
+        '<span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:2px;background:var(--gray-500);"></span> Market avg</span>' +
+      '</div>';
+  }
+
+  priceInput.addEventListener('input', update);
+  zipSelect.addEventListener('change', update);
+  update();
+}
+
+function renderRevenueEstimator() {
+  var container = document.getElementById('tool-revenue');
+  if (!container) return;
+
+  container.innerHTML =
+    '<h3 class="tool-card-title">Revenue Estimator</h3>' +
+    '<p class="tool-card-desc">Estimate your daily, weekly, monthly, and annual revenue</p>' +
+    '<div class="tool-inputs">' +
+      '<div class="tool-input-group">' +
+        '<label>Avg Price per Cut</label>' +
+        '<input type="number" id="tool-rev-price" min="0" max="500" step="1" value="35">' +
+      '</div>' +
+      '<div class="tool-input-group">' +
+        '<label>Clients per Day</label>' +
+        '<input type="number" id="tool-rev-clients" min="0" max="100" step="1" value="12">' +
+      '</div>' +
+      '<div class="tool-input-group">' +
+        '<label>Days per Week</label>' +
+        '<input type="number" id="tool-rev-days" min="1" max="7" step="1" value="5">' +
+      '</div>' +
+    '</div>' +
+    '<div class="tool-result" id="tool-rev-results"></div>';
+
+  var priceInput = document.getElementById('tool-rev-price');
+  var clientsInput = document.getElementById('tool-rev-clients');
+  var daysInput = document.getElementById('tool-rev-days');
+  var resultsDiv = document.getElementById('tool-rev-results');
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  function update() {
+    var price = parseFloat(priceInput.value) || 0;
+    var clients = parseFloat(clientsInput.value) || 0;
+    var days = parseFloat(daysInput.value) || 0;
+    var daily = price * clients;
+    var weekly = daily * days;
+    var monthly = weekly * 4.33;
+    var annual = weekly * 52;
+
+    resultsDiv.innerHTML =
+      '<div class="tool-revenue-grid">' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Daily</span><span class="tool-revenue-value">' + fmt(daily) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Weekly</span><span class="tool-revenue-value">' + fmt(weekly) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Monthly</span><span class="tool-revenue-value">' + fmt(monthly) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Annual</span><span class="tool-revenue-value tool-revenue-value--annual">' + fmt(annual) + '</span></div>' +
+      '</div>' +
+      '<p style="margin:12px 0 0;font-size:11px;color:var(--gray-500);">' + clients + ' clients/day x ' + fmt(price) + '/cut x ' + days + ' days/week. Monthly uses 4.33 weeks.</p>';
+  }
+
+  priceInput.addEventListener('input', update);
+  clientsInput.addEventListener('input', update);
+  daysInput.addEventListener('input', update);
+  update();
+}
+
+function renderGapFinder() {
+  var container = document.getElementById('tool-gap-finder');
+  if (!container) return;
+
+  var maxShops = Math.max.apply(null, PRICING_BY_ZIP.map(function (d) { return d.shops || 0; }));
+  var allPrices = PRICING_BY_ZIP.map(function (d) { return d.haircut; }).filter(function (p) { return typeof p === 'number' && p > 0; });
+  var overallAvg = allPrices.length > 0 ? allPrices.reduce(function (a, b) { return a + b; }, 0) / allPrices.length : 33;
+
+  var maxComps = 0;
+  PRICING_BY_ZIP.forEach(function (e) {
+    var c = COMPETITORS.filter(function (comp) { return comp.zip === e.zip; }).length;
+    if (c > maxComps) maxComps = c;
+  });
+  if (maxComps === 0) maxComps = 1;
+
+  var scored = PRICING_BY_ZIP.map(function (entry) {
+    var shopCount = entry.shops || 0;
+    var avgPrice = typeof entry.haircut === 'number' ? entry.haircut : 0;
+    var competitorCount = COMPETITORS.filter(function (c) { return c.zip === entry.zip; }).length;
+
+    var saturationScore = Math.max(0, 50 * (1 - (shopCount / maxShops)));
+    var priceScore = avgPrice > 0 ? Math.min(30, 30 * (avgPrice / overallAvg)) : 20;
+    var compScore = Math.max(0, 20 * (1 - (competitorCount / maxComps)));
+    var totalScore = Math.round(saturationScore + priceScore + compScore);
+
+    var tier, tierClass;
+    if (totalScore >= 65) { tier = 'High Opportunity'; tierClass = 'high'; }
+    else if (totalScore >= 45) { tier = 'Medium'; tierClass = 'medium'; }
+    else { tier = 'Saturated'; tierClass = 'saturated'; }
+
+    return { zip: entry.zip, area: entry.area, shops: shopCount, avgPrice: avgPrice, competitors: competitorCount, score: totalScore, tier: tier, tierClass: tierClass };
+  });
+
+  scored.sort(function (a, b) { return b.score - a.score; });
+
+  var listHtml = '';
+  scored.forEach(function (item, idx) {
+    listHtml +=
+      '<div class="tool-gap-item" data-opportunity="' + item.tierClass + '">' +
+        '<span class="tool-gap-rank">#' + (idx + 1) + '</span>' +
+        '<span class="tool-gap-zip">' + item.zip + '</span>' +
+        '<span class="tool-gap-area">' + item.area + '</span>' +
+        '<span class="tool-gap-shops">' + item.shops + ' shop' + (item.shops !== 1 ? 's' : '') + '</span>' +
+        '<span class="tool-gap-badge tool-gap-badge--' + item.tierClass + '">' + item.tier + '</span>' +
+      '</div>';
+  });
+
+  container.innerHTML =
+    '<h3 class="tool-card-title">Market Gap Finder</h3>' +
+    '<p class="tool-card-desc">Zip codes ranked by opportunity — fewer shops and higher pricing signals room to grow</p>' +
+    '<div class="tool-gap-list">' + listHtml + '</div>' +
+    '<p class="tool-gap-method">Score based on: shop saturation (50pts), price headroom (30pts), competitor density (20pts). Higher score = more opportunity.</p>';
+}
+
 // --------------- PAYWALL GATE ---------------
 
 function applyDashPaywall() {
@@ -515,6 +848,9 @@ function applyDashPaywall() {
 // --------------- INIT ---------------
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Always set up admin login (works on both gated and unlocked states)
+  setupAdminLogin();
+
   // Check access
   if (!hasAccess()) {
     applyDashPaywall();
@@ -522,11 +858,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Render all sections
+  renderHeatMap('haircut');
+  setupHeatMapButtons();
   renderPricingTable();
   renderCompetitorTable();
   renderSocialTable();
   renderMoves();
   renderDensity();
+
+  // Render interactive tools
+  renderPriceCompare();
+  renderRevenueEstimator();
+  renderGapFinder();
 
   // Set up interactivity
   setupFilterButtons();

@@ -2309,6 +2309,525 @@ a.news-card--link:hover .news-title {
 }
 
 /* ============================================
+   ADMIN LOGIN MODAL
+   ============================================ */
+.admin-link {
+  font-size: 11px;
+  color: var(--gray-500);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+
+.admin-link:hover {
+  color: var(--accent);
+}
+
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.admin-modal {
+  background: var(--black);
+  border: 1px solid var(--gray-800);
+  border-radius: 10px;
+  padding: 32px;
+  width: 320px;
+  position: relative;
+  text-align: center;
+}
+
+.admin-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.admin-modal-close:hover {
+  color: var(--white);
+}
+
+.admin-modal-title {
+  color: var(--white);
+  font-size: 16px;
+  margin: 0 0 20px;
+  font-weight: 600;
+}
+
+.admin-modal-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  border-radius: 6px;
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.admin-modal-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
+}
+
+.admin-modal-error {
+  color: var(--accent);
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.admin-modal-submit {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-modal-submit:hover {
+  background: var(--accent-hover);
+}
+
+/* ============================================
+   HEAT MAP — Charlotte Zip Pricing
+   ============================================ */
+#heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.heatmap-tile {
+  border-radius: 10px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 120px;
+}
+
+.heatmap-tile:hover {
+  transform: translateY(-2px);
+}
+
+.heatmap-tile--hot:hover {
+  box-shadow: 0 4px 24px rgba(229, 9, 20, 0.25);
+}
+
+.heatmap-zip {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.heatmap-area {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+
+.heatmap-price {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.heatmap-shops {
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+.heatmap-nodata {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  background: var(--gray-800);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin: 8px 0 4px;
+}
+
+.heatmap-legend {
+  margin-top: 20px;
+  max-width: 500px;
+}
+
+.heatmap-legend-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, rgb(40, 3, 3) 0%, rgb(120, 6, 10) 50%, #e50914 100%);
+}
+
+.heatmap-legend-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+}
+
+.heatmap-legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--gray-800);
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.heatmap-filter-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gray-400);
+  background: var(--black-card);
+  border: 1px solid var(--gray-800);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.heatmap-filter-btn:hover {
+  color: var(--white);
+  border-color: var(--gray-500);
+}
+
+.heatmap-filter-btn.active {
+  color: var(--white);
+  border-color: var(--accent);
+  background: rgba(229, 9, 20, 0.08);
+}
+
+/* ============================================
+   INTERACTIVE DATA TOOLS
+   ============================================ */
+.tools-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tool-card {
+  background: var(--black-card);
+  border: 1px solid var(--gray-800);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.tool-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0 0 4px;
+}
+
+.tool-card-desc {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin: 0 0 20px;
+  line-height: 1.4;
+}
+
+.tool-inputs {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.tool-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.tool-input-group label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gray-400);
+}
+
+.tool-input-group input,
+.tool-input-group select {
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.tool-input-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.tool-input-group input:focus,
+.tool-input-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
+}
+
+.tool-result {
+  margin-top: 20px;
+}
+
+.tool-result-line {
+  font-size: 14px;
+  color: var(--gray-300);
+  line-height: 1.8;
+}
+
+.tool-result-line strong {
+  color: var(--white);
+}
+
+.tool-above {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.tool-below {
+  color: var(--red);
+  font-weight: 600;
+}
+
+.tool-compare-bar {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: var(--gray-900);
+  border-radius: 4px;
+  margin: 16px 0 4px;
+  overflow: visible;
+}
+
+.tool-compare-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(229, 9, 20, 0.5);
+  transition: left 0.3s ease;
+  z-index: 2;
+}
+
+.tool-compare-line {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 16px;
+  background: var(--gray-500);
+  z-index: 1;
+}
+
+.tool-compare-line--area {
+  background: var(--green);
+}
+
+/* Revenue estimator */
+.tool-revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.tool-revenue-card {
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.tool-revenue-card:hover {
+  border-color: var(--gray-700);
+}
+
+.tool-revenue-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray-500);
+}
+
+.tool-revenue-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.tool-revenue-value--annual {
+  color: var(--accent);
+  font-size: 26px;
+}
+
+/* Gap finder */
+.tool-gap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-gap-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  border-radius: 8px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--gray-600);
+  transition: background 0.15s ease;
+}
+
+.tool-gap-item:hover {
+  background: var(--black-hover);
+}
+
+.tool-gap-item[data-opportunity="high"] { border-left-color: var(--green); }
+.tool-gap-item[data-opportunity="medium"] { border-left-color: #f59e0b; }
+.tool-gap-item[data-opportunity="saturated"] { border-left-color: var(--red); }
+
+.tool-gap-rank {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-500);
+  min-width: 28px;
+}
+
+.tool-gap-zip {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  min-width: 56px;
+}
+
+.tool-gap-area {
+  font-size: 13px;
+  color: var(--gray-400);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-gap-shops {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-300);
+  background: var(--gray-800);
+  padding: 3px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.tool-gap-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.tool-gap-badge--high {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--green);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.tool-gap-badge--medium {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.tool-gap-badge--saturated {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.tool-gap-method {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--gray-500);
+  margin-top: 12px;
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-800);
+}
+
+/* ============================================
    RESPONSIVE — iPad / Tablet (max-width: 768px)
    iPad Mini portrait, small tablets
    ============================================ */
@@ -2375,6 +2894,30 @@ a.news-card--link:hover .news-title {
   .paywall-plans {
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+  }
+
+  #heatmap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tool-inputs {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tool-revenue-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tool-gap-item {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .tool-gap-area {
+    order: 5;
+    flex-basis: 100%;
+    white-space: normal;
   }
 
   .bottom-ticker {
@@ -2534,6 +3077,26 @@ a.news-card--link:hover .news-title {
   .dash-gated--locked {
     max-height: 250px;
   }
+
+  /* Heat map — phone */
+  #heatmap-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heatmap-zip { font-size: 18px; }
+  .heatmap-price { font-size: 18px; }
+
+  /* Tools — phone */
+  .tool-card {
+    padding: 18px 16px;
+  }
+
+  .tool-revenue-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tool-revenue-value { font-size: 20px; }
+  .tool-revenue-value--annual { font-size: 22px; }
 }
 
 /* ============================================

@@ -21,6 +21,8 @@
         </span>
       </div>
       <div class="nav-actions">
+        <a href="#" id="adminLoginLink" class="admin-link">Admin Login</a>
+        <a href="#" id="adminLogoutLink" class="admin-link" style="display:none;">Logout</a>
         <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
@@ -29,6 +31,17 @@
       </div>
     </div>
   </nav>
+
+  <!-- Admin Login Modal -->
+  <div id="adminModal" class="admin-modal-overlay" style="display:none;">
+    <div class="admin-modal">
+      <button class="admin-modal-close" id="adminModalClose">&times;</button>
+      <h3 class="admin-modal-title">Admin Access</h3>
+      <input type="password" id="adminPasswordInput" class="admin-modal-input" placeholder="Enter password" />
+      <p id="adminError" class="admin-modal-error" style="display:none;">Incorrect password.</p>
+      <button id="adminSubmitBtn" class="admin-modal-submit">Login</button>
+    </div>
+  </div>
 
   <!-- Mobile Menu -->
   <div class="mobile-menu">
@@ -83,6 +96,31 @@
     <!-- GATED CONTENT — visible but locked behind paywall -->
     <div id="dash-gated">
 
+      <!-- Charlotte Pricing Heat Map -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Charlotte Pricing Heat Map</h2>
+          <p class="dash-section-sub">Average service price by zip code — darker zones have less data, red zones are premium pricing</p>
+          <div class="dash-filters">
+            <button class="heatmap-filter-btn active" data-service="haircut">Men's Cut</button>
+            <button class="heatmap-filter-btn" data-service="fade">Fade</button>
+            <button class="heatmap-filter-btn" data-service="beard">Beard</button>
+            <button class="heatmap-filter-btn" data-service="kids">Kids</button>
+          </div>
+        </div>
+        <div id="heatmap-grid"></div>
+        <div class="heatmap-legend">
+          <div class="heatmap-legend-bar"></div>
+          <div class="heatmap-legend-labels">
+            <span><span class="heatmap-legend-swatch"></span>No Data</span>
+            <span>$20</span>
+            <span>$35</span>
+            <span>$50</span>
+            <span>$65</span>
+          </div>
+        </div>
+      </section>
+
       <!-- Pricing by Zip -->
       <section class="dash-section">
         <div class="dash-section-header">
@@ -110,10 +148,21 @@
                 <th>Shops</th>
               </tr>
             </thead>
-            <tbody id="pricing-tbody">
-              <!-- Populated by JS from /api/market/pricing-by-zip or seed data -->
-            </tbody>
+            <tbody id="pricing-tbody"></tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Interactive Tools -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Market Tools</h2>
+          <p class="dash-section-sub">Interactive calculators to help you price, plan, and find your edge</p>
+        </div>
+        <div class="tools-grid">
+          <div class="tool-card" id="tool-price-compare"></div>
+          <div class="tool-card" id="tool-revenue"></div>
+          <div class="tool-card" id="tool-gap-finder"></div>
         </div>
       </section>
 
@@ -138,9 +187,7 @@
                 <th>Model</th>
               </tr>
             </thead>
-            <tbody id="competitor-tbody">
-              <!-- Populated by JS -->
-            </tbody>
+            <tbody id="competitor-tbody"></tbody>
           </table>
         </div>
       </section>
@@ -163,9 +210,7 @@
                 <th>Engagement</th>
               </tr>
             </thead>
-            <tbody id="social-tbody">
-              <!-- Populated by JS -->
-            </tbody>
+            <tbody id="social-tbody"></tbody>
           </table>
         </div>
       </section>
@@ -176,20 +221,16 @@
           <h2 class="dash-section-title">Recent Market Moves</h2>
           <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
         </div>
-        <div class="moves-grid" id="moves-grid">
-          <!-- Populated by JS -->
-        </div>
+        <div class="moves-grid" id="moves-grid"></div>
       </section>
 
-      <!-- Shop Density Map Placeholder -->
+      <!-- Shop Density Map -->
       <section class="dash-section">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Shop Density by Zip Code</h2>
           <p class="dash-section-sub">Where the competition is concentrated — and where the gaps are</p>
         </div>
-        <div class="density-grid" id="density-grid">
-          <!-- Populated by JS -->
-        </div>
+        <div class="density-grid" id="density-grid"></div>
       </section>
 
       <!-- Industry News -->
@@ -205,9 +246,7 @@
             <button class="news-tab" data-news-filter="clt-events">CLT Events</button>
           </div>
         </div>
-        <div class="news-grid" id="news-grid">
-          <!-- Populated by js/news.js from newsroom feed -->
-        </div>
+        <div class="news-grid" id="news-grid"></div>
       </section>
 
     </div><!-- end #dash-gated -->
@@ -227,9 +266,7 @@
   <div class="bottom-ticker" aria-label="Live market pricing ticker">
     <div class="ticker-label-fixed">CLT LIVE</div>
     <div class="ticker-track">
-      <div class="ticker-scroll" id="ticker-scroll">
-        <!-- Populated by js/ticker.js -->
-      </div>
+      <div class="ticker-scroll" id="ticker-scroll"></div>
     </div>
   </div>
 
