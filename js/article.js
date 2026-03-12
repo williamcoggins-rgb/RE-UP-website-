@@ -83,18 +83,18 @@
 
           '<div class="paywall-plans">' +
             '<div class="paywall-plan">' +
-              '<div class="paywall-plan-name">Intel Monthly</div>' +
+              '<div class="paywall-plan-name">Intel Monthly <span class="reup-coming-soon">Coming Soon</span></div>' +
               '<div class="paywall-plan-price"><span class="paywall-currency">$</span>9<span class="paywall-period">/mo</span></div>' +
               '<ul class="paywall-plan-includes">' +
                 '<li>Full articles &amp; outlook briefs</li>' +
                 '<li>Charlotte market dashboard</li>' +
                 '<li>Weekly email intel digest</li>' +
               '</ul>' +
-              '<button class="btn btn-primary paywall-cta" data-plan="monthly">Start 7-Day Free Trial</button>' +
+              '<button class="btn btn-primary paywall-cta" data-plan="monthly">Join the Waitlist</button>' +
             '</div>' +
             '<div class="paywall-plan paywall-plan--featured">' +
               '<div class="paywall-plan-badge">Best Value</div>' +
-              '<div class="paywall-plan-name">Intel Annual</div>' +
+              '<div class="paywall-plan-name">Intel Annual <span class="reup-coming-soon">Coming Soon</span></div>' +
               '<div class="paywall-plan-price"><span class="paywall-currency">$</span>79<span class="paywall-period">/yr</span></div>' +
               '<div class="paywall-plan-savings">Save $29 vs monthly</div>' +
               '<ul class="paywall-plan-includes">' +
@@ -102,11 +102,11 @@
                 '<li>Quarterly market reports</li>' +
                 '<li>Priority access to new tools</li>' +
               '</ul>' +
-              '<button class="btn btn-primary paywall-cta" data-plan="annual">Start 7-Day Free Trial</button>' +
+              '<button class="btn btn-primary paywall-cta" data-plan="annual">Join the Waitlist</button>' +
             '</div>' +
           '</div>' +
 
-          '<p class="paywall-note">Cancel anytime. No charge during trial. Built by barbers, for barbers.</p>' +
+          '<p class="paywall-note">Subscriptions launching soon. Built by barbers, for barbers.</p>' +
 
         '</div>' +
       '</div>';
@@ -210,27 +210,19 @@
     html += '</article>';
     container.innerHTML = html;
 
-    // Attach CTA handlers
+    // Attach CTA handlers — show inline waitlist form
     if (!unlocked) {
       var buttons = container.querySelectorAll('.paywall-cta');
       for (var b = 0; b < buttons.length; b++) {
         buttons[b].addEventListener('click', function () {
-          var plan = this.getAttribute('data-plan');
-          handleSubscribe(plan);
+          var btn = this;
+          var formContainer = document.createElement('div');
+          btn.parentNode.replaceChild(formContainer, btn);
+          window.showWaitlistForm(formContainer);
         });
       }
     }
     }); // end checkAccess callback
-  }
-
-  function handleSubscribe(plan) {
-    // Placeholder — wire to Stripe, Gumroad, or custom backend
-    // For now show a signup prompt
-    var email = prompt('Enter your email to start your free trial (' + plan + ' plan):');
-    if (email && email.indexOf('@') > 0) {
-      alert('Thanks! We\u2019ll send your trial access to ' + email + '. Check your inbox.');
-      // In production: POST to /api/subscribe with email + plan
-    }
   }
 
   function init() {
