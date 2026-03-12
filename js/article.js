@@ -31,11 +31,7 @@
     return params.get('id');
   }
 
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str || '';
-    return div.innerHTML;
-  }
+  // escapeHtml is now provided by js/utils.js on window.escapeHtml
 
   function formatDate(dateStr) {
     try {
@@ -140,7 +136,7 @@
     var impactHtml = '';
     if (article.impact && article.impact !== 'low') {
       var cls = article.impact === 'high' ? 'news-impact--high' : 'news-impact--medium';
-      impactHtml = '<span class="news-impact ' + cls + '">' + article.impact.toUpperCase() + ' IMPACT</span>';
+      impactHtml = '<span class="news-impact ' + cls + '">' + escapeHtml(article.impact.toUpperCase()) + ' IMPACT</span>';
     }
 
     // Body paragraphs — split into teaser (1st para) and gated (rest)
@@ -183,13 +179,13 @@
       '<article class="article-full">' +
         '<a href="../index.html#news-section" class="article-back">&larr; Back to News</a>' +
         '<div class="article-meta">' +
-          '<span class="news-tag ' + meta.tagClass + '">' + meta.label + '</span>' +
+          '<span class="news-tag ' + meta.tagClass + '">' + escapeHtml(meta.label) + '</span>' +
           impactHtml +
         '</div>' +
         '<h1 class="article-headline">' + escapeHtml(article.title) + '</h1>' +
         '<div class="article-info">' +
           '<span class="article-byline">' + escapeHtml(article.byline || article.source) + '</span>' +
-          '<span class="article-date">' + formatDate(article.date) + '</span>' +
+          '<span class="article-date">' + escapeHtml(formatDate(article.date)) + '</span>' +
         '</div>' +
         '<div class="article-body">' +
           teaserHtml;
