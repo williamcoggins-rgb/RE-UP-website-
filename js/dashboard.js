@@ -16,10 +16,10 @@ const PRICING_BY_ZIP = [
   { zip: "28209", area: "Park Road / Selwyn", haircut: 27, fade: "—", beard: 12, kids: "—", hotTowel: "—", lineup: "—", shops: 4 },
   { zip: "28210", area: "South Charlotte / Sharon Lakes", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 1 },
   { zip: "28211", area: "SouthPark / Myers Park", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
-  { zip: "28213", area: "University City / UNCC", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 1 },
+  { zip: "28213", area: "University City / UNCC", haircut: 35, fade: 42, beard: 25, kids: "—", hotTowel: "—", lineup: "—", shops: 8 },
   { zip: "28215", area: "East Charlotte / Albemarle Rd", haircut: 25, fade: 50, beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
   { zip: "28216", area: "Brookshire / North Charlotte", haircut: 33, fade: "—", beard: "—", kids: 20, hotTowel: "—", lineup: "—", shops: 3 },
-  { zip: "28262", area: "University City / N Tryon", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 1 },
+  { zip: "28262", area: "University City / N Tryon", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
   { zip: "28269", area: "University City / WT Harris", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
   { zip: "28273", area: "Steele Creek", haircut: 35, fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 }
 ];
@@ -65,6 +65,13 @@ const COMPETITORS = [
   { name: "Freshen Up Barbershop", neighborhood: "SouthPark", zip: "28211", avgCut: "—", rating: 4.9, barbers: 1, model: "Appointment", tier: "Premium" },
   // 28213 — University City / UNCC
   { name: "Kutt Masters Barbershop", neighborhood: "University City", zip: "28213", avgCut: "—", rating: 4.6, barbers: "—", model: "Hybrid", tier: "Mid-tier" },
+  { name: "Fade Factory Barbershop", neighborhood: "University City", zip: "28213", avgCut: 50, rating: 4.5, barbers: "—", model: "Appointment", tier: "Premium" },
+  { name: "DJ The Fademaster", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 5.0, barbers: 1, model: "Booth Rental", tier: "Mid-tier" },
+  { name: "The Cutting Room Grooming Lounge", neighborhood: "University City", zip: "28213", avgCut: 40, rating: 5.0, barbers: "—", model: "Booth Rental", tier: "Mid-tier" },
+  { name: "Just For You Barber & Beauty II", neighborhood: "University City", zip: "28213", avgCut: 25, rating: 4.3, barbers: "—", model: "Hybrid", tier: "Value" },
+  { name: "34th Design Barbershop", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.6, barbers: "—", model: "Booth Rental", tier: "Mid-tier" },
+  { name: "Clean Cuts Barbershop", neighborhood: "University City", zip: "28213", avgCut: 30, rating: 5.0, barbers: "—", model: "Walk-in", tier: "Mid-tier" },
+  { name: "Overton's Barber & Styling", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.8, barbers: "—", model: "Walk-in", tier: "Mid-tier" },
   // 28215 — East Charlotte / Albemarle Rd
   { name: "Edward's Boyz Barber Shop", neighborhood: "East Charlotte", zip: "28215", avgCut: "—", rating: 4.8, barbers: "—", model: "Hybrid", tier: "Mid-tier" },
   { name: "Right Touch Barbershop", neighborhood: "East Charlotte", zip: "28215", avgCut: 25, rating: 5.0, barbers: "—", model: "Hybrid", tier: "Mid-tier" },
@@ -74,6 +81,7 @@ const COMPETITORS = [
   { name: "No Grease Mosaic", neighborhood: "Brookshire", zip: "28216", avgCut: 30, rating: 4.2, barbers: "—", model: "Hybrid", tier: "Mid-tier" },
   // 28262 — University City / N Tryon
   { name: "Emperial Barber Lounge", neighborhood: "University City", zip: "28262", avgCut: "—", rating: 4.9, barbers: "—", model: "Appointment", tier: "Mid-tier" },
+  { name: "Azeal Barbershop", neighborhood: "University City", zip: "28262", avgCut: "—", rating: "—", barbers: "—", model: "Appointment", tier: "Mid-tier" },
   // 28269 — University City / WT Harris
   { name: "Just For You", neighborhood: "University City", zip: "28269", avgCut: "—", rating: 4.6, barbers: "—", model: "Hybrid", tier: "Mid-tier" },
   { name: "MVP's Grooming Lounge", neighborhood: "University City", zip: "28269", avgCut: "—", rating: 5.0, barbers: "—", model: "Appointment", tier: "Mid-tier" },
@@ -193,8 +201,8 @@ function buildDashPaywall() {
       '</div>' +
       '<div class="dash-paywall-card">' +
         '<h3 class="dash-paywall-card-title">Competitor Directory</h3>' +
-        '<p class="dash-paywall-card-desc">39 shops profiled with pricing, ratings, barber count, and business model. Search by name, neighborhood, or zip to find your direct competition.</p>' +
-        '<span class="dash-paywall-card-tag">39 shops</span>' +
+        '<p class="dash-paywall-card-desc">47 shops profiled with pricing, ratings, barber count, and business model. Search by name, neighborhood, or zip to find your direct competition.</p>' +
+        '<span class="dash-paywall-card-tag">47 shops</span>' +
       '</div>' +
       '<div class="dash-paywall-card">' +
         '<h3 class="dash-paywall-card-title">Social Leaderboard</h3>' +
@@ -856,7 +864,7 @@ var TOUR_STEPS = [
   {
     target: '#competitor-table',
     title: 'Competitor Directory',
-    body: 'Every barbershop we track in Charlotte — 39 shops with their pricing, ratings, barber count, and business model. Use the search bar to find any shop by name, neighborhood, or zip code.',
+    body: 'Every barbershop we track in Charlotte — 47 shops with their pricing, ratings, barber count, and business model. Use the search bar to find any shop by name, neighborhood, or zip code.',
     tip: 'Sort by "Avg Cut" to see who\'s charging the most in your area.',
     cta: 'Next'
   },
