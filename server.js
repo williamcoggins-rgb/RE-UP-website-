@@ -1,9 +1,59 @@
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
+var crypto = require('crypto');
 
 var app = express();
 var PORT = process.env.PORT || 3000;
+
+// --- Authentication ---
+var ADMIN_PASSWORD = process.env.REUP_ADMIN_PASSWORD || 'Sanford8715!';
+var SESSION_TTL = 24 * 60 * 60 * 1000; // 24 hours
+var sessions = {}; // token -> { createdAt: timestamp }
+
+// Clean up expired sessions every hour
+setInterval(function () {
+  var now = Date.now();
+  Object.keys(sessions).forEach(function (token) {
+    if (now - sessions[token].createdAt > SESSION_TTL) {
+      delete sessions[token];
+    }
+  });
+}, 60 * 60 * 1000);
+
+// --- Auth endpoints ---
+
+app.post('/api/auth/login', function (req, res) {
+  var password = req.body && req.body.password;
+  if (!password || password !== ADMIN_PASSWORD) {
+    return res.json({ success: false });
+  }
+  var token = crypto.randomBytes(32).toString('hex');
+  sessions[token] = { createdAt: Date.now() };
+  res.json({ success: true, token: token });
+});
+
+app.get('/api/auth/verify', function (req, res) {
+  var auth = req.headers.authorization || '';
+  var token = auth.replace(/^Bearer\s+/i, '');
+  if (!token || !sessions[token]) {
+    return res.json({ valid: false });
+  }
+  if (Date.now() - sessions[token].createdAt > SESSION_TTL) {
+    delete sessions[token];
+    return res.json({ valid: false });
+  }
+  res.json({ valid: true });
+});
+
+app.post('/api/auth/logout', function (req, res) {
+  var auth = req.headers.authorization || '';
+  var token = auth.replace(/^Bearer\s+/i, '');
+  if (token && sessions[token]) {
+    delete sessions[token];
+  }
+  res.json({ success: true });
+});
 
 // --- In-memory cache for JSON data files ---
 var dataCache = {};
@@ -31,8 +81,8 @@ app.use(express.json());
 // CORS headers for local development
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }

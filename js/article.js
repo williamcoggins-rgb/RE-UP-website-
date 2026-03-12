@@ -15,10 +15,15 @@
     'clt-events':   { tagClass: 'news-tag--events',    label: 'CLT Events' }
   };
 
-  // Simple access check — replace with real auth when backend is ready
-  function hasAccess() {
-    try { return localStorage.getItem('reup_access') === 'intel'; }
-    catch (e) { return false; }
+  // Server-side access check via shared auth utility
+  function checkAccess(callback) {
+    if (window.RE_UP_AUTH) {
+      window.RE_UP_AUTH.isAuthenticated().then(function (authed) {
+        callback(authed);
+      });
+    } else {
+      callback(false);
+    }
   }
 
   function getArticleId() {
@@ -26,11 +31,7 @@
     return params.get('id');
   }
 
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str || '';
-    return div.innerHTML;
-  }
+  // escapeHtml is now provided by js/utils.js on window.escapeHtml
 
   function formatDate(dateStr) {
     try {
@@ -82,18 +83,18 @@
 
           '<div class="paywall-plans">' +
             '<div class="paywall-plan">' +
-              '<div class="paywall-plan-name">Intel Monthly</div>' +
+              '<div class="paywall-plan-name">Intel Monthly <span class="reup-coming-soon">Coming Soon</span></div>' +
               '<div class="paywall-plan-price"><span class="paywall-currency">$</span>9<span class="paywall-period">/mo</span></div>' +
               '<ul class="paywall-plan-includes">' +
                 '<li>Full articles &amp; outlook briefs</li>' +
                 '<li>Charlotte market dashboard</li>' +
                 '<li>Weekly email intel digest</li>' +
               '</ul>' +
-              '<button class="btn btn-primary paywall-cta" data-plan="monthly">Start 7-Day Free Trial</button>' +
+              '<button class="btn btn-primary paywall-cta" data-plan="monthly">Join the Waitlist</button>' +
             '</div>' +
             '<div class="paywall-plan paywall-plan--featured">' +
               '<div class="paywall-plan-badge">Best Value</div>' +
-              '<div class="paywall-plan-name">Intel Annual</div>' +
+              '<div class="paywall-plan-name">Intel Annual <span class="reup-coming-soon">Coming Soon</span></div>' +
               '<div class="paywall-plan-price"><span class="paywall-currency">$</span>79<span class="paywall-period">/yr</span></div>' +
               '<div class="paywall-plan-savings">Save $29 vs monthly</div>' +
               '<ul class="paywall-plan-includes">' +
@@ -101,11 +102,11 @@
                 '<li>Quarterly market reports</li>' +
                 '<li>Priority access to new tools</li>' +
               '</ul>' +
-              '<button class="btn btn-primary paywall-cta" data-plan="annual">Start 7-Day Free Trial</button>' +
+              '<button class="btn btn-primary paywall-cta" data-plan="annual">Join the Waitlist</button>' +
             '</div>' +
           '</div>' +
 
-          '<p class="paywall-note">Cancel anytime. No charge during trial. Built by barbers, for barbers.</p>' +
+          '<p class="paywall-note">Subscriptions launching soon. Built by barbers, for barbers.</p>' +
 
         '</div>' +
       '</div>';
@@ -125,8 +126,8 @@
       return;
     }
 
+    checkAccess(function (unlocked) {
     var meta = DESK_META[article.desk] || { tagClass: 'news-tag--charlotte', label: article.desk };
-    var unlocked = hasAccess();
 
     // Set page title
     document.title = article.title + ' | RE UP Report';
@@ -135,7 +136,7 @@
     var impactHtml = '';
     if (article.impact && article.impact !== 'low') {
       var cls = article.impact === 'high' ? 'news-impact--high' : 'news-impact--medium';
-      impactHtml = '<span class="news-impact ' + cls + '">' + article.impact.toUpperCase() + ' IMPACT</span>';
+      impactHtml = '<span class="news-impact ' + cls + '">' + escapeHtml(article.impact.toUpperCase()) + ' IMPACT</span>';
     }
 
     // Body paragraphs — split into teaser (1st para) and gated (rest)
@@ -178,13 +179,13 @@
       '<article class="article-full">' +
         '<a href="../index.html#news-section" class="article-back">&larr; Back to News</a>' +
         '<div class="article-meta">' +
-          '<span class="news-tag ' + meta.tagClass + '">' + meta.label + '</span>' +
+          '<span class="news-tag ' + meta.tagClass + '">' + escapeHtml(meta.label) + '</span>' +
           impactHtml +
         '</div>' +
         '<h1 class="article-headline">' + escapeHtml(article.title) + '</h1>' +
         '<div class="article-info">' +
           '<span class="article-byline">' + escapeHtml(article.byline || article.source) + '</span>' +
-          '<span class="article-date">' + formatDate(article.date) + '</span>' +
+          '<span class="article-date">' + escapeHtml(formatDate(article.date)) + '</span>' +
         '</div>' +
         '<div class="article-body">' +
           teaserHtml;
@@ -209,26 +210,19 @@
     html += '</article>';
     container.innerHTML = html;
 
-    // Attach CTA handlers
+    // Attach CTA handlers — show inline waitlist form
     if (!unlocked) {
       var buttons = container.querySelectorAll('.paywall-cta');
       for (var b = 0; b < buttons.length; b++) {
         buttons[b].addEventListener('click', function () {
-          var plan = this.getAttribute('data-plan');
-          handleSubscribe(plan);
+          var btn = this;
+          var formContainer = document.createElement('div');
+          btn.parentNode.replaceChild(formContainer, btn);
+          window.showWaitlistForm(formContainer);
         });
       }
     }
-  }
-
-  function handleSubscribe(plan) {
-    // Placeholder — wire to Stripe, Gumroad, or custom backend
-    // For now show a signup prompt
-    var email = prompt('Enter your email to start your free trial (' + plan + ' plan):');
-    if (email && email.indexOf('@') > 0) {
-      alert('Thanks! We\u2019ll send your trial access to ' + email + '. Check your inbox.');
-      // In production: POST to /api/subscribe with email + plan
-    }
+    }); // end checkAccess callback
   }
 
   function init() {

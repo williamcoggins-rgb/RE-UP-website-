@@ -56,10 +56,10 @@
       var d = TICKER_DATA[i];
       html +=
         '<span class="ticker-item-live">' +
-          '<span class="ticker-shop-name">' + d.shop + '</span>' +
-          '<span class="ticker-service-name">' + d.service + '</span>' +
-          '<span class="ticker-price-live">' + d.price + '</span>' +
-          '<span class="ticker-zip">' + d.zip + '</span>' +
+          '<span class="ticker-shop-name">' + escapeHtml(d.shop) + '</span>' +
+          '<span class="ticker-service-name">' + escapeHtml(d.service) + '</span>' +
+          '<span class="ticker-price-live">' + escapeHtml(d.price) + '</span>' +
+          '<span class="ticker-zip">' + escapeHtml(d.zip) + '</span>' +
         '</span>';
     }
     return html;

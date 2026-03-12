@@ -122,14 +122,7 @@ const DENSITY = PRICING_BY_ZIP.map(function (row) {
 
 // --------------- ADMIN LOGIN ---------------
 
-var ADMIN_PASSWORD = 'Sanford8715!';
-
-function hasAccess() {
-  return localStorage.getItem('reup_access') === 'intel';
-}
-
-function setupAdminLogin() {
-  var isLoggedIn = hasAccess();
+function setupAdminLogin(isLoggedIn) {
   var loginLink = document.getElementById('adminLoginLink');
   var logoutLink = document.getElementById('adminLogoutLink');
   var modal = document.getElementById('adminModal');
@@ -154,8 +147,9 @@ function setupAdminLogin() {
   if (logoutLink) {
     logoutLink.addEventListener('click', function (e) {
       e.preventDefault();
-      localStorage.removeItem('reup_access');
-      location.reload();
+      window.RE_UP_AUTH.logout().then(function () {
+        location.reload();
+      });
     });
   }
 
@@ -171,13 +165,22 @@ function setupAdminLogin() {
 
   if (submitBtn && passwordInput) {
     submitBtn.addEventListener('click', function () {
-      if (passwordInput.value === ADMIN_PASSWORD) {
-        localStorage.setItem('reup_access', 'intel');
-        location.reload();
-      } else {
+      var pw = passwordInput.value;
+      if (!pw) return;
+      submitBtn.disabled = true;
+      window.RE_UP_AUTH.login(pw).then(function (data) {
+        if (data.success) {
+          location.reload();
+        } else {
+          if (errorMsg) errorMsg.style.display = 'block';
+          passwordInput.value = '';
+          submitBtn.disabled = false;
+        }
+      }).catch(function () {
         if (errorMsg) errorMsg.style.display = 'block';
         passwordInput.value = '';
-      }
+        submitBtn.disabled = false;
+      });
     });
 
     passwordInput.addEventListener('keydown', function (e) {
@@ -228,18 +231,18 @@ function buildDashPaywall() {
 
     '<div class="paywall-plans">' +
       '<div class="paywall-plan">' +
-        '<div class="paywall-plan-name">Intel Monthly</div>' +
+        '<div class="paywall-plan-name">Intel Monthly <span class="reup-coming-soon">Coming Soon</span></div>' +
         '<div class="paywall-plan-price"><span class="paywall-currency">$</span>9<span class="paywall-period">/mo</span></div>' +
         '<ul class="paywall-plan-includes">' +
           '<li>Full market dashboard</li>' +
-          '<li>All articles & outlook briefs</li>' +
+          '<li>All articles &amp; outlook briefs</li>' +
           '<li>Weekly email intel digest</li>' +
         '</ul>' +
-        '<button class="btn btn-primary paywall-cta" data-plan="monthly">Start 7-Day Free Trial</button>' +
+        '<button class="btn btn-primary paywall-cta" data-plan="monthly">Join the Waitlist</button>' +
       '</div>' +
       '<div class="paywall-plan paywall-plan--featured">' +
         '<div class="paywall-plan-badge">Best Value</div>' +
-        '<div class="paywall-plan-name">Intel Annual</div>' +
+        '<div class="paywall-plan-name">Intel Annual <span class="reup-coming-soon">Coming Soon</span></div>' +
         '<div class="paywall-plan-price"><span class="paywall-currency">$</span>79<span class="paywall-period">/yr</span></div>' +
         '<div class="paywall-plan-savings">Save $29 vs monthly</div>' +
         '<ul class="paywall-plan-includes">' +
@@ -247,11 +250,11 @@ function buildDashPaywall() {
           '<li>Quarterly market reports</li>' +
           '<li>Priority access to new tools</li>' +
         '</ul>' +
-        '<button class="btn btn-primary paywall-cta" data-plan="annual">Start 7-Day Free Trial</button>' +
+        '<button class="btn btn-primary paywall-cta" data-plan="annual">Join the Waitlist</button>' +
       '</div>' +
     '</div>' +
 
-    '<p class="paywall-note">Cancel anytime. No charge during trial. Built by barbers, for barbers.</p>' +
+    '<p class="paywall-note">Subscriptions launching soon. Built by barbers, for barbers.</p>' +
   '</div>';
 }
 
@@ -276,15 +279,15 @@ function renderPricingTable() {
   PRICING_BY_ZIP.forEach(function (row) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td class="cell-mono">' + row.zip + "</td>" +
-      "<td>" + row.area + "</td>" +
-      '<td class="cell-price" data-service="haircut">' + formatPrice(row.haircut) + "</td>" +
-      '<td class="cell-price" data-service="fade">' + formatPrice(row.fade) + "</td>" +
-      '<td class="cell-price" data-service="beard">' + formatPrice(row.beard) + "</td>" +
-      '<td class="cell-price" data-service="kids">' + formatPrice(row.kids) + "</td>" +
-      '<td class="cell-price" data-service="hotTowel">' + formatPrice(row.hotTowel) + "</td>" +
-      '<td class="cell-price" data-service="lineup">' + formatPrice(row.lineup) + "</td>" +
-      '<td class="cell-count">' + row.shops + "</td>";
+      '<td class="cell-mono">' + escapeHtml(row.zip) + "</td>" +
+      "<td>" + escapeHtml(row.area) + "</td>" +
+      '<td class="cell-price" data-service="haircut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
+      '<td class="cell-price" data-service="fade">' + escapeHtml(formatPrice(row.fade)) + "</td>" +
+      '<td class="cell-price" data-service="beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
+      '<td class="cell-price" data-service="kids">' + escapeHtml(formatPrice(row.kids)) + "</td>" +
+      '<td class="cell-price" data-service="hotTowel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
+      '<td class="cell-price" data-service="lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
+      '<td class="cell-count">' + escapeHtml(row.shops) + "</td>";
     tbody.appendChild(tr);
   });
 }
@@ -300,13 +303,13 @@ function renderCompetitorTable(data) {
   list.forEach(function (c) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      "<td>" + c.name + "</td>" +
-      "<td>" + c.neighborhood + "</td>" +
-      '<td class="cell-mono">' + c.zip + "</td>" +
-      '<td class="cell-price">' + formatPrice(c.avgCut) + "</td>" +
-      "<td>" + (c.rating === "—" ? "—" : c.rating.toFixed(1)) + "</td>" +
-      "<td>" + c.barbers + "</td>" +
-      "<td>" + c.model + "</td>";
+      "<td>" + escapeHtml(c.name) + "</td>" +
+      "<td>" + escapeHtml(c.neighborhood) + "</td>" +
+      '<td class="cell-mono">' + escapeHtml(c.zip) + "</td>" +
+      '<td class="cell-price">' + escapeHtml(formatPrice(c.avgCut)) + "</td>" +
+      "<td>" + escapeHtml(c.rating === "—" ? "—" : c.rating.toFixed(1)) + "</td>" +
+      "<td>" + escapeHtml(c.barbers) + "</td>" +
+      "<td>" + escapeHtml(c.model) + "</td>";
     tbody.appendChild(tr);
   });
 }
@@ -321,12 +324,12 @@ function renderSocialTable() {
   SOCIAL_LEADERS.forEach(function (s) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      "<td>" + s.rank + "</td>" +
-      "<td>" + s.name + "</td>" +
-      "<td>" + s.type + "</td>" +
-      "<td>" + s.platform + "</td>" +
-      "<td>" + formatFollowers(s.followers) + "</td>" +
-      "<td>" + s.engagement + "</td>";
+      "<td>" + escapeHtml(s.rank) + "</td>" +
+      "<td>" + escapeHtml(s.name) + "</td>" +
+      "<td>" + escapeHtml(s.type) + "</td>" +
+      "<td>" + escapeHtml(s.platform) + "</td>" +
+      "<td>" + escapeHtml(formatFollowers(s.followers)) + "</td>" +
+      "<td>" + escapeHtml(s.engagement) + "</td>";
     tbody.appendChild(tr);
   });
 }
@@ -354,12 +357,12 @@ function renderMoves() {
 
     card.innerHTML =
       '<div class="move-card-header">' +
-        '<span class="move-type">' + m.type + "</span>" +
-        '<span class="move-impact move-impact--' + m.impact.toLowerCase() + '">' + m.impact + " Impact</span>" +
+        '<span class="move-type">' + escapeHtml(m.type) + "</span>" +
+        '<span class="move-impact move-impact--' + escapeHtml(m.impact.toLowerCase()) + '">' + escapeHtml(m.impact) + " Impact</span>" +
       "</div>" +
-      '<h3 class="move-title">' + m.title + "</h3>" +
-      '<p class="move-detail">' + m.detail + "</p>" +
-      '<span class="move-date">' + m.date + "</span>";
+      '<h3 class="move-title">' + escapeHtml(m.title) + "</h3>" +
+      '<p class="move-detail">' + escapeHtml(m.detail) + "</p>" +
+      '<span class="move-date">' + escapeHtml(m.date) + "</span>";
 
     grid.appendChild(card);
   });
@@ -381,10 +384,10 @@ function renderDensity() {
 
     card.innerHTML =
       '<div class="density-header">' +
-        '<span class="density-zip cell-mono">' + d.zip + "</span>" +
-        '<span class="density-count">' + d.count + " shops</span>" +
+        '<span class="density-zip cell-mono">' + escapeHtml(d.zip) + "</span>" +
+        '<span class="density-count">' + escapeHtml(d.count) + " shops</span>" +
       "</div>" +
-      '<span class="density-area">' + d.area + "</span>" +
+      '<span class="density-area">' + escapeHtml(d.area) + "</span>" +
       '<div class="density-bar-track">' +
         '<div class="density-bar-fill" style="width:' + pct + '%"></div>' +
       "</div>";
@@ -523,15 +526,15 @@ function renderPricingTableFromData(data) {
   data.forEach(function (row) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td class="cell-mono">' + row.zip + "</td>" +
-      "<td>" + row.area + "</td>" +
-      '<td class="cell-price" data-service="haircut">' + formatPrice(row.haircut) + "</td>" +
-      '<td class="cell-price" data-service="fade">' + formatPrice(row.fade) + "</td>" +
-      '<td class="cell-price" data-service="beard">' + formatPrice(row.beard) + "</td>" +
-      '<td class="cell-price" data-service="kids">' + formatPrice(row.kids) + "</td>" +
-      '<td class="cell-price" data-service="hotTowel">' + formatPrice(row.hotTowel) + "</td>" +
-      '<td class="cell-price" data-service="lineup">' + formatPrice(row.lineup) + "</td>" +
-      '<td class="cell-count">' + row.shops + "</td>";
+      '<td class="cell-mono">' + escapeHtml(row.zip) + "</td>" +
+      "<td>" + escapeHtml(row.area) + "</td>" +
+      '<td class="cell-price" data-service="haircut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
+      '<td class="cell-price" data-service="fade">' + escapeHtml(formatPrice(row.fade)) + "</td>" +
+      '<td class="cell-price" data-service="beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
+      '<td class="cell-price" data-service="kids">' + escapeHtml(formatPrice(row.kids)) + "</td>" +
+      '<td class="cell-price" data-service="hotTowel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
+      '<td class="cell-price" data-service="lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
+      '<td class="cell-count">' + escapeHtml(row.shops) + "</td>";
     tbody.appendChild(tr);
   });
 
@@ -593,19 +596,19 @@ function renderHeatMap(service) {
       if (intensity > 0.5) tile.classList.add('heatmap-tile--hot');
 
       tile.innerHTML =
-        '<div class="heatmap-zip">' + entry.zip + '</div>' +
-        '<div class="heatmap-area">' + entry.area + '</div>' +
-        '<div class="heatmap-price">$' + price + '</div>' +
-        '<div class="heatmap-shops">' + entry.shops + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
+        '<div class="heatmap-zip">' + escapeHtml(entry.zip) + '</div>' +
+        '<div class="heatmap-area">' + escapeHtml(entry.area) + '</div>' +
+        '<div class="heatmap-price">$' + escapeHtml(price) + '</div>' +
+        '<div class="heatmap-shops">' + escapeHtml(entry.shops) + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
     } else {
       tile.style.backgroundColor = 'rgba(255,255,255,0.03)';
       tile.style.border = '1px solid rgba(255,255,255,0.06)';
 
       tile.innerHTML =
-        '<div class="heatmap-zip">' + entry.zip + '</div>' +
-        '<div class="heatmap-area">' + entry.area + '</div>' +
+        '<div class="heatmap-zip">' + escapeHtml(entry.zip) + '</div>' +
+        '<div class="heatmap-area">' + escapeHtml(entry.area) + '</div>' +
         '<span class="heatmap-nodata">NO DATA</span>' +
-        '<div class="heatmap-shops">' + entry.shops + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
+        '<div class="heatmap-shops">' + escapeHtml(entry.shops) + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
     }
 
     return tile;
@@ -639,7 +642,7 @@ function renderPriceCompare() {
   var marketMin = 20, marketMax = 65, marketAvg = 34;
   var zipOptions = '';
   PRICING_BY_ZIP.forEach(function (d) {
-    zipOptions += '<option value="' + d.zip + '">' + d.zip + ' \u2014 ' + d.area + '</option>';
+    zipOptions += '<option value="' + escapeHtml(d.zip) + '">' + escapeHtml(d.zip) + ' \u2014 ' + escapeHtml(d.area) + '</option>';
   });
 
   container.innerHTML =
@@ -669,17 +672,17 @@ function renderPriceCompare() {
     var areaAvg = zipData.haircut;
     if (areaAvg === '—' || !areaAvg) {
       resultsDiv.innerHTML =
-        '<div class="tool-result-line">No pricing data available for ' + zipData.area + ' yet.</div>' +
-        '<div class="tool-result-line">Market-wide average: <strong>$' + marketAvg + '</strong></div>';
+        '<div class="tool-result-line">No pricing data available for ' + escapeHtml(zipData.area) + ' yet.</div>' +
+        '<div class="tool-result-line">Market-wide average: <strong>$' + escapeHtml(marketAvg) + '</strong></div>';
       return;
     }
 
     var diff = userPrice - areaAvg;
     var diffAbs = Math.abs(diff).toFixed(0);
     var diffLabel = diff > 0
-      ? '<span class="tool-above">+$' + diffAbs + ' above market</span>'
+      ? '<span class="tool-above">+$' + escapeHtml(diffAbs) + ' above market</span>'
       : diff < 0
-        ? '<span class="tool-below">-$' + diffAbs + ' below market</span>'
+        ? '<span class="tool-below">-$' + escapeHtml(diffAbs) + ' below market</span>'
         : '<span style="color:var(--gray-300);">At market rate</span>';
 
     var barPos = Math.max(0, Math.min(100, ((userPrice - marketMin) / (marketMax - marketMin)) * 100));
@@ -687,9 +690,9 @@ function renderPriceCompare() {
     var areaPos = ((areaAvg - marketMin) / (marketMax - marketMin)) * 100;
 
     resultsDiv.innerHTML =
-      '<div class="tool-result-line">You charge <strong>$' + userPrice.toFixed(0) + '</strong>. Average in <strong>' + zipData.area + '</strong> is <strong>$' + areaAvg + '</strong>.</div>' +
+      '<div class="tool-result-line">You charge <strong>$' + escapeHtml(userPrice.toFixed(0)) + '</strong>. Average in <strong>' + escapeHtml(zipData.area) + '</strong> is <strong>$' + escapeHtml(areaAvg) + '</strong>.</div>' +
       '<div class="tool-result-line">' + diffLabel + '</div>' +
-      '<div class="tool-result-line" style="color:var(--gray-500);font-size:13px;">Market-wide average: $' + marketAvg + '</div>' +
+      '<div class="tool-result-line" style="color:var(--gray-500);font-size:13px;">Market-wide average: $' + escapeHtml(marketAvg) + '</div>' +
       '<div class="tool-compare-bar">' +
         '<div class="tool-compare-line" style="left:' + avgPos + '%" title="Market avg"></div>' +
         '<div class="tool-compare-line tool-compare-line--area" style="left:' + areaPos + '%" title="Area avg"></div>' +
@@ -748,12 +751,12 @@ function renderRevenueEstimator() {
 
     resultsDiv.innerHTML =
       '<div class="tool-revenue-grid">' +
-        '<div class="tool-revenue-card"><span class="tool-revenue-label">Daily</span><span class="tool-revenue-value">' + fmt(daily) + '</span></div>' +
-        '<div class="tool-revenue-card"><span class="tool-revenue-label">Weekly</span><span class="tool-revenue-value">' + fmt(weekly) + '</span></div>' +
-        '<div class="tool-revenue-card"><span class="tool-revenue-label">Monthly</span><span class="tool-revenue-value">' + fmt(monthly) + '</span></div>' +
-        '<div class="tool-revenue-card"><span class="tool-revenue-label">Annual</span><span class="tool-revenue-value tool-revenue-value--annual">' + fmt(annual) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Daily</span><span class="tool-revenue-value">' + escapeHtml(fmt(daily)) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Weekly</span><span class="tool-revenue-value">' + escapeHtml(fmt(weekly)) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Monthly</span><span class="tool-revenue-value">' + escapeHtml(fmt(monthly)) + '</span></div>' +
+        '<div class="tool-revenue-card"><span class="tool-revenue-label">Annual</span><span class="tool-revenue-value tool-revenue-value--annual">' + escapeHtml(fmt(annual)) + '</span></div>' +
       '</div>' +
-      '<p style="margin:12px 0 0;font-size:11px;color:var(--gray-500);">' + clients + ' clients/day x ' + fmt(price) + '/cut x ' + days + ' days/week. Monthly uses 4.33 weeks.</p>';
+      '<p style="margin:12px 0 0;font-size:11px;color:var(--gray-500);">' + escapeHtml(clients) + ' clients/day x ' + escapeHtml(fmt(price)) + '/cut x ' + escapeHtml(days) + ' days/week. Monthly uses 4.33 weeks.</p>';
   }
 
   priceInput.addEventListener('input', update);
@@ -800,12 +803,12 @@ function renderGapFinder() {
   var listHtml = '';
   scored.forEach(function (item, idx) {
     listHtml +=
-      '<div class="tool-gap-item" data-opportunity="' + item.tierClass + '">' +
-        '<span class="tool-gap-rank">#' + (idx + 1) + '</span>' +
-        '<span class="tool-gap-zip">' + item.zip + '</span>' +
-        '<span class="tool-gap-area">' + item.area + '</span>' +
-        '<span class="tool-gap-shops">' + item.shops + ' shop' + (item.shops !== 1 ? 's' : '') + '</span>' +
-        '<span class="tool-gap-badge tool-gap-badge--' + item.tierClass + '">' + item.tier + '</span>' +
+      '<div class="tool-gap-item" data-opportunity="' + escapeHtml(item.tierClass) + '">' +
+        '<span class="tool-gap-rank">#' + escapeHtml(idx + 1) + '</span>' +
+        '<span class="tool-gap-zip">' + escapeHtml(item.zip) + '</span>' +
+        '<span class="tool-gap-area">' + escapeHtml(item.area) + '</span>' +
+        '<span class="tool-gap-shops">' + escapeHtml(item.shops) + ' shop' + (item.shops !== 1 ? 's' : '') + '</span>' +
+        '<span class="tool-gap-badge tool-gap-badge--' + escapeHtml(item.tierClass) + '">' + escapeHtml(item.tier) + '</span>' +
       '</div>';
   });
 
@@ -934,20 +937,20 @@ function startGuidedTour() {
 
     // Build tip callout
     var tipHtml = step.tip
-      ? '<div class="tour-tip"><span class="tour-tip-icon">&rarr;</span> ' + step.tip + '</div>'
+      ? '<div class="tour-tip"><span class="tour-tip-icon">&rarr;</span> ' + escapeHtml(step.tip) + '</div>'
       : '';
 
     // Build tooltip content
     tooltip.innerHTML =
       (isWelcome ? '<div class="tour-welcome-badge">RE UP INTEL</div>' : '') +
-      '<div class="tour-step-counter">Step ' + (idx + 1) + ' of ' + totalSteps + '</div>' +
-      '<h2 class="tour-title">' + step.title + '</h2>' +
-      '<p class="tour-body">' + step.body + '</p>' +
+      '<div class="tour-step-counter">Step ' + escapeHtml(idx + 1) + ' of ' + escapeHtml(totalSteps) + '</div>' +
+      '<h2 class="tour-title">' + escapeHtml(step.title) + '</h2>' +
+      '<p class="tour-body">' + escapeHtml(step.body) + '</p>' +
       tipHtml +
       dotsHtml +
       '<div class="tour-actions">' +
         (idx > 0 ? '<button class="tour-btn tour-btn--back" id="tour-back">Back</button>' : '') +
-        '<button class="tour-btn tour-btn--primary" id="tour-next">' + step.cta + '</button>' +
+        '<button class="tour-btn tour-btn--primary" id="tour-next">' + escapeHtml(step.cta) + '</button>' +
       '</div>' +
       (isLast ? '' : '<button class="tour-skip" id="tour-skip">Skip tour</button>');
 
@@ -1086,15 +1089,15 @@ function applyDashPaywall() {
   paywallDiv.innerHTML = buildDashPaywall();
   gated.parentNode.insertBefore(paywallDiv.firstChild, gated.nextSibling);
 
-  // Attach CTA handlers
+  // Attach CTA handlers — show inline waitlist form
   var buttons = document.querySelectorAll('.paywall-cta');
   for (var b = 0; b < buttons.length; b++) {
     buttons[b].addEventListener('click', function () {
-      var plan = this.getAttribute('data-plan');
-      var email = prompt('Enter your email to start your free trial (' + plan + ' plan):');
-      if (email && email.indexOf('@') > 0) {
-        alert('Thanks! We\u2019ll send your trial access to ' + email + '. Check your inbox.');
-      }
+      var btn = this;
+      // Create a container where the button is, then replace button with waitlist form
+      var formContainer = document.createElement('div');
+      btn.parentNode.replaceChild(formContainer, btn);
+      window.showWaitlistForm(formContainer);
     });
   }
 }
@@ -1102,46 +1105,49 @@ function applyDashPaywall() {
 // --------------- INIT ---------------
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Always set up admin login (works on both gated and unlocked states)
-  setupAdminLogin();
+  // Verify auth server-side, then render accordingly
+  window.RE_UP_AUTH.isAuthenticated().then(function (authed) {
+    // Always set up admin login (works on both gated and unlocked states)
+    setupAdminLogin(authed);
 
-  // Check access
-  if (!hasAccess()) {
-    applyDashPaywall();
-    return;  // Don't render the gated data
-  }
+    // Check access
+    if (!authed) {
+      applyDashPaywall();
+      return;  // Don't render the gated data
+    }
 
-  // Render all sections
-  renderHeatMap('haircut');
-  setupHeatMapButtons();
-  renderPricingTable();
-  renderCompetitorTable();
-  renderSocialTable();
-  renderMoves();
-  renderDensity();
+    // Render all sections
+    renderHeatMap('haircut');
+    setupHeatMapButtons();
+    renderPricingTable();
+    renderCompetitorTable();
+    renderSocialTable();
+    renderMoves();
+    renderDensity();
 
-  // Render interactive tools
-  renderPriceCompare();
-  renderRevenueEstimator();
-  renderGapFinder();
+    // Render interactive tools
+    renderPriceCompare();
+    renderRevenueEstimator();
+    renderGapFinder();
 
-  // Set up interactivity
-  setupFilterButtons();
-  setupCompetitorSearch();
-  makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
-  makeSortable("competitor-table", COMPETITORS, renderCompetitorTable);
+    // Set up interactivity
+    setupFilterButtons();
+    setupCompetitorSearch();
+    makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
+    makeSortable("competitor-table", COMPETITORS, renderCompetitorTable);
 
-  // Show replay tour link for logged-in users
-  var replayLink = document.getElementById('replayTourLink');
-  if (replayLink) {
-    replayLink.style.display = 'inline';
-    replayLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      localStorage.removeItem('reup_tour_done');
-      startGuidedTour();
-    });
-  }
+    // Show replay tour link for logged-in users
+    var replayLink = document.getElementById('replayTourLink');
+    if (replayLink) {
+      replayLink.style.display = 'inline';
+      replayLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        localStorage.removeItem('reup_tour_done');
+        startGuidedTour();
+      });
+    }
 
-  // Launch guided tour for first-time subscribers
-  setTimeout(function () { startGuidedTour(); }, 600);
+    // Launch guided tour for first-time subscribers
+    setTimeout(function () { startGuidedTour(); }, 600);
+  });
 });

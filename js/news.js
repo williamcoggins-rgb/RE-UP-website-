@@ -394,7 +394,7 @@
   function impactBadge(impact) {
     if (!impact || impact === 'low') return '';
     var cls = impact === 'high' ? 'news-impact--high' : 'news-impact--medium';
-    return '<span class="news-impact ' + cls + '">' + impact.toUpperCase() + '</span>';
+    return '<span class="news-impact ' + cls + '">' + escapeHtml(impact.toUpperCase()) + '</span>';
   }
 
   // Build article page URL
@@ -442,10 +442,10 @@
       }
 
       html +=
-        '<a class="news-card news-card--link" href="' + articleUrl(a) + '" data-desk="' + a.desk + '" data-score="' + (a.score || 0) + '">' +
+        '<a class="news-card news-card--link" href="' + articleUrl(a) + '" data-desk="' + escapeHtml(a.desk) + '" data-score="' + escapeHtml(a.score || 0) + '">' +
           '<div class="news-card-header">' +
-            '<span class="news-tag ' + meta.tagClass + '">' + meta.label + '</span>' +
-            '<span class="news-date">' + displayDate + '</span>' +
+            '<span class="news-tag ' + meta.tagClass + '">' + escapeHtml(meta.label) + '</span>' +
+            '<span class="news-date">' + escapeHtml(displayDate) + '</span>' +
           '</div>' +
           '<h3 class="news-title">' + escapeHtml(a.title) + '</h3>' +
           '<p class="news-summary">' + escapeHtml(a.summary) + '</p>' +
@@ -459,11 +459,7 @@
     grid.innerHTML = html;
   }
 
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str || '';
-    return div.innerHTML;
-  }
+  // escapeHtml is now provided by js/utils.js on window.escapeHtml
 
   // Apply the current filter to cached articles
   function applyFilter(filter) {
