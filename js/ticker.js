@@ -8,7 +8,7 @@
   // Each entry maps to a real record in data/exports/pricing.json
   var TICKER_DATA = [
     { shop: "Modern Classics", service: "Men's Cut", price: "$65", zip: "28203" },
-    { shop: "NoDa Barbers", service: "Faded Cut", price: "$45", zip: "28205" },
+    { shop: "NoDa Barbers", service: "Men's Cut", price: "$45", zip: "28205" },
     { shop: "Hawk & Fade", service: "Men's Cut", price: "$40", zip: "28203" },
     { shop: "Uptown Cuts", service: "Men's Cut", price: "$40", zip: "28202" },
     { shop: "Charlotte Barber & Beard", service: "Men's Cut", price: "$45", zip: "28205" },
@@ -42,9 +42,6 @@
     { shop: "34th Design", service: "Men's Cut", price: "$35", zip: "28213" },
     { shop: "Overton's Barber", service: "Men's Cut", price: "$35", zip: "28213" },
     { shop: "Just For You II", service: "Men's Cut", price: "$25", zip: "28213" },
-    { shop: "Fade Factory", service: "Fade", price: "$50", zip: "28213" },
-    { shop: "DJ The Fademaster", service: "Fade", price: "$35", zip: "28213" },
-    { shop: "The Cutting Room", service: "Fade", price: "$40", zip: "28213" },
     { shop: "Fade Factory", service: "Beard Trim", price: "$35", zip: "28213" },
     { shop: "DJ The Fademaster", service: "Beard Trim", price: "$20", zip: "28213" },
     { shop: "The Cutting Room", service: "Beard Trim", price: "$25", zip: "28213" }
