@@ -1,0 +1,284 @@
+[
+  {
+    "name": "The CUT Barbershop",
+    "zip": "28202",
+    "rating": 4.7,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Uptown Cuts",
+    "zip": "28202",
+    "rating": 5,
+    "tier": "Premium"
+  },
+  {
+    "name": "Knights of the Razor by No Grease",
+    "zip": "28202",
+    "rating": 4.3,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "City Barbers at Uptown",
+    "zip": "28202",
+    "rating": 4.6,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Scissors & Scotch",
+    "zip": "28202",
+    "rating": 4.9,
+    "tier": "Premium"
+  },
+  {
+    "name": "Modern Classics South End",
+    "zip": "28203",
+    "rating": 4.9,
+    "tier": "Premium"
+  },
+  {
+    "name": "Hawk & Fade Barbershop",
+    "zip": "28203",
+    "rating": 4.8,
+    "tier": "Premium"
+  },
+  {
+    "name": "Caliber Men's Grooming",
+    "zip": "28203",
+    "rating": 4.7,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Arrow - South End",
+    "zip": "28203",
+    "rating": 4.8,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Southside Barber Shop",
+    "zip": "28203",
+    "rating": 4,
+    "tier": "Value"
+  },
+  {
+    "name": "Shear Excellence - Dilworth",
+    "zip": "28203",
+    "rating": 4.7,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Midwood Barbers",
+    "zip": "28205",
+    "rating": 4.9,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "NoDa Barbers",
+    "zip": "28205",
+    "rating": 4.7,
+    "tier": "Premium"
+  },
+  {
+    "name": "Charlotte Barber & Beard",
+    "zip": "28205",
+    "rating": 4.6,
+    "tier": "Premium"
+  },
+  {
+    "name": "Arrow - Plaza Midwood",
+    "zip": "28205",
+    "rating": 4.8,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Next Level Hair Studio",
+    "zip": "28205",
+    "rating": "—",
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Harris Barber Shop",
+    "zip": "28206",
+    "rating": 4.7,
+    "tier": "Value"
+  },
+  {
+    "name": "Gillespie Barber & Stylist",
+    "zip": "28206",
+    "rating": 4,
+    "tier": "Value"
+  },
+  {
+    "name": "The Man Cave Barbershop Charlotte LLC",
+    "zip": "28208",
+    "rating": 4.6,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Da Lucky Spot",
+    "zip": "28208",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Victory Cutz Barber Lounge CLT",
+    "zip": "28208",
+    "rating": "—",
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Modern Haircutters (Park Road Barbers)",
+    "zip": "28209",
+    "rating": 4.5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Selwyn Barber & Style",
+    "zip": "28209",
+    "rating": 4.8,
+    "tier": "Value"
+  },
+  {
+    "name": "Arrow - Park Road",
+    "zip": "28209",
+    "rating": 4.8,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Urban Barber & Style",
+    "zip": "28209",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Bladez Barber Shop",
+    "zip": "28210",
+    "rating": 4.3,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "South Park Barber Shop",
+    "zip": "28211",
+    "rating": 4.6,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Freshen Up Barbershop",
+    "zip": "28211",
+    "rating": 4.9,
+    "tier": "Premium"
+  },
+  {
+    "name": "Kutt Masters Barbershop",
+    "zip": "28213",
+    "rating": 4.6,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Fade Factory Barbershop",
+    "zip": "28213",
+    "rating": 4.5,
+    "tier": "Premium"
+  },
+  {
+    "name": "DJ The Fademaster",
+    "zip": "28213",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "The Cutting Room Grooming Lounge",
+    "zip": "28213",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Just For You Barber & Beauty II",
+    "zip": "28213",
+    "rating": 4.3,
+    "tier": "Value"
+  },
+  {
+    "name": "34th Design Barbershop",
+    "zip": "28213",
+    "rating": 4.6,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Clean Cuts Barbershop",
+    "zip": "28213",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Overton's Barber & Styling",
+    "zip": "28213",
+    "rating": 4.8,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Edward's Boyz Barber Shop",
+    "zip": "28215",
+    "rating": 4.8,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Right Touch Barbershop",
+    "zip": "28215",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "M&M Barber Studio",
+    "zip": "28216",
+    "rating": "—",
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Tha Kut Club Barbershop Lounge",
+    "zip": "28216",
+    "rating": 5,
+    "tier": "Value"
+  },
+  {
+    "name": "No Grease Mosaic",
+    "zip": "28216",
+    "rating": 4.2,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Emperial Barber Lounge",
+    "zip": "28262",
+    "rating": 4.9,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Azeal Barbershop",
+    "zip": "28262",
+    "rating": "—",
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Just For You",
+    "zip": "28269",
+    "rating": 4.6,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "MVP's Grooming Lounge",
+    "zip": "28269",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Verified Cuts",
+    "zip": "28273",
+    "rating": 5,
+    "tier": "Mid-tier"
+  },
+  {
+    "name": "Headz Up Barbershop",
+    "zip": "28273",
+    "rating": "—",
+    "tier": "Mid-tier"
+  }
+]
