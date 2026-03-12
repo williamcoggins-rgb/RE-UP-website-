@@ -34,7 +34,20 @@
     { shop: "City Barbers", service: "Kids Cut", price: "$26", zip: "28202" },
     { shop: "No Grease Mosaic", service: "Standard", price: "$40", zip: "28216" },
     { shop: "Selwyn Barber", service: "Beard Add-on", price: "$5", zip: "28209" },
-    { shop: "Arrow Plaza Midwood", service: "Beard Trim", price: "$15", zip: "28205" }
+    { shop: "Arrow Plaza Midwood", service: "Beard Trim", price: "$15", zip: "28205" },
+    { shop: "Fade Factory", service: "Men's Cut", price: "$50", zip: "28213" },
+    { shop: "DJ The Fademaster", service: "Men's Cut", price: "$35", zip: "28213" },
+    { shop: "The Cutting Room", service: "Men's Cut", price: "$40", zip: "28213" },
+    { shop: "Clean Cuts", service: "Men's Cut", price: "$30", zip: "28213" },
+    { shop: "34th Design", service: "Men's Cut", price: "$35", zip: "28213" },
+    { shop: "Overton's Barber", service: "Men's Cut", price: "$35", zip: "28213" },
+    { shop: "Just For You II", service: "Men's Cut", price: "$25", zip: "28213" },
+    { shop: "Fade Factory", service: "Fade", price: "$50", zip: "28213" },
+    { shop: "DJ The Fademaster", service: "Fade", price: "$35", zip: "28213" },
+    { shop: "The Cutting Room", service: "Fade", price: "$40", zip: "28213" },
+    { shop: "Fade Factory", service: "Beard Trim", price: "$35", zip: "28213" },
+    { shop: "DJ The Fademaster", service: "Beard Trim", price: "$20", zip: "28213" },
+    { shop: "The Cutting Room", service: "Beard Trim", price: "$25", zip: "28213" }
   ];
 
   function buildTickerHTML() {
