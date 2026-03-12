@@ -2840,35 +2840,30 @@ a.news-card--link:hover .news-title {
   height: 100%;
   z-index: 10000;
   pointer-events: auto;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
   transition: opacity 0.4s ease;
 }
 
-.tour-overlay--welcome {
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.tour-overlay--spotlight {
-  background: transparent;
-  box-shadow:
-    0 0 0 9999px rgba(0, 0, 0, 0.82),
-    inset var(--spot-width, 0) 0 0 0 transparent;
-  clip-path: polygon(
-    0% 0%, 0% 100%, 100% 100%, 100% 0%,
-    /* Cutout */
-    var(--spot-left, -100px) var(--spot-top, -100px),
-    var(--spot-left, -100px) calc(var(--spot-top, -100px) + var(--spot-height, 0px)),
-    calc(var(--spot-left, -100px) + var(--spot-width, 0px)) calc(var(--spot-top, -100px) + var(--spot-height, 0px)),
-    calc(var(--spot-left, -100px) + var(--spot-width, 0px)) var(--spot-top, -100px),
-    var(--spot-left, -100px) var(--spot-top, -100px),
-    0% 0%
-  );
+.tour-overlay--active {
+  opacity: 1;
 }
 
 .tour-overlay--exiting {
   opacity: 0;
   pointer-events: none;
+}
+
+/* Highlighted target element — elevated above the overlay */
+.tour-highlight {
+  box-shadow:
+    0 0 0 4px rgba(229, 9, 20, 0.5),
+    0 0 30px rgba(229, 9, 20, 0.2),
+    0 0 60px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  background: var(--black, #0a0a0a);
 }
 
 /* Tooltip */
@@ -2903,6 +2898,7 @@ a.news-card--link:hover .news-title {
 
 .tour-tooltip--positioned {
   transform: none;
+  animation: none;
 }
 
 .tour-tooltip--exiting {
@@ -3346,9 +3342,9 @@ a.news-card--link:hover .news-title {
   }
 
   .tour-tooltip--welcome {
-    top: auto;
+    top: auto !important;
     bottom: 24px;
-    left: 16px;
+    left: 16px !important;
     transform: none;
     max-width: none;
   }

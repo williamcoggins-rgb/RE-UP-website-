@@ -888,19 +888,34 @@ function startGuidedTour() {
   if (!shouldShowTour()) return;
 
   var currentStep = 0;
+  var highlightedEl = null;
+
+  // Create dark overlay — covers everything, target gets elevated above it
   var overlay = document.createElement('div');
   overlay.id = 'tour-overlay';
-  overlay.className = 'tour-overlay';
+  overlay.className = 'tour-overlay tour-overlay--active';
   document.body.appendChild(overlay);
 
+  // Create tooltip
   var tooltip = document.createElement('div');
   tooltip.id = 'tour-tooltip';
   tooltip.className = 'tour-tooltip';
   document.body.appendChild(tooltip);
 
+  function clearHighlight() {
+    if (highlightedEl) {
+      highlightedEl.classList.remove('tour-highlight');
+      highlightedEl.style.position = '';
+      highlightedEl.style.zIndex = '';
+      highlightedEl = null;
+    }
+  }
+
   function renderStep(idx) {
     var step = TOUR_STEPS[idx];
     var totalSteps = TOUR_STEPS.length;
+    var isWelcome = idx === 0;
+    var isLast = idx === totalSteps - 1;
 
     // Build dots
     var dotsHtml = '<div class="tour-dots">';
@@ -914,9 +929,6 @@ function startGuidedTour() {
       ? '<div class="tour-tip"><span class="tour-tip-icon">&rarr;</span> ' + step.tip + '</div>'
       : '';
 
-    var isWelcome = idx === 0;
-    var isLast = idx === totalSteps - 1;
-
     // Build tooltip content
     tooltip.innerHTML =
       (isWelcome ? '<div class="tour-welcome-badge">RE UP INTEL</div>' : '') +
@@ -929,36 +941,33 @@ function startGuidedTour() {
         (idx > 0 ? '<button class="tour-btn tour-btn--back" id="tour-back">Back</button>' : '') +
         '<button class="tour-btn tour-btn--primary" id="tour-next">' + step.cta + '</button>' +
       '</div>' +
-      '<button class="tour-skip" id="tour-skip">' + (isLast ? '' : 'Skip tour') + '</button>';
+      (isLast ? '' : '<button class="tour-skip" id="tour-skip">Skip tour</button>');
 
-    // Position tooltip
+    // Clear previous highlight
+    clearHighlight();
+
     if (isWelcome) {
-      // Welcome: centered on screen
-      tooltip.classList.add('tour-tooltip--welcome');
-      tooltip.classList.remove('tour-tooltip--positioned');
-      overlay.classList.add('tour-overlay--welcome');
-      overlay.classList.remove('tour-overlay--spotlight');
+      tooltip.className = 'tour-tooltip tour-tooltip--welcome';
+      tooltip.style.top = '';
+      tooltip.style.left = '';
     } else {
-      tooltip.classList.remove('tour-tooltip--welcome');
-      tooltip.classList.add('tour-tooltip--positioned');
-      overlay.classList.remove('tour-overlay--welcome');
-      overlay.classList.add('tour-overlay--spotlight');
+      tooltip.className = 'tour-tooltip tour-tooltip--positioned';
 
-      // Scroll to target and position
       var target = document.querySelector(step.target);
       if (target) {
-        var rect = target.getBoundingClientRect();
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        // Elevate the target above the overlay
+        highlightedEl = target;
+        target.classList.add('tour-highlight');
+        target.style.position = 'relative';
+        target.style.zIndex = '10001';
 
-        // Scroll so element is in view
-        var targetTop = rect.top + scrollTop - 100;
-        window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        // Scroll target into view
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        // Wait for scroll, then position spotlight + tooltip
+        // Position tooltip after scroll completes
         setTimeout(function () {
-          positionSpotlight(target);
           positionTooltip(target);
-        }, 400);
+        }, 450);
       }
     }
 
@@ -971,24 +980,20 @@ function startGuidedTour() {
       nextBtn.addEventListener('click', function () {
         if (idx < totalSteps - 1) {
           currentStep++;
-          clearSpotlight();
           renderStep(currentStep);
         } else {
           endTour();
         }
       });
     }
-
     if (backBtn) {
       backBtn.addEventListener('click', function () {
         if (idx > 0) {
           currentStep--;
-          clearSpotlight();
           renderStep(currentStep);
         }
       });
     }
-
     if (skipBtn) {
       skipBtn.addEventListener('click', function () {
         endTour();
@@ -996,47 +1001,47 @@ function startGuidedTour() {
     }
   }
 
-  function positionSpotlight(target) {
-    var rect = target.getBoundingClientRect();
-    var pad = 12;
-    overlay.style.setProperty('--spot-top', (rect.top - pad) + 'px');
-    overlay.style.setProperty('--spot-left', (rect.left - pad) + 'px');
-    overlay.style.setProperty('--spot-width', (rect.width + pad * 2) + 'px');
-    overlay.style.setProperty('--spot-height', (rect.height + pad * 2) + 'px');
-  }
-
   function positionTooltip(target) {
     var rect = target.getBoundingClientRect();
-    var tooltipRect = tooltip.getBoundingClientRect();
     var viewW = window.innerWidth;
+    var viewH = window.innerHeight;
 
-    // Position below the target, centered horizontally
-    var top = rect.bottom + 16;
-    var left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    // Reset so we can measure natural size
+    tooltip.style.top = '0';
+    tooltip.style.left = '0';
+    tooltip.style.visibility = 'hidden';
+    var tooltipRect = tooltip.getBoundingClientRect();
+    tooltip.style.visibility = '';
 
-    // If tooltip would go off screen bottom, position above
-    if (top + tooltipRect.height > window.innerHeight - 60) {
-      top = rect.top - tooltipRect.height - 16;
+    var pad = 16;
+    var tooltipW = tooltipRect.width;
+    var tooltipH = tooltipRect.height;
+
+    // Try below target first
+    var top = rect.bottom + pad;
+    var left = rect.left + (rect.width / 2) - (tooltipW / 2);
+
+    // If below doesn't fit, try above
+    if (top + tooltipH > viewH - pad) {
+      top = rect.top - tooltipH - pad;
     }
 
-    // Keep within horizontal bounds
-    if (left < 16) left = 16;
-    if (left + tooltipRect.width > viewW - 16) left = viewW - tooltipRect.width - 16;
+    // If above doesn't fit either, center vertically in viewport
+    if (top < pad) {
+      top = Math.max(pad, (viewH - tooltipH) / 2);
+    }
+
+    // Clamp horizontal
+    if (left < pad) left = pad;
+    if (left + tooltipW > viewW - pad) left = viewW - tooltipW - pad;
 
     tooltip.style.top = top + 'px';
     tooltip.style.left = left + 'px';
   }
 
-  function clearSpotlight() {
-    overlay.style.removeProperty('--spot-top');
-    overlay.style.removeProperty('--spot-left');
-    overlay.style.removeProperty('--spot-width');
-    overlay.style.removeProperty('--spot-height');
-  }
-
   function endTour() {
     completeTour();
-    clearSpotlight();
+    clearHighlight();
     overlay.classList.add('tour-overlay--exiting');
     tooltip.classList.add('tour-tooltip--exiting');
     setTimeout(function () {
