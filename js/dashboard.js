@@ -8,20 +8,20 @@
 // All pricing verified via Booksy, Squire, Fresha, shop websites, Yelp, Axios Charlotte
 // "—" = not found in any public source. No fabricated data.
 const PRICING_BY_ZIP = [
-  { zip: "28202", area: "Uptown / Center City", haircut: 35, fade: "—", beard: "—", kids: 26, hotTowel: "—", lineup: "—", shops: 5 },
-  { zip: "28203", area: "South End / Dilworth", haircut: 44, fade: 65, beard: 25, kids: "—", hotTowel: 40, lineup: 20, shops: 6 },
-  { zip: "28205", area: "NoDa / Plaza Midwood", haircut: 38, fade: 60, beard: 23, kids: 31, hotTowel: "—", lineup: "—", shops: 5 },
-  { zip: "28206", area: "North Charlotte / Druid Hills", haircut: 20, fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
-  { zip: "28208", area: "West Charlotte / Airport", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 3 },
-  { zip: "28209", area: "Park Road / Selwyn", haircut: 27, fade: "—", beard: 12, kids: "—", hotTowel: "—", lineup: "—", shops: 4 },
-  { zip: "28210", area: "South Charlotte / Sharon Lakes", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 1 },
-  { zip: "28211", area: "SouthPark / Myers Park", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
-  { zip: "28213", area: "University City / UNCC", haircut: 35, fade: 42, beard: 25, kids: "—", hotTowel: "—", lineup: "—", shops: 8 },
-  { zip: "28215", area: "East Charlotte / Albemarle Rd", haircut: 25, fade: 50, beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
-  { zip: "28216", area: "Brookshire / North Charlotte", haircut: 33, fade: "—", beard: "—", kids: 20, hotTowel: "—", lineup: "—", shops: 3 },
-  { zip: "28262", area: "University City / N Tryon", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
-  { zip: "28269", area: "University City / WT Harris", haircut: "—", fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 },
-  { zip: "28273", area: "Steele Creek", haircut: 35, fade: "—", beard: "—", kids: "—", hotTowel: "—", lineup: "—", shops: 2 }
+  { zip: "28202", area: "Uptown / Center City", haircut: 35, beard: "—", students: 26, hotTowel: "—", lineup: "—", shops: 5 },
+  { zip: "28203", area: "South End / Dilworth", haircut: 44, beard: 25, students: "—", hotTowel: 40, lineup: 20, shops: 6 },
+  { zip: "28205", area: "NoDa / Plaza Midwood", haircut: 38, beard: 23, students: 31, hotTowel: "—", lineup: "—", shops: 5 },
+  { zip: "28206", area: "North Charlotte / Druid Hills", haircut: 20, beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 },
+  { zip: "28208", area: "West Charlotte / Airport", haircut: "—", beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28209", area: "Park Road / Selwyn", haircut: 27, beard: 12, students: "—", hotTowel: "—", lineup: "—", shops: 4 },
+  { zip: "28210", area: "South Charlotte / Sharon Lakes", haircut: "—", beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 1 },
+  { zip: "28211", area: "SouthPark / Myers Park", haircut: "—", beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 },
+  { zip: "28213", area: "University City / UNCC", haircut: 35, beard: 25, students: "—", hotTowel: "—", lineup: "—", shops: 8 },
+  { zip: "28215", area: "East Charlotte / Albemarle Rd", haircut: 25, beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 },
+  { zip: "28216", area: "Brookshire / North Charlotte", haircut: 33, beard: "—", students: 20, hotTowel: "—", lineup: "—", shops: 3 },
+  { zip: "28262", area: "University City / N Tryon", haircut: "—", beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 },
+  { zip: "28269", area: "University City / WT Harris", haircut: "—", beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 },
+  { zip: "28273", area: "Steele Creek", haircut: 35, beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 }
 ];
 
 // All shops verified via Google, Yelp, Booksy, Squire, Fresha, Vagaro, shop websites
@@ -282,9 +282,8 @@ function renderPricingTable() {
       '<td class="cell-mono">' + escapeHtml(row.zip) + "</td>" +
       "<td>" + escapeHtml(row.area) + "</td>" +
       '<td class="cell-price" data-service="haircut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
-      '<td class="cell-price" data-service="fade">' + escapeHtml(formatPrice(row.fade)) + "</td>" +
       '<td class="cell-price" data-service="beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
-      '<td class="cell-price" data-service="kids">' + escapeHtml(formatPrice(row.kids)) + "</td>" +
+      '<td class="cell-price" data-service="students">' + escapeHtml(formatPrice(row.students)) + "</td>" +
       '<td class="cell-price" data-service="hotTowel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
       '<td class="cell-price" data-service="lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
       '<td class="cell-count">' + escapeHtml(row.shops) + "</td>";
@@ -429,7 +428,7 @@ function highlightServiceColumn(service) {
   cells.forEach(function (cell) { cell.classList.add("col-highlight"); });
 
   // Also highlight the corresponding header
-  var serviceToColIndex = { haircut: 2, fade: 3, beard: 4, kids: 5, hotTowel: 6, lineup: 7 };
+  var serviceToColIndex = { haircut: 2, beard: 3, students: 4, hotTowel: 5, lineup: 6 };
   var colIdx = serviceToColIndex[service];
   if (colIdx !== undefined) {
     var ths = table.querySelectorAll("thead th");
@@ -529,9 +528,8 @@ function renderPricingTableFromData(data) {
       '<td class="cell-mono">' + escapeHtml(row.zip) + "</td>" +
       "<td>" + escapeHtml(row.area) + "</td>" +
       '<td class="cell-price" data-service="haircut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
-      '<td class="cell-price" data-service="fade">' + escapeHtml(formatPrice(row.fade)) + "</td>" +
       '<td class="cell-price" data-service="beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
-      '<td class="cell-price" data-service="kids">' + escapeHtml(formatPrice(row.kids)) + "</td>" +
+      '<td class="cell-price" data-service="students">' + escapeHtml(formatPrice(row.students)) + "</td>" +
       '<td class="cell-price" data-service="hotTowel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
       '<td class="cell-price" data-service="lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
       '<td class="cell-count">' + escapeHtml(row.shops) + "</td>";
@@ -832,7 +830,7 @@ var TOUR_STEPS = [
   {
     target: '#heatmap-grid',
     title: 'Pricing Heat Map',
-    body: 'This is your bird\'s-eye view of Charlotte pricing. The redder the tile, the more expensive that zip code is. Dark tiles = cheaper areas. Tap the buttons up top to switch between Men\'s Cut, Fade, Beard, and Kids.',
+    body: 'This is your bird\'s-eye view of Charlotte pricing. The redder the tile, the more expensive that zip code is. Dark tiles = cheaper areas. Tap the buttons up top to switch between Men\'s Cut, Beard, and Students.',
     tip: 'Use this to see which neighborhoods charge premium and where the value shops are.',
     cta: 'Next'
   },
