@@ -636,7 +636,7 @@ function renderPriceCompare() {
   var container = document.getElementById('tool-price-compare');
   if (!container) return;
 
-  var marketMin = 20, marketMax = 65, marketAvg = 33;
+  var marketMin = 20, marketMax = 65, marketAvg = 34;
   var zipOptions = '';
   PRICING_BY_ZIP.forEach(function (d) {
     zipOptions += '<option value="' + d.zip + '">' + d.zip + ' \u2014 ' + d.area + '</option>';
