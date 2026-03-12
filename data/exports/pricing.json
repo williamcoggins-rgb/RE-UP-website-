@@ -12,7 +12,7 @@
   {
     "zip": "28203",
     "area": "South End / Dilworth",
-    "haircut": 44,
+    "haircut": 55,
     "beard": 25,
     "students": "—",
     "hotTowel": 40,
@@ -22,7 +22,7 @@
   {
     "zip": "28205",
     "area": "NoDa / Plaza Midwood",
-    "haircut": 38,
+    "haircut": 49,
     "beard": 23,
     "students": 31,
     "hotTowel": "—",
@@ -82,7 +82,7 @@
   {
     "zip": "28213",
     "area": "University City / UNCC",
-    "haircut": 35,
+    "haircut": 39,
     "beard": 25,
     "students": "—",
     "hotTowel": "—",
@@ -92,7 +92,7 @@
   {
     "zip": "28215",
     "area": "East Charlotte / Albemarle Rd",
-    "haircut": 25,
+    "haircut": 38,
     "beard": "—",
     "students": "—",
     "hotTowel": "—",
