@@ -123,7 +123,7 @@ Object.keys(dataRoutes).forEach(function(route) {
 // --- Static files ---
 app.use(express.static(__dirname));
 
-// --- Start (local dev) / Export (Vercel) ---
+// --- Start (local dev) / Export (Railway / Vercel) ---
 if (require.main === module) {
   app.listen(PORT, function() {
     console.log('RE UP Report running on http://localhost:' + PORT);
