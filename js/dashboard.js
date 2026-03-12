@@ -122,14 +122,7 @@ const DENSITY = PRICING_BY_ZIP.map(function (row) {
 
 // --------------- ADMIN LOGIN ---------------
 
-var ADMIN_PASSWORD = 'Sanford8715!';
-
-function hasAccess() {
-  return localStorage.getItem('reup_access') === 'intel';
-}
-
-function setupAdminLogin() {
-  var isLoggedIn = hasAccess();
+function setupAdminLogin(isLoggedIn) {
   var loginLink = document.getElementById('adminLoginLink');
   var logoutLink = document.getElementById('adminLogoutLink');
   var modal = document.getElementById('adminModal');
@@ -154,8 +147,9 @@ function setupAdminLogin() {
   if (logoutLink) {
     logoutLink.addEventListener('click', function (e) {
       e.preventDefault();
-      localStorage.removeItem('reup_access');
-      location.reload();
+      window.RE_UP_AUTH.logout().then(function () {
+        location.reload();
+      });
     });
   }
 
@@ -171,13 +165,22 @@ function setupAdminLogin() {
 
   if (submitBtn && passwordInput) {
     submitBtn.addEventListener('click', function () {
-      if (passwordInput.value === ADMIN_PASSWORD) {
-        localStorage.setItem('reup_access', 'intel');
-        location.reload();
-      } else {
+      var pw = passwordInput.value;
+      if (!pw) return;
+      submitBtn.disabled = true;
+      window.RE_UP_AUTH.login(pw).then(function (data) {
+        if (data.success) {
+          location.reload();
+        } else {
+          if (errorMsg) errorMsg.style.display = 'block';
+          passwordInput.value = '';
+          submitBtn.disabled = false;
+        }
+      }).catch(function () {
         if (errorMsg) errorMsg.style.display = 'block';
         passwordInput.value = '';
-      }
+        submitBtn.disabled = false;
+      });
     });
 
     passwordInput.addEventListener('keydown', function (e) {
@@ -1102,46 +1105,49 @@ function applyDashPaywall() {
 // --------------- INIT ---------------
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Always set up admin login (works on both gated and unlocked states)
-  setupAdminLogin();
+  // Verify auth server-side, then render accordingly
+  window.RE_UP_AUTH.isAuthenticated().then(function (authed) {
+    // Always set up admin login (works on both gated and unlocked states)
+    setupAdminLogin(authed);
 
-  // Check access
-  if (!hasAccess()) {
-    applyDashPaywall();
-    return;  // Don't render the gated data
-  }
+    // Check access
+    if (!authed) {
+      applyDashPaywall();
+      return;  // Don't render the gated data
+    }
 
-  // Render all sections
-  renderHeatMap('haircut');
-  setupHeatMapButtons();
-  renderPricingTable();
-  renderCompetitorTable();
-  renderSocialTable();
-  renderMoves();
-  renderDensity();
+    // Render all sections
+    renderHeatMap('haircut');
+    setupHeatMapButtons();
+    renderPricingTable();
+    renderCompetitorTable();
+    renderSocialTable();
+    renderMoves();
+    renderDensity();
 
-  // Render interactive tools
-  renderPriceCompare();
-  renderRevenueEstimator();
-  renderGapFinder();
+    // Render interactive tools
+    renderPriceCompare();
+    renderRevenueEstimator();
+    renderGapFinder();
 
-  // Set up interactivity
-  setupFilterButtons();
-  setupCompetitorSearch();
-  makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
-  makeSortable("competitor-table", COMPETITORS, renderCompetitorTable);
+    // Set up interactivity
+    setupFilterButtons();
+    setupCompetitorSearch();
+    makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
+    makeSortable("competitor-table", COMPETITORS, renderCompetitorTable);
 
-  // Show replay tour link for logged-in users
-  var replayLink = document.getElementById('replayTourLink');
-  if (replayLink) {
-    replayLink.style.display = 'inline';
-    replayLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      localStorage.removeItem('reup_tour_done');
-      startGuidedTour();
-    });
-  }
+    // Show replay tour link for logged-in users
+    var replayLink = document.getElementById('replayTourLink');
+    if (replayLink) {
+      replayLink.style.display = 'inline';
+      replayLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        localStorage.removeItem('reup_tour_done');
+        startGuidedTour();
+      });
+    }
 
-  // Launch guided tour for first-time subscribers
-  setTimeout(function () { startGuidedTour(); }, 600);
+    // Launch guided tour for first-time subscribers
+    setTimeout(function () { startGuidedTour(); }, 600);
+  });
 });

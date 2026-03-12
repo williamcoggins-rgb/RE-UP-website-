@@ -15,10 +15,15 @@
     'clt-events':   { tagClass: 'news-tag--events',    label: 'CLT Events' }
   };
 
-  // Simple access check — replace with real auth when backend is ready
-  function hasAccess() {
-    try { return localStorage.getItem('reup_access') === 'intel'; }
-    catch (e) { return false; }
+  // Server-side access check via shared auth utility
+  function checkAccess(callback) {
+    if (window.RE_UP_AUTH) {
+      window.RE_UP_AUTH.isAuthenticated().then(function (authed) {
+        callback(authed);
+      });
+    } else {
+      callback(false);
+    }
   }
 
   function getArticleId() {
@@ -125,8 +130,8 @@
       return;
     }
 
+    checkAccess(function (unlocked) {
     var meta = DESK_META[article.desk] || { tagClass: 'news-tag--charlotte', label: article.desk };
-    var unlocked = hasAccess();
 
     // Set page title
     document.title = article.title + ' | RE UP Report';
@@ -219,6 +224,7 @@
         });
       }
     }
+    }); // end checkAccess callback
   }
 
   function handleSubscribe(plan) {

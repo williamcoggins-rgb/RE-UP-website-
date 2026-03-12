@@ -21,6 +21,40 @@ setInterval(function () {
   });
 }, 60 * 60 * 1000);
 
+// --- Auth endpoints ---
+
+app.post('/api/auth/login', function (req, res) {
+  var password = req.body && req.body.password;
+  if (!password || password !== ADMIN_PASSWORD) {
+    return res.json({ success: false });
+  }
+  var token = crypto.randomBytes(32).toString('hex');
+  sessions[token] = { createdAt: Date.now() };
+  res.json({ success: true, token: token });
+});
+
+app.get('/api/auth/verify', function (req, res) {
+  var auth = req.headers.authorization || '';
+  var token = auth.replace(/^Bearer\s+/i, '');
+  if (!token || !sessions[token]) {
+    return res.json({ valid: false });
+  }
+  if (Date.now() - sessions[token].createdAt > SESSION_TTL) {
+    delete sessions[token];
+    return res.json({ valid: false });
+  }
+  res.json({ valid: true });
+});
+
+app.post('/api/auth/logout', function (req, res) {
+  var auth = req.headers.authorization || '';
+  var token = auth.replace(/^Bearer\s+/i, '');
+  if (token && sessions[token]) {
+    delete sessions[token];
+  }
+  res.json({ success: true });
+});
+
 // --- In-memory cache for JSON data files ---
 var dataCache = {};
 
