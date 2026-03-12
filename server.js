@@ -21,6 +21,20 @@ setInterval(function () {
   });
 }, 60 * 60 * 1000);
 
+// --- Middleware (must come before route handlers) ---
+app.use(express.json());
+
+// CORS headers for local development
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // --- Auth endpoints ---
 
 app.post('/api/auth/login', function (req, res) {
@@ -74,20 +88,6 @@ function loadDataFile(filename) {
   dataCache[filename] = parsed;
   return parsed;
 }
-
-// --- Middleware ---
-app.use(express.json());
-
-// CORS headers for local development
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
-});
 
 // --- Market Data API routes ---
 
