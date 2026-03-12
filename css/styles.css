@@ -775,6 +775,7 @@ table {
   font-size: 13px;
   font-weight: 500;
   color: var(--green);
+  font-variant-numeric: tabular-nums;
 }
 
 .cell-count {
@@ -1402,6 +1403,15 @@ table {
     width: 100%;
   }
 
+  .hero-waitlist-form {
+    flex-direction: column;
+  }
+
+  .hero-waitlist-form input[type="email"],
+  .hero-waitlist-form .btn {
+    width: 100%;
+  }
+
   .value-grid {
     grid-template-columns: 1fr;
   }
@@ -1913,7 +1923,7 @@ a.news-card--link:hover .news-title {
 }
 
 .article-back:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .article-meta {
@@ -1945,7 +1955,7 @@ a.news-card--link:hover .news-title {
 .article-byline {
   font-size: 13px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   letter-spacing: 0.03em;
 }
 
@@ -2000,7 +2010,7 @@ a.news-card--link:hover .news-title {
 .article-outlook-timeframe {
   font-size: 13px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-text);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -2089,7 +2099,7 @@ a.news-card--link:hover .news-title {
 /* Header */
 .paywall-lock {
   display: inline-block;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 10px;
   margin-bottom: 8px;
 }
@@ -2121,7 +2131,7 @@ a.news-card--link:hover .news-title {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: var(--accent-text);
   margin: 0 0 18px;
 }
 
@@ -2233,7 +2243,7 @@ a.news-card--link:hover .news-title {
 
 .paywall-plan-savings {
   font-size: 12px;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin-top: -4px;
 }
@@ -2351,7 +2361,7 @@ a.news-card--link:hover .news-title {
 .dash-paywall-card-tag {
   font-size: 11px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -2369,7 +2379,7 @@ a.news-card--link:hover .news-title {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--accent);
+  color: var(--accent-text);
   margin: 0 0 16px;
 }
 
@@ -2417,7 +2427,7 @@ a.news-card--link:hover .news-title {
 }
 
 .admin-link:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .admin-modal-overlay {
@@ -2484,7 +2494,7 @@ a.news-card--link:hover .news-title {
 }
 
 .admin-modal-error {
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 12px;
   margin: 8px 0 0;
 }
@@ -3013,7 +3023,7 @@ a.news-card--link:hover .news-title {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.15em;
-  color: var(--accent);
+  color: var(--accent-text);
   background: rgba(229, 9, 20, 0.1);
   border: 1px solid rgba(229, 9, 20, 0.25);
   border-radius: 100px;
