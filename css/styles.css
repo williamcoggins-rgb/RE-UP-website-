@@ -25,6 +25,7 @@
   --accent-hover: #ff1a1a;
   --accent-dim: rgba(229, 9, 20, 0.15);
   --accent-glow: rgba(229, 9, 20, 0.3);
+  --accent-text: #ff3333;
   --green: #10b981;
   --red: #ef4444;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -164,7 +165,7 @@ table {
 }
 
 .logo-accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .nav-menu {
@@ -329,7 +330,7 @@ table {
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -414,6 +415,99 @@ table {
   flex-wrap: wrap;
 }
 
+/* Hero & CTA Waitlist Forms */
+.hero-waitlist {
+  margin-top: 32px;
+}
+
+.hero-waitlist-label {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+
+.hero-waitlist-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hero-waitlist-form input[type="email"] {
+  padding: 12px 16px;
+  border: 1px solid var(--gray-700);
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 14px;
+  flex: 1 1 240px;
+  min-width: 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hero-waitlist-form input[type="email"]:focus {
+  border-color: var(--accent);
+}
+
+.hero-waitlist-form input[type="email"]::placeholder {
+  color: var(--gray-500);
+}
+
+.hero-waitlist-msg {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.hero-waitlist-msg--ok {
+  color: var(--green);
+}
+
+.hero-waitlist-msg--err {
+  color: var(--accent-text);
+}
+
+/* CTA Waitlist */
+.cta-waitlist {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.cta-waitlist .hero-waitlist-form {
+  justify-content: center;
+}
+
+.cta-social-proof {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--gray-500);
+  letter-spacing: 0.02em;
+}
+
+/* Navbar Waitlist Button */
+.btn-nav-waitlist {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+}
+
+.btn-nav-waitlist:hover {
+  background: #cc0812;
+  border-color: #cc0812;
+  color: var(--white);
+}
+
+.btn-nav-waitlist.nav-waitlist-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
 /* Ticker card (right side) */
 .hero-report-ticker {
   flex-shrink: 0;
@@ -460,7 +554,7 @@ table {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -545,7 +639,7 @@ table {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
-  color: var(--accent);
+  color: var(--accent-text);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -1063,7 +1157,7 @@ table {
 .move-type {
   font-size: 10px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 8px;
@@ -1094,7 +1188,7 @@ table {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .move-impact.negative {
@@ -1228,7 +1322,7 @@ table {
    UTILITIES
    ============================================ */
 .text-accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ============================================
@@ -1631,7 +1725,7 @@ body.has-ticker {
 
 .news-tag--charlotte {
   background: rgba(229, 9, 20, 0.15);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .news-tag--tech {
@@ -1670,7 +1764,7 @@ body.has-ticker {
 
 .news-impact--high {
   background: rgba(229, 9, 20, 0.2);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .news-impact--medium {
@@ -1710,7 +1804,7 @@ body.has-ticker {
 }
 
 .news-source a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: none;
   transition: color 0.15s;
 }
@@ -1721,7 +1815,7 @@ body.has-ticker {
 }
 
 .news-byline {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.03em;
@@ -1777,7 +1871,7 @@ a.news-card--link:hover {
 }
 
 a.news-card--link:hover .news-title {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ============================================================
