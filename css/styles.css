@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Geist — body font via Fontsource CDN */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist:vf@latest/latin-wght-normal.woff2') format('woff2-variations');
+}
+
 /* --- View Transitions API (cross-page transitions in supporting browsers) --- */
 @view-transition {
   navigation: auto;
@@ -7,8 +18,6 @@
    RE UP REPORT — Bloomberg-Style CSS
    Dark terminal aesthetic, data-forward design
    ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* --- Custom Properties --- */
 :root {
