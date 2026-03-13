@@ -4,7 +4,7 @@
    news feed, and renders the full story with impact outlook.
 
    Free users see: headline + first paragraph (teaser)
-   RE UP Intel subscribers see: full body + outlook + action items
+   RE UP Intel subscribers see: full body + playbook + market context
    ============================================================ */
 
 (function () {
@@ -14,6 +14,9 @@
     'supply-chain': { tagClass: 'news-tag--supply',    label: 'Supply Chain' },
     'clt-events':   { tagClass: 'news-tag--events',    label: 'CLT Events' }
   };
+
+  // Charlotte zip regex
+  var ZIP_RE = /\b282\d{2}\b/g;
 
   // Server-side access check via shared auth utility
   function checkAccess(callback) {
@@ -42,6 +45,312 @@
     } catch (e) { /* fall through */ }
     return dateStr || '';
   }
+
+  // ---- Market Context helpers ----
+
+  function extractZipCodes(article) {
+    var zips = {};
+    // Scan tags
+    if (article.tags) {
+      for (var i = 0; i < article.tags.length; i++) {
+        var m = article.tags[i].match(/^282\d{2}$/);
+        if (m) zips[m[0]] = true;
+      }
+    }
+    // Scan body text
+    if (article.body) {
+      for (var j = 0; j < article.body.length; j++) {
+        var matches = article.body[j].match(ZIP_RE);
+        if (matches) {
+          for (var k = 0; k < matches.length; k++) zips[matches[k]] = true;
+        }
+      }
+    }
+    return Object.keys(zips);
+  }
+
+  function extractShopNames(article) {
+    var market = window.RE_UP_MARKET;
+    if (!market || !market.COMPETITORS) return [];
+    var found = {};
+    var bodyText = '';
+    if (article.body) bodyText = article.body.join(' ');
+    var tagText = (article.tags || []).join(' ');
+    var searchText = (bodyText + ' ' + tagText).toLowerCase();
+
+    for (var i = 0; i < market.COMPETITORS.length; i++) {
+      var shop = market.COMPETITORS[i];
+      if (searchText.indexOf(shop.name.toLowerCase()) !== -1) {
+        found[shop.name] = shop;
+      }
+    }
+    // Also match partial names from tags (e.g. "midwood-barbers" -> "Midwood Barbers")
+    if (article.tags) {
+      for (var t = 0; t < article.tags.length; t++) {
+        var tagNorm = article.tags[t].replace(/-/g, ' ').toLowerCase();
+        for (var c = 0; c < market.COMPETITORS.length; c++) {
+          var cn = market.COMPETITORS[c].name.toLowerCase();
+          if (cn.indexOf(tagNorm) !== -1 || tagNorm.indexOf(cn.split(' ').slice(0,2).join(' ').toLowerCase()) !== -1) {
+            found[market.COMPETITORS[c].name] = market.COMPETITORS[c];
+          }
+        }
+      }
+    }
+    var results = [];
+    for (var name in found) results.push(found[name]);
+    return results;
+  }
+
+  function buildMarketContext(article) {
+    var market = window.RE_UP_MARKET;
+    if (!market) return '';
+
+    var zips = extractZipCodes(article);
+    var shops = extractShopNames(article);
+
+    if (zips.length === 0 && shops.length === 0) return '';
+
+    var html = '<aside class="article-market-context">' +
+      '<h3 class="market-context-title">Market Context</h3>';
+
+    // Zip code cards
+    if (zips.length > 0) {
+      html += '<div class="market-context-zips">';
+      for (var i = 0; i < zips.length; i++) {
+        var zipData = market.findZip(zips[i]);
+        if (!zipData) continue;
+        var priceStr = '';
+        if (typeof zipData.haircut === 'number') {
+          var diff = zipData.haircut - market.cityAvgHaircut;
+          var sign = diff >= 0 ? '+' : '';
+          priceStr = 'Avg cut: $' + zipData.haircut +
+            ' <span class="context-vs">(' + sign + '$' + Math.abs(diff) + ' vs city avg)</span>';
+        } else {
+          priceStr = 'Avg cut: No data';
+        }
+        html += '<div class="context-zip-card">' +
+          '<span class="context-zip">' + escapeHtml(zipData.zip) + '</span>' +
+          '<span class="context-area">' + escapeHtml(zipData.area) + '</span>' +
+          '<span class="context-price">' + priceStr + '</span>' +
+          '<span class="context-shops">' + zipData.shops + ' shops tracked</span>' +
+        '</div>';
+      }
+      html += '</div>';
+    }
+
+    // Shop cards
+    if (shops.length > 0) {
+      html += '<div class="market-context-shops">';
+      for (var s = 0; s < shops.length; s++) {
+        var shop = shops[s];
+        var priceLabel = typeof shop.avgCut === 'number' ? '$' + shop.avgCut : 'N/A';
+        var ratingLabel = typeof shop.rating === 'number' ? shop.rating + '\u2605' : 'N/A';
+        html += '<div class="context-shop-card">' +
+          '<span class="context-shop-name">' + escapeHtml(shop.name) + '</span>' +
+          '<span class="context-shop-meta">' + priceLabel + ' \u00b7 ' + ratingLabel + ' \u00b7 ' + escapeHtml(shop.model) + '</span>' +
+        '</div>';
+      }
+      html += '</div>';
+    }
+
+    html += '<a href="dashboard.html#section-pricing" class="context-cta">View full market data \u2192</a>';
+    html += '</aside>';
+    return html;
+  }
+
+  // ---- Playbook / Outlook rendering ----
+
+  function buildPlaybook(outlook) {
+    if (!outlook) return '';
+
+    // New playbook format (has actions array)
+    if (outlook.actions && outlook.actions.length) {
+      var html = '<div class="article-playbook">' +
+        '<h3 class="playbook-title">\ud83d\udccb Your Playbook</h3>';
+
+      if (outlook.summary) {
+        html += '<div class="playbook-summary">' +
+          '<h4>What Happened</h4>' +
+          '<p>' + escapeHtml(outlook.summary) + '</p>' +
+        '</div>';
+      }
+
+      if (outlook.impact) {
+        html += '<div class="playbook-impact">' +
+          '<h4>Why It Matters</h4>' +
+          '<p>' + escapeHtml(outlook.impact) + '</p>' +
+        '</div>';
+      }
+
+      html += '<div class="playbook-actions">' +
+        '<h4>What To Do</h4>' +
+        '<ul>';
+      for (var i = 0; i < outlook.actions.length; i++) {
+        html += '<li>' + escapeHtml(outlook.actions[i]) + '</li>';
+      }
+      html += '</ul></div>';
+
+      if (outlook.watchFor) {
+        html += '<div class="playbook-watch">' +
+          '<h4>Watch For</h4>' +
+          '<p>' + escapeHtml(outlook.watchFor) + '</p>' +
+        '</div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    // Backward compatibility: old outlook.text format
+    if (outlook.text) {
+      return '<div class="article-outlook">' +
+        '<div class="article-outlook-header">' +
+          '<span class="article-outlook-icon">\u2192</span>' +
+          '<span class="article-outlook-timeframe">How This Affects You: ' + escapeHtml(outlook.timeframe) + '</span>' +
+        '</div>' +
+        '<p class="article-outlook-text">' + escapeHtml(outlook.text) + '</p>' +
+      '</div>';
+    }
+
+    return '';
+  }
+
+  // ---- Related Data Cards ----
+
+  function buildRelatedData(article) {
+    var cards = [];
+    var zips = extractZipCodes(article);
+    var shops = extractShopNames(article);
+    var tagStr = (article.tags || []).join(' ');
+    var desk = article.desk || '';
+
+    // Zip-related
+    if (zips.length > 0) {
+      cards.push({
+        href: 'dashboard.html#section-pricing',
+        icon: '\ud83d\udcca',
+        label: 'Pricing by Zip Code',
+        desc: 'See how prices compare across 14 Charlotte zip codes'
+      });
+    }
+
+    // Shop-related
+    if (shops.length > 0) {
+      cards.push({
+        href: 'dashboard.html#section-competitors',
+        icon: '\ud83c\udfe2',
+        label: 'Competitor Directory',
+        desc: 'View all tracked shops with pricing, ratings, and models'
+      });
+    }
+
+    // Pricing/trends articles
+    if (tagStr.indexOf('pricing') !== -1 || tagStr.indexOf('market-trends') !== -1 || tagStr.indexOf('revenue') !== -1) {
+      cards.push({
+        href: 'dashboard.html#section-heatmap',
+        icon: '\ud83d\uddfa\ufe0f',
+        label: 'Pricing Heat Map',
+        desc: 'Visualize pricing patterns across Charlotte neighborhoods'
+      });
+    }
+
+    // Social media articles
+    if (tagStr.indexOf('social-media') !== -1 || tagStr.indexOf('instagram') !== -1 || tagStr.indexOf('tiktok') !== -1) {
+      cards.push({
+        href: 'dashboard.html#section-social',
+        icon: '\ud83d\udcf1',
+        label: 'Social Leaderboard',
+        desc: 'See which Charlotte shops lead on social media'
+      });
+    }
+
+    // Events desk
+    if (desk === 'clt-events') {
+      if (cards.length < 3) {
+        cards.push({
+          href: 'dashboard.html#section-pricing',
+          icon: '\ud83c\udfab',
+          label: 'Event Impact on Pricing',
+          desc: 'Track how major events affect barbershop demand'
+        });
+      }
+    }
+
+    // Supply chain desk
+    if (desk === 'supply-chain') {
+      if (cards.length < 3) {
+        cards.push({
+          href: 'dashboard.html#section-competitors',
+          icon: '\u2699\ufe0f',
+          label: 'Shop Equipment Profiles',
+          desc: 'See what models and tiers Charlotte shops operate in'
+        });
+      }
+    }
+
+    // De-duplicate by href
+    var seen = {};
+    var unique = [];
+    for (var i = 0; i < cards.length && unique.length < 3; i++) {
+      if (!seen[cards[i].href + cards[i].label]) {
+        seen[cards[i].href + cards[i].label] = true;
+        unique.push(cards[i]);
+      }
+    }
+
+    if (unique.length === 0) return '';
+
+    var html = '<div class="article-related-data">' +
+      '<h3>Dive Deeper</h3>' +
+      '<div class="related-data-grid">';
+
+    for (var j = 0; j < unique.length; j++) {
+      var c = unique[j];
+      html += '<a href="' + c.href + '" class="related-data-card">' +
+        '<span class="related-data-icon">' + c.icon + '</span>' +
+        '<span class="related-data-label">' + escapeHtml(c.label) + '</span>' +
+        '<span class="related-data-desc">' + escapeHtml(c.desc) + '</span>' +
+      '</a>';
+    }
+
+    html += '</div></div>';
+    return html;
+  }
+
+  // ---- Tag Deep Links ----
+
+  function buildTagLink(tag) {
+    // Zip code tags → heat map
+    if (/^282\d{2}$/.test(tag)) {
+      return 'dashboard.html#section-heatmap';
+    }
+    // Check if tag matches a shop name (normalized)
+    if (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) {
+      var tagNorm = tag.replace(/-/g, ' ').toLowerCase();
+      for (var i = 0; i < window.RE_UP_MARKET.COMPETITORS.length; i++) {
+        var shopName = window.RE_UP_MARKET.COMPETITORS[i].name.toLowerCase();
+        if (shopName.indexOf(tagNorm) !== -1) {
+          return 'dashboard.html#section-competitors';
+        }
+      }
+    }
+    // General tags → filtered news feed
+    return '../index.html#news-section';
+  }
+
+  function buildTags(article) {
+    if (!article.tags || !article.tags.length) return '';
+    var html = '<div class="article-tags">';
+    for (var t = 0; t < article.tags.length; t++) {
+      var tag = article.tags[t];
+      var href = buildTagLink(tag);
+      html += '<a href="' + href + '" class="article-tag article-tag--link">' + escapeHtml(tag) + '</a>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  // ---- Paywall ----
 
   function buildPaywall() {
     return '' +
@@ -112,6 +421,8 @@
       '</div>';
   }
 
+  // ---- Main Render ----
+
   function renderArticle(article) {
     var container = document.getElementById('article-container');
     if (!container) return;
@@ -132,7 +443,7 @@
     // Set page title
     document.title = article.title + ' | RE UP Report';
 
-    // Impact badge
+    // Impact badge with deep link
     var impactHtml = '';
     if (article.impact && article.impact !== 'low') {
       var cls = article.impact === 'high' ? 'news-impact--high' : 'news-impact--medium';
@@ -151,32 +462,21 @@
       teaserHtml = '<p>' + escapeHtml(article.summary) + '</p>';
     }
 
-    // Outlook section
-    var outlookHtml = '';
-    if (article.outlook) {
-      outlookHtml =
-        '<div class="article-outlook">' +
-          '<div class="article-outlook-header">' +
-            '<span class="article-outlook-icon">\u2192</span>' +
-            '<span class="article-outlook-timeframe">How This Affects You: ' + escapeHtml(article.outlook.timeframe) + '</span>' +
-          '</div>' +
-          '<p class="article-outlook-text">' + escapeHtml(article.outlook.text) + '</p>' +
-        '</div>';
-    }
+    // Playbook / Outlook section
+    var playbookHtml = buildPlaybook(article.outlook);
 
-    // Tags
-    var tagsHtml = '';
-    if (article.tags && article.tags.length) {
-      tagsHtml = '<div class="article-tags">';
-      for (var t = 0; t < article.tags.length; t++) {
-        tagsHtml += '<span class="article-tag">' + escapeHtml(article.tags[t]) + '</span>';
-      }
-      tagsHtml += '</div>';
-    }
+    // Market context sidebar (subscriber-only)
+    var marketContextHtml = buildMarketContext(article);
+
+    // Related data cards (subscriber-only)
+    var relatedDataHtml = buildRelatedData(article);
+
+    // Tags with deep links
+    var tagsHtml = buildTags(article);
 
     // Build the full article HTML
     var html =
-      '<article class="article-full">' +
+      '<article class="article-full' + (unlocked && marketContextHtml ? ' article-full--with-sidebar' : '') + '">' +
         '<a href="../index.html#news-section" class="article-back">&larr; Back to News</a>' +
         '<div class="article-meta">' +
           '<span class="news-tag ' + meta.tagClass + '">' + escapeHtml(meta.label) + '</span>' +
@@ -186,22 +486,30 @@
         '<div class="article-info">' +
           '<span class="article-byline">' + escapeHtml(article.byline || article.source) + '</span>' +
           '<span class="article-date">' + escapeHtml(formatDate(article.date)) + '</span>' +
-        '</div>' +
-        '<div class="article-body">' +
-          teaserHtml;
+        '</div>';
 
     if (unlocked) {
       // Full access — show everything
-      html += gatedHtml +
+      html += '<div class="article-content-wrapper">' +
+        '<div class="article-body-column">' +
+          '<div class="article-body">' +
+            teaserHtml +
+            gatedHtml +
+          '</div>' +
+          playbookHtml +
+          relatedDataHtml +
+          tagsHtml +
         '</div>' +
-        outlookHtml +
-        tagsHtml;
+        marketContextHtml +
+      '</div>';
     } else {
       // Gated — show blurred preview + paywall
       html +=
+        '<div class="article-body">' +
+          teaserHtml +
         '</div>' +
         '<div class="article-gated-preview">' +
-          '<div class="article-gated-blur">' + gatedHtml + outlookHtml + '</div>' +
+          '<div class="article-gated-blur">' + gatedHtml + playbookHtml + '</div>' +
         '</div>' +
         buildPaywall() +
         tagsHtml;

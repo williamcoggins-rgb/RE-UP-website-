@@ -15,6 +15,17 @@ function CltEventsDesk() {
 CltEventsDesk.prototype = Object.create(BaseDesk.prototype);
 CltEventsDesk.prototype.constructor = CltEventsDesk;
 
+// Desk-specific directive layered on top of the Editorial Doctrine
+CltEventsDesk.prototype.getDeskDirective = function () {
+  return [
+    'You cover Charlotte events that affect barber culture, income, and community engagement.',
+    'Apply Verify and Grade Reliability: confirm event dates, venues, and details from official sources (venue sites, Eventbrite, organizer posts) before reporting.',
+    'Every story must connect the event to its impact on barbers: booking surges, foot traffic, networking opportunities, or revenue windows.',
+    'Follow the Reader Contract: if the headline promises an event will drive business, the body must show evidence or reasoning for that claim.',
+    'Name what is uncertain — unconfirmed dates, tentative lineups, or estimated attendance should be clearly flagged.'
+  ].join(' ');
+};
+
 // Original stories written by RE UP Report staff — verified events
 CltEventsDesk.prototype.SEED_STORIES = [
   {

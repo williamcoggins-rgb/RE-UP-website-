@@ -15,6 +15,17 @@ function CltLocalDesk() {
 CltLocalDesk.prototype = Object.create(BaseDesk.prototype);
 CltLocalDesk.prototype.constructor = CltLocalDesk;
 
+// Desk-specific directive layered on top of the Editorial Doctrine
+CltLocalDesk.prototype.getDeskDirective = function () {
+  return [
+    'You cover Charlotte\'s barbershop scene at the neighborhood level.',
+    'Prioritize firsthand sources: barber social media posts, booking platform data, community event announcements.',
+    'Apply Source Doctrine rigorously — distinguish what a shop owner posted publicly versus what is inferred from secondhand reports.',
+    'Every story must answer: What changed for Charlotte barbers, and why does it matter to the community?',
+    'Follow the Narrative Architecture: lead with the discovery or change, build with evidence, close with stakes and what to watch.'
+  ].join(' ');
+};
+
 // Original stories written by RE UP Report staff based on verified research
 CltLocalDesk.prototype.SEED_STORIES = [
   {
