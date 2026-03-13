@@ -546,15 +546,123 @@ function renderPricingTableFromData(data) {
 
 // --------------- RENDER: HEAT MAP ---------------
 
+var _heatmapExpandedZip = null;
+
+function getHeatMapStrengths(entry) {
+  var strengths = [];
+
+  // Find extremes across all zip data
+  var allPrices = [], allShops = [], allSpreads = [];
+  PRICING_BY_ZIP.forEach(function (z) {
+    var p = z.haircut;
+    if (typeof p === 'number') allPrices.push({ zip: z.zip, price: p });
+    allShops.push({ zip: z.zip, count: z.shops });
+
+    // Calculate price spread
+    var services = [z.haircut, z.beard, z.students, z.hotTowel, z.lineup];
+    var nums = [];
+    services.forEach(function (s) { if (typeof s === 'number') nums.push(s); });
+    if (nums.length > 1) {
+      allSpreads.push({ zip: z.zip, spread: Math.max.apply(null, nums) - Math.min.apply(null, nums) });
+    }
+  });
+
+  if (allPrices.length > 0) {
+    allPrices.sort(function (a, b) { return a.price - b.price; });
+    if (allPrices[0].zip === entry.zip) strengths.push('Budget-friendly zone');
+    if (allPrices[allPrices.length - 1].zip === entry.zip) strengths.push('Premium pricing area');
+  }
+
+  allShops.sort(function (a, b) { return b.count - a.count; });
+  if (allShops[0].zip === entry.zip) strengths.push('High competition area');
+  if (allShops[allShops.length - 1].zip === entry.zip) strengths.push('Underserved market');
+
+  if (allSpreads.length > 0) {
+    allSpreads.sort(function (a, b) { return b.spread - a.spread; });
+    if (allSpreads[0].zip === entry.zip) strengths.push('Diverse pricing');
+  }
+
+  // Fallback: generate a contextual strength if none matched
+  if (strengths.length === 0) {
+    if (entry.shops >= 5) strengths.push('Established market');
+    else if (entry.shops <= 2) strengths.push('Growth opportunity');
+    else strengths.push('Mid-market area');
+  }
+
+  return strengths;
+}
+
+function buildDetailPanel(entry) {
+  var strengths = getHeatMapStrengths(entry);
+
+  // Get competitors in this zip
+  var comps = COMPETITORS.filter(function (c) { return c.zip === entry.zip; });
+
+  var services = [
+    { label: "Men's Cut", value: entry.haircut },
+    { label: 'Beard', value: entry.beard },
+    { label: 'Students', value: entry.students },
+    { label: 'Hot Towel', value: entry.hotTowel },
+    { label: 'Lineup', value: entry.lineup }
+  ];
+
+  var servicesHtml = '';
+  services.forEach(function (s) {
+    var val = (typeof s.value === 'number') ? '$' + s.value : 'N/A';
+    var cls = (typeof s.value === 'number') ? '' : ' heatmap-detail-na';
+    servicesHtml += '<div class="heatmap-detail-service' + cls + '">' +
+      '<span class="heatmap-detail-service-label">' + escapeHtml(s.label) + '</span>' +
+      '<span class="heatmap-detail-service-value">' + escapeHtml(val) + '</span>' +
+    '</div>';
+  });
+
+  var strengthsHtml = '';
+  strengths.forEach(function (s) {
+    strengthsHtml += '<span class="heatmap-strength-tag">' + escapeHtml(s) + '</span>';
+  });
+
+  var compsHtml = '';
+  if (comps.length > 0) {
+    compsHtml = '<div class="heatmap-detail-comps">' +
+      '<h4 class="heatmap-detail-comps-title">Shops in this area (' + comps.length + ')</h4>' +
+      '<div class="heatmap-detail-comps-list">';
+    comps.forEach(function (c) {
+      var avgText = (typeof c.avgCut === 'number') ? '$' + c.avgCut : 'N/A';
+      var ratingText = (typeof c.rating === 'number') ? c.rating.toFixed(1) : 'N/A';
+      compsHtml += '<div class="heatmap-comp-row">' +
+        '<span class="heatmap-comp-name">' + escapeHtml(c.name) + '</span>' +
+        '<span class="heatmap-comp-meta">' + escapeHtml(avgText) + ' · ' + escapeHtml(ratingText) + '★ · ' + escapeHtml(c.model) + '</span>' +
+      '</div>';
+    });
+    compsHtml += '</div></div>';
+  }
+
+  return '<div class="heatmap-detail-panel" role="region" aria-label="Details for zip code ' + escapeHtml(entry.zip) + '">' +
+    '<div class="heatmap-detail-header">' +
+      '<h3 class="heatmap-detail-title">' + escapeHtml(entry.zip) + ' — ' + escapeHtml(entry.area) + '</h3>' +
+      '<span class="heatmap-detail-shopcount">' + escapeHtml(entry.shops) + ' shop' + (entry.shops !== 1 ? 's' : '') + ' tracked</span>' +
+    '</div>' +
+    '<div class="heatmap-detail-strengths">' + strengthsHtml + '</div>' +
+    '<div class="heatmap-detail-services">' + servicesHtml + '</div>' +
+    compsHtml +
+  '</div>';
+}
+
 function renderHeatMap(service) {
   service = service || 'haircut';
   var grid = document.getElementById('heatmap-grid');
   if (!grid) return;
 
-  var MIN_PRICE = 20;
-  var MAX_PRICE = 65;
-  var LOW_R = 60, LOW_G = 5, LOW_B = 5;
-  var HIGH_R = 229, HIGH_G = 9, HIGH_B = 20;
+  // Calculate dynamic min/max from data
+  var dataPoints = [];
+  PRICING_BY_ZIP.forEach(function (entry) {
+    var price = entry[service];
+    if (typeof price === 'number') dataPoints.push(price);
+  });
+
+  var MIN_PRICE = dataPoints.length > 0 ? Math.min.apply(null, dataPoints) : 20;
+  var MAX_PRICE = dataPoints.length > 0 ? Math.max.apply(null, dataPoints) : 65;
+  if (MIN_PRICE === MAX_PRICE) { MIN_PRICE -= 5; MAX_PRICE += 5; }
 
   var withPrice = [];
   var noData = [];
@@ -571,19 +679,72 @@ function renderHeatMap(service) {
   withPrice.sort(function (a, b) { return b.price - a.price; });
   grid.innerHTML = '';
 
+  // Green → Yellow → Red gradient
   function interpolateColor(price) {
     var t = (price - MIN_PRICE) / (MAX_PRICE - MIN_PRICE);
     t = Math.max(0, Math.min(1, t));
-    return {
-      r: Math.round(LOW_R + (HIGH_R - LOW_R) * t),
-      g: Math.round(LOW_G + (HIGH_G - LOW_G) * t),
-      b: Math.round(LOW_B + (HIGH_B - LOW_B) * t)
-    };
+    var r, g, b;
+    if (t < 0.5) {
+      // green → yellow
+      var u = t / 0.5;
+      r = Math.round(46 + (234 - 46) * u);
+      g = Math.round(139 + (179 - 139) * u);
+      b = Math.round(87 + (8 - 87) * u);
+    } else {
+      // yellow → red
+      var u = (t - 0.5) / 0.5;
+      r = Math.round(234 + (229 - 234) * u);
+      g = Math.round(179 + (9 - 179) * u);
+      b = Math.round(8 + (20 - 8) * u);
+    }
+    return { r: r, g: g, b: b };
+  }
+
+  function handleTileClick(entry, wrapper) {
+    var wasExpanded = _heatmapExpandedZip === entry.zip;
+
+    // Collapse any previously expanded tile
+    var prev = grid.querySelector('.heatmap-wrapper--expanded');
+    if (prev) {
+      prev.classList.remove('heatmap-wrapper--expanded');
+      var prevPanel = prev.querySelector('.heatmap-detail-panel');
+      if (prevPanel) prevPanel.remove();
+      var prevTile = prev.querySelector('.heatmap-tile');
+      if (prevTile) {
+        prevTile.classList.remove('heatmap-tile--active');
+        prevTile.setAttribute('aria-expanded', 'false');
+      }
+    }
+    _heatmapExpandedZip = null;
+
+    // If clicking the same tile, just collapse
+    if (wasExpanded) return;
+
+    // Expand the clicked tile
+    _heatmapExpandedZip = entry.zip;
+    wrapper.classList.add('heatmap-wrapper--expanded');
+    var tile = wrapper.querySelector('.heatmap-tile');
+    if (tile) {
+      tile.classList.add('heatmap-tile--active');
+      tile.setAttribute('aria-expanded', 'true');
+    }
+
+    var panelHtml = buildDetailPanel(entry);
+    var panelContainer = document.createElement('div');
+    panelContainer.innerHTML = panelHtml;
+    wrapper.appendChild(panelContainer.firstChild);
   }
 
   function createTile(entry, price, hasData) {
-    var tile = document.createElement('div');
+    var wrapper = document.createElement('div');
+    wrapper.className = 'heatmap-wrapper';
+
+    var tile = document.createElement('button');
     tile.className = 'heatmap-tile';
+    tile.setAttribute('type', 'button');
+    tile.setAttribute('aria-expanded', 'false');
+    tile.setAttribute('aria-label', 'Zip code ' + entry.zip + ', ' + entry.area +
+      (hasData ? ', $' + price : ', no price data') + ', ' + entry.shops + ' shop' + (entry.shops !== 1 ? 's' : ''));
 
     if (hasData) {
       var color = interpolateColor(price);
@@ -591,25 +752,54 @@ function renderHeatMap(service) {
       tile.style.backgroundColor = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
       tile.style.boxShadow = '0 0 ' + Math.round(8 + intensity * 16) + 'px rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.3 + intensity * 0.4).toFixed(2) + ')';
       tile.style.border = '1px solid rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.4 + intensity * 0.4).toFixed(2) + ')';
-      if (intensity > 0.5) tile.classList.add('heatmap-tile--hot');
+      if (intensity > 0.66) tile.classList.add('heatmap-tile--hot');
+
+      var priceLabel = '';
+      if (intensity < 0.33) priceLabel = 'Low';
+      else if (intensity < 0.66) priceLabel = 'Mid';
+      else priceLabel = 'High';
 
       tile.innerHTML =
-        '<div class="heatmap-zip">' + escapeHtml(entry.zip) + '</div>' +
+        '<div class="heatmap-tile-top">' +
+          '<div class="heatmap-zip">' + escapeHtml(entry.zip) + '</div>' +
+          '<span class="heatmap-shop-badge" aria-label="' + entry.shops + ' shops">' + escapeHtml(entry.shops) + '</span>' +
+        '</div>' +
         '<div class="heatmap-area">' + escapeHtml(entry.area) + '</div>' +
-        '<div class="heatmap-price">$' + escapeHtml(price) + '</div>' +
+        '<div class="heatmap-price-row">' +
+          '<span class="heatmap-price">$' + escapeHtml(price) + '</span>' +
+          '<span class="heatmap-price-label">' + priceLabel + '</span>' +
+        '</div>' +
         '<div class="heatmap-shops">' + escapeHtml(entry.shops) + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
     } else {
       tile.style.backgroundColor = 'rgba(255,255,255,0.03)';
       tile.style.border = '1px solid rgba(255,255,255,0.06)';
 
       tile.innerHTML =
-        '<div class="heatmap-zip">' + escapeHtml(entry.zip) + '</div>' +
+        '<div class="heatmap-tile-top">' +
+          '<div class="heatmap-zip">' + escapeHtml(entry.zip) + '</div>' +
+          '<span class="heatmap-shop-badge" aria-label="' + entry.shops + ' shops">' + escapeHtml(entry.shops) + '</span>' +
+        '</div>' +
         '<div class="heatmap-area">' + escapeHtml(entry.area) + '</div>' +
         '<span class="heatmap-nodata">NO DATA</span>' +
         '<div class="heatmap-shops">' + escapeHtml(entry.shops) + ' shop' + (entry.shops !== 1 ? 's' : '') + '</div>';
     }
 
-    return tile;
+    tile.addEventListener('click', function () { handleTileClick(entry, wrapper); });
+
+    wrapper.appendChild(tile);
+
+    // Re-expand if this was the previously expanded zip
+    if (_heatmapExpandedZip === entry.zip) {
+      wrapper.classList.add('heatmap-wrapper--expanded');
+      tile.classList.add('heatmap-tile--active');
+      tile.setAttribute('aria-expanded', 'true');
+      var panelHtml = buildDetailPanel(entry);
+      var panelContainer = document.createElement('div');
+      panelContainer.innerHTML = panelHtml;
+      wrapper.appendChild(panelContainer.firstChild);
+    }
+
+    return wrapper;
   }
 
   withPrice.forEach(function (item) {
@@ -618,6 +808,20 @@ function renderHeatMap(service) {
   noData.forEach(function (entry) {
     grid.appendChild(createTile(entry, null, false));
   });
+
+  // Update legend labels dynamically
+  var legendLabels = document.querySelector('.heatmap-legend-labels');
+  if (legendLabels) {
+    var spans = legendLabels.querySelectorAll('span');
+    // Update the price labels (skip the first "No Data" span)
+    if (spans.length >= 5) {
+      var range = MAX_PRICE - MIN_PRICE;
+      spans[1].textContent = '$' + MIN_PRICE;
+      spans[2].textContent = '$' + Math.round(MIN_PRICE + range * 0.33);
+      spans[3].textContent = '$' + Math.round(MIN_PRICE + range * 0.66);
+      spans[4].textContent = '$' + MAX_PRICE;
+    }
+  }
 }
 
 function setupHeatMapButtons() {
@@ -626,6 +830,7 @@ function setupHeatMapButtons() {
     btn.addEventListener('click', function () {
       buttons.forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
+      _heatmapExpandedZip = null; // collapse on service change
       renderHeatMap(btn.getAttribute('data-service') || 'haircut');
     });
   });
