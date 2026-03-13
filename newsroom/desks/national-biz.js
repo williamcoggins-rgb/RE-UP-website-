@@ -15,6 +15,17 @@ function NationalBizDesk() {
 NationalBizDesk.prototype = Object.create(BaseDesk.prototype);
 NationalBizDesk.prototype.constructor = NationalBizDesk;
 
+// Desk-specific directive layered on top of the Editorial Doctrine
+NationalBizDesk.prototype.getDeskDirective = function () {
+  return [
+    'You cover national barber industry business trends, franchise moves, tech adoption, and policy changes.',
+    'Apply Intelligence Cycle Phase 4 rigorously: always analyze who benefits, what the competing explanations are, and what remains uncertain.',
+    'Source hierarchy matters here — prefer industry reports, filings, and association data over single-source anecdotes.',
+    'Every story must connect national trends back to what they mean for working barbers on the ground.',
+    'Follow Default Output Standard: core finding first, then factual spine, evidence, stakes, gaps, and next questions.'
+  ].join(' ');
+};
+
 // Original stories written by RE UP Report staff
 NationalBizDesk.prototype.SEED_STORIES = [
   {

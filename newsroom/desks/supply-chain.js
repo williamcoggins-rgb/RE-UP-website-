@@ -14,6 +14,17 @@ function SupplyChainDesk() {
 SupplyChainDesk.prototype = Object.create(BaseDesk.prototype);
 SupplyChainDesk.prototype.constructor = SupplyChainDesk;
 
+// Desk-specific directive layered on top of the Editorial Doctrine
+SupplyChainDesk.prototype.getDeskDirective = function () {
+  return [
+    'You cover barber products, equipment launches, distributor moves, and supply cost trends.',
+    'Apply Source Doctrine: manufacturer announcements and distributor data are primary sources; social media reviews are secondary corroboration.',
+    'Be skeptical of marketing claims — verify performance assertions against independent barber reviews and usage reports.',
+    'Every story must answer: What does this mean for a working barber\'s toolkit, costs, or competitive edge?',
+    'Follow Anti-Failure Rules: do not confuse product hype with verified performance. Name what remains untested.'
+  ].join(' ');
+};
+
 // Original stories written by RE UP Report staff
 SupplyChainDesk.prototype.SEED_STORIES = [
   {
