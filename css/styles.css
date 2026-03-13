@@ -1,3 +1,8 @@
+/* --- View Transitions API (cross-page transitions in supporting browsers) --- */
+@view-transition {
+  navigation: auto;
+}
+
 /* ============================================
    RE UP REPORT — Bloomberg-Style CSS
    Dark terminal aesthetic, data-forward design
@@ -44,7 +49,14 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 64px; /* Account for sticky navbar height + breathing room */
   -webkit-text-size-adjust: 100%;
+}
+
+/* View transition: main content area animates between pages */
+main,
+.dashboard {
+  view-transition-name: main-content;
 }
 
 body {
@@ -108,15 +120,32 @@ h1, h2, h3 {
   background: var(--gray-600);
 }
 
-/* --- Scroll Progress Bar --- */
+/* --- Scroll Progress Bar (CSS-only with scroll-driven animation) --- */
 .scroll-progress {
   position: fixed;
   top: 0;
   left: 0;
-  height: 2px;
+  width: 100%;
+  height: 3px;
   background: var(--accent);
   z-index: 10000;
+  transform-origin: left;
+  transform: scaleX(0);
+  /* JS fallback: transition on width for browsers without animation-timeline */
   transition: width 0.1s linear;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    transition: none;
+    animation: scroll-progress-fill linear forwards;
+    animation-timeline: scroll();
+  }
+
+  @keyframes scroll-progress-fill {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
 }
 
 /* --- Container --- */
@@ -142,6 +171,7 @@ h1, h2, h3 {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--gray-800);
   height: 56px;
+  view-transition-name: header;
 }
 
 .nav-container {
@@ -167,6 +197,7 @@ h1, h2, h3 {
   font-weight: 700;
   color: var(--white);
   letter-spacing: -0.02em;
+  view-transition-name: logo;
 }
 
 .logo-accent {
@@ -3914,6 +3945,110 @@ textarea:focus-visible,
 }
 
 /* ============================================
+   SCROLL-DRIVEN ANIMATIONS
+   Progressive enhancement — static content in unsupported browsers
+   ============================================ */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  /* Sections fade in + slide up as they enter the viewport */
+  .section,
+  .dash-section {
+    animation: fade-in-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  /* Value cards, competitor cards, data tables — staggered reveal */
+  .value-card,
+  .competitor-card,
+  .data-table-wrapper,
+  .news-card,
+  .kpi-card,
+  .tool-card {
+    animation: fade-in-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+/* ============================================
+   CONTAINER QUERIES
+   Cards adapt to their container, not just the viewport
+   ============================================ */
+@supports (container-type: inline-size) {
+  /* Define containers for grid wrappers */
+  .kpi-grid {
+    container-type: inline-size;
+    container-name: kpi-container;
+  }
+
+  .news-grid {
+    container-type: inline-size;
+    container-name: news-container;
+  }
+
+  .competitor-grid {
+    container-type: inline-size;
+    container-name: competitor-container;
+  }
+
+  .value-grid {
+    container-type: inline-size;
+    container-name: value-container;
+  }
+
+  /* KPI cards: stack when container is narrow */
+  @container kpi-container (max-width: 500px) {
+    .kpi-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @container kpi-container (min-width: 501px) and (max-width: 800px) {
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* News cards: single column in narrow containers */
+  @container news-container (max-width: 500px) {
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Competitor cards: adapt to container width */
+  @container competitor-container (max-width: 600px) {
+    .competitor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Value proposition cards: adapt to container width */
+  @container value-container (max-width: 500px) {
+    .value-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @container value-container (min-width: 501px) and (max-width: 800px) {
+    .value-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+/* ============================================
    ACCESSIBILITY — Reduced Motion
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -3946,5 +4081,25 @@ textarea:focus-visible,
   .skeleton {
     animation: none !important;
     background-image: none !important;
+  }
+
+  /* Disable scroll-driven animations */
+  .section,
+  .dash-section,
+  .value-card,
+  .competitor-card,
+  .data-table-wrapper,
+  .news-card,
+  .kpi-card,
+  .tool-card {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Disable scroll progress animation */
+  .scroll-progress {
+    animation: none !important;
+    transform: none !important;
   }
 }
