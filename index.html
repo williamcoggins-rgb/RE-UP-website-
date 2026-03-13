@@ -515,6 +515,13 @@
     </div>
   </div>
 
+  <script>
+  // Remove skeleton placeholders once real content is available
+  document.addEventListener('DOMContentLoaded', function() {
+    var skeletons = document.querySelectorAll('[data-skeleton]');
+    for (var i = 0; i < skeletons.length; i++) skeletons[i].remove();
+  });
+  </script>
   <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
   <script src="js/ticker.js"></script>

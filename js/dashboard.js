@@ -3,6 +3,15 @@
    js/dashboard.js
    ============================================================ */
 
+// --------------- HELPERS ---------------
+
+/** Remove skeleton placeholders by data-skeleton key (or all if no key given) */
+function removeSkeleton(key) {
+  var selector = key ? '[data-skeleton="' + key + '"]' : '[data-skeleton]';
+  var els = document.querySelectorAll(selector);
+  for (var i = 0; i < els.length; i++) els[i].remove();
+}
+
 // --------------- SEED DATA ---------------
 
 // All pricing verified via Booksy, Squire, Fresha, shop websites, Yelp, Axios Charlotte
@@ -679,23 +688,23 @@ function renderHeatMap(service) {
   withPrice.sort(function (a, b) { return b.price - a.price; });
   grid.innerHTML = '';
 
-  // Green → Yellow → Red gradient
+  // Muted dark-theme gradient: dark teal → muted amber → muted red
   function interpolateColor(price) {
     var t = (price - MIN_PRICE) / (MAX_PRICE - MIN_PRICE);
     t = Math.max(0, Math.min(1, t));
     var r, g, b;
     if (t < 0.5) {
-      // green → yellow
+      // dark teal → muted amber
       var u = t / 0.5;
-      r = Math.round(46 + (234 - 46) * u);
-      g = Math.round(139 + (179 - 139) * u);
-      b = Math.round(87 + (8 - 87) * u);
+      r = Math.round(30 + (140 - 30) * u);
+      g = Math.round(80 + (100 - 80) * u);
+      b = Math.round(60 + (30 - 60) * u);
     } else {
-      // yellow → red
+      // muted amber → muted red
       var u = (t - 0.5) / 0.5;
-      r = Math.round(234 + (229 - 234) * u);
-      g = Math.round(179 + (9 - 179) * u);
-      b = Math.round(8 + (20 - 8) * u);
+      r = Math.round(140 + (160 - 140) * u);
+      g = Math.round(100 + (40 - 100) * u);
+      b = Math.round(30 + (40 - 30) * u);
     }
     return { r: r, g: g, b: b };
   }
@@ -750,8 +759,8 @@ function renderHeatMap(service) {
       var color = interpolateColor(price);
       var intensity = Math.max(0, Math.min(1, (price - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)));
       tile.style.backgroundColor = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
-      tile.style.boxShadow = '0 0 ' + Math.round(8 + intensity * 16) + 'px rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.3 + intensity * 0.4).toFixed(2) + ')';
-      tile.style.border = '1px solid rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.4 + intensity * 0.4).toFixed(2) + ')';
+      tile.style.boxShadow = '0 0 ' + Math.round(4 + intensity * 8) + 'px rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.15 + intensity * 0.25).toFixed(2) + ')';
+      tile.style.border = '1px solid rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (0.3 + intensity * 0.3).toFixed(2) + ')';
       if (intensity > 0.66) tile.classList.add('heatmap-tile--hot');
 
       var priceLabel = '';
@@ -1320,13 +1329,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Render all sections
+    removeSkeleton('kpi-cards');
     renderHeatMap('haircut');
     setupHeatMapButtons();
     renderPricingTable();
+    removeSkeleton('pricing-table');
     renderCompetitorTable();
+    removeSkeleton('competitor-table');
     renderSocialTable();
+    removeSkeleton('social-table');
     renderMoves();
     renderDensity();
+    removeSkeleton('news-cards');
+    removeSkeleton('ticker');
 
     // Render interactive tools
     renderPriceCompare();
