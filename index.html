@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="has-ticker">
+  <!-- Scroll progress indicator — CSS-only, fills as user scrolls -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Navigation -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
@@ -38,6 +41,7 @@
       </ul>
       <div class="nav-actions">
         <a href="pages/dashboard.html" class="btn btn-nav">View Market Data</a>
+        <button class="btn btn-nav btn-nav-waitlist" id="nav-waitlist-btn" onclick="document.getElementById('hero-waitlist-form').scrollIntoView({behavior:'smooth'});document.querySelector('#hero-waitlist-form input').focus();">Join Waitlist</button>
         <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
@@ -88,6 +92,14 @@
         <div class="hero-report-actions">
           <a href="pages/dashboard.html" class="btn btn-primary btn-lg">Open Charlotte Dashboard</a>
           <a href="#how-it-works" class="btn btn-ghost btn-lg">How It Works</a>
+        </div>
+        <div class="hero-waitlist" id="hero-waitlist">
+          <p class="hero-waitlist-label">Get early access when subscriptions launch</p>
+          <form class="hero-waitlist-form" id="hero-waitlist-form">
+            <input type="email" placeholder="your@email.com" required>
+            <button type="submit" class="btn btn-primary">Join the Waitlist</button>
+          </form>
+          <p class="hero-waitlist-msg" id="hero-waitlist-msg" style="display:none;"></p>
         </div>
       </div>
       <div class="hero-report-ticker">
@@ -194,70 +206,98 @@
               <th>Shops</th>
             </tr>
           </thead>
+          <!-- Skeleton: Market Pricing Table -->
+          <tbody class="skeleton-rows" data-skeleton="pricing-table">
+            <tr>
+              <td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:120px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td>
+            </tr>
+            <tr>
+              <td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:140px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td>
+            </tr>
+            <tr>
+              <td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:130px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td>
+              <td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td>
+            </tr>
+          </tbody>
+          <!-- End Skeleton: Market Pricing Table -->
           <tbody>
             <tr>
-              <td class="cell-mono">28202</td>
-              <td>Uptown / Center City</td>
-              <td class="cell-price">$35</td>
-              <td class="cell-price">—</td>
-              <td class="cell-price">$26</td>
-              <td class="cell-count">5</td>
+              <td class="cell-mono" data-label="Zip Code">28202</td>
+              <td data-label="Neighborhood">Uptown / Center City</td>
+              <td class="cell-price" data-label="Men's Cut">$35</td>
+              <td class="cell-price" data-label="Beard">—</td>
+              <td class="cell-price" data-label="Students">$26</td>
+              <td class="cell-count" data-label="Shops">5</td>
             </tr>
             <tr>
-              <td class="cell-mono">28203</td>
-              <td>South End / Dilworth</td>
-              <td class="cell-price">$44</td>
-              <td class="cell-price">$25</td>
-              <td class="cell-price">—</td>
-              <td class="cell-count">6</td>
+              <td class="cell-mono" data-label="Zip Code">28203</td>
+              <td data-label="Neighborhood">South End / Dilworth</td>
+              <td class="cell-price" data-label="Men's Cut">$44</td>
+              <td class="cell-price" data-label="Beard">$25</td>
+              <td class="cell-price" data-label="Students">—</td>
+              <td class="cell-count" data-label="Shops">6</td>
             </tr>
             <tr>
-              <td class="cell-mono">28205</td>
-              <td>NoDa / Plaza Midwood</td>
-              <td class="cell-price">$38</td>
-              <td class="cell-price">$23</td>
-              <td class="cell-price">$31</td>
-              <td class="cell-count">5</td>
+              <td class="cell-mono" data-label="Zip Code">28205</td>
+              <td data-label="Neighborhood">NoDa / Plaza Midwood</td>
+              <td class="cell-price" data-label="Men's Cut">$38</td>
+              <td class="cell-price" data-label="Beard">$23</td>
+              <td class="cell-price" data-label="Students">$31</td>
+              <td class="cell-count" data-label="Shops">5</td>
             </tr>
             <tr>
-              <td class="cell-mono">28206</td>
-              <td>North Charlotte / Druid Hills</td>
-              <td class="cell-price">$20</td>
-              <td class="cell-price">—</td>
-              <td class="cell-price">—</td>
-              <td class="cell-count">2</td>
+              <td class="cell-mono" data-label="Zip Code">28206</td>
+              <td data-label="Neighborhood">North Charlotte / Druid Hills</td>
+              <td class="cell-price" data-label="Men's Cut">$20</td>
+              <td class="cell-price" data-label="Beard">—</td>
+              <td class="cell-price" data-label="Students">—</td>
+              <td class="cell-count" data-label="Shops">2</td>
             </tr>
             <tr>
-              <td class="cell-mono">28209</td>
-              <td>Park Road / Selwyn</td>
-              <td class="cell-price">$27</td>
-              <td class="cell-price">$12</td>
-              <td class="cell-price">—</td>
-              <td class="cell-count">4</td>
+              <td class="cell-mono" data-label="Zip Code">28209</td>
+              <td data-label="Neighborhood">Park Road / Selwyn</td>
+              <td class="cell-price" data-label="Men's Cut">$27</td>
+              <td class="cell-price" data-label="Beard">$12</td>
+              <td class="cell-price" data-label="Students">—</td>
+              <td class="cell-count" data-label="Shops">4</td>
             </tr>
             <tr>
-              <td class="cell-mono">28215</td>
-              <td>East Charlotte / Albemarle Rd</td>
-              <td class="cell-price">$25</td>
-              <td class="cell-price">—</td>
-              <td class="cell-price">—</td>
-              <td class="cell-count">2</td>
+              <td class="cell-mono" data-label="Zip Code">28215</td>
+              <td data-label="Neighborhood">East Charlotte / Albemarle Rd</td>
+              <td class="cell-price" data-label="Men's Cut">$25</td>
+              <td class="cell-price" data-label="Beard">—</td>
+              <td class="cell-price" data-label="Students">—</td>
+              <td class="cell-count" data-label="Shops">2</td>
             </tr>
             <tr>
-              <td class="cell-mono">28216</td>
-              <td>Brookshire / North Charlotte</td>
-              <td class="cell-price">$33</td>
-              <td class="cell-price">—</td>
-              <td class="cell-price">$20</td>
-              <td class="cell-count">3</td>
+              <td class="cell-mono" data-label="Zip Code">28216</td>
+              <td data-label="Neighborhood">Brookshire / North Charlotte</td>
+              <td class="cell-price" data-label="Men's Cut">$33</td>
+              <td class="cell-price" data-label="Beard">—</td>
+              <td class="cell-price" data-label="Students">$20</td>
+              <td class="cell-count" data-label="Shops">3</td>
             </tr>
             <tr>
-              <td class="cell-mono">28213</td>
-              <td>University City / UNCC</td>
-              <td class="cell-price">$35</td>
-              <td class="cell-price">$30</td>
-              <td class="cell-price">—</td>
-              <td class="cell-count">8</td>
+              <td class="cell-mono" data-label="Zip Code">28213</td>
+              <td data-label="Neighborhood">University City / UNCC</td>
+              <td class="cell-price" data-label="Men's Cut">$35</td>
+              <td class="cell-price" data-label="Beard">$30</td>
+              <td class="cell-price" data-label="Students">—</td>
+              <td class="cell-count" data-label="Shops">8</td>
             </tr>
           </tbody>
         </table>
@@ -372,7 +412,29 @@
         </div>
       </div>
       <div class="news-grid" id="news-grid" data-animate>
-        <!-- Populated by js/news.js from newsroom feed -->
+        <!-- Skeleton: News Cards -->
+        <div class="skeleton-news-card" data-skeleton="news-cards">
+          <div class="skeleton skeleton-text" style="width:30%"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text" style="width:90%"></div>
+          <div class="skeleton skeleton-text" style="width:75%"></div>
+          <div class="skeleton skeleton-text" style="width:40%"></div>
+        </div>
+        <div class="skeleton-news-card" data-skeleton="news-cards">
+          <div class="skeleton skeleton-text" style="width:25%"></div>
+          <div class="skeleton skeleton-title" style="width:55%"></div>
+          <div class="skeleton skeleton-text" style="width:85%"></div>
+          <div class="skeleton skeleton-text" style="width:70%"></div>
+          <div class="skeleton skeleton-text" style="width:35%"></div>
+        </div>
+        <div class="skeleton-news-card" data-skeleton="news-cards">
+          <div class="skeleton skeleton-text" style="width:35%"></div>
+          <div class="skeleton skeleton-title" style="width:50%"></div>
+          <div class="skeleton skeleton-text" style="width:80%"></div>
+          <div class="skeleton skeleton-text" style="width:65%"></div>
+          <div class="skeleton skeleton-text" style="width:45%"></div>
+        </div>
+        <!-- End Skeleton: News Cards -->
       </div>
     </div>
   </section>
@@ -406,7 +468,14 @@
             <span>Updated regularly</span>
           </div>
         </div>
-        <a href="pages/dashboard.html" class="btn btn-primary btn-lg">Access the Dashboard</a>
+        <div class="cta-waitlist" id="cta-waitlist">
+          <form class="hero-waitlist-form" id="cta-waitlist-form">
+            <input type="email" placeholder="your@email.com" required>
+            <button type="submit" class="btn btn-primary btn-lg">Join the Waitlist</button>
+          </form>
+          <p class="hero-waitlist-msg" id="cta-waitlist-msg" style="display:none;"></p>
+          <p class="cta-social-proof">Built by Charlotte barbers, for Charlotte barbers</p>
+        </div>
       </div>
     </div>
   </section>
@@ -429,11 +498,19 @@
   </footer>
 
   <!-- Bottom Ticker — Live Market Prices -->
-  <div class="bottom-ticker" aria-label="Live market pricing ticker">
+  <div class="bottom-ticker" aria-label="Live market pricing ticker" aria-live="off">
     <div class="ticker-label-fixed">CLT LIVE</div>
     <div class="ticker-track">
       <div class="ticker-scroll" id="ticker-scroll">
-        <!-- Populated by js/ticker.js from verified pricing data -->
+        <!-- Skeleton: Ticker Items -->
+        <div class="skeleton-ticker-items" data-skeleton="ticker">
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+        </div>
+        <!-- End Skeleton: Ticker Items -->
       </div>
     </div>
   </div>
@@ -442,5 +519,63 @@
   <script src="js/main.js"></script>
   <script src="js/ticker.js"></script>
   <script src="js/news.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // Waitlist form handler — reusable for hero and CTA forms
+    function handleWaitlistSubmit(formId, msgId) {
+      var form = document.getElementById(formId);
+      var msgEl = document.getElementById(msgId);
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = form.querySelector('input[type="email"]');
+        var email = (input.value || '').trim();
+
+        // Validate
+        if (!email || email.indexOf('@') < 1) {
+          msgEl.textContent = 'Please enter a valid email address.';
+          msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
+          msgEl.style.display = '';
+          return;
+        }
+
+        // Store in localStorage under reup_waitlist
+        var list = [];
+        try { list = JSON.parse(localStorage.getItem('reup_waitlist')) || []; } catch (ex) { list = []; }
+        if (list.indexOf(email) === -1) {
+          list.push(email);
+          localStorage.setItem('reup_waitlist', JSON.stringify(list));
+        }
+
+        // Show confirmation
+        form.style.display = 'none';
+        msgEl.innerHTML = escapeHtml("You\u2019re on the list. We\u2019ll notify you when subscriptions go live.");
+        msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--ok';
+        msgEl.style.display = '';
+      });
+    }
+
+    handleWaitlistSubmit('hero-waitlist-form', 'hero-waitlist-msg');
+    handleWaitlistSubmit('cta-waitlist-form', 'cta-waitlist-msg');
+
+    // Sticky navbar "Join Waitlist" button — show after scrolling past hero
+    var navWaitlistBtn = document.getElementById('nav-waitlist-btn');
+    var heroSection = document.getElementById('main-content');
+
+    if (navWaitlistBtn && heroSection) {
+      window.addEventListener('scroll', function () {
+        var heroBottom = heroSection.getBoundingClientRect().bottom;
+        if (heroBottom < 0) {
+          navWaitlistBtn.classList.add('nav-waitlist-visible');
+        } else {
+          navWaitlistBtn.classList.remove('nav-waitlist-visible');
+        }
+      });
+    }
+  })();
+  </script>
 </body>
 </html>

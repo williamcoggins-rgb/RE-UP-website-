@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="body-dashboard has-ticker">
+  <!-- Scroll progress indicator — CSS-only, fills as user scrolls -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Navigation -->
   <nav class="navbar navbar-dashboard" role="navigation">
@@ -70,13 +73,55 @@
     </ul>
   </div>
 
+  <!-- Dashboard Section Nav -->
+  <nav class="dash-section-nav" id="dash-section-nav" aria-label="Dashboard sections">
+    <div class="dash-section-nav-track">
+      <a href="#section-overview" class="dash-nav-link active">Overview</a>
+      <a href="#section-heatmap" class="dash-nav-link">Heat Map</a>
+      <a href="#section-pricing" class="dash-nav-link">Pricing</a>
+      <a href="#section-tools" class="dash-nav-link">Tools</a>
+      <a href="#section-competitors" class="dash-nav-link">Competitors</a>
+      <a href="#section-social" class="dash-nav-link">Social</a>
+      <a href="#section-moves" class="dash-nav-link">Market Moves</a>
+      <a href="#section-density" class="dash-nav-link">Density</a>
+      <a href="#section-news" class="dash-nav-link">News</a>
+    </div>
+  </nav>
+
   <!-- Dashboard -->
-  <main class="dashboard">
+  <main class="dashboard" id="main-content">
 
     <!-- Market Overview Cards — FREE PREVIEW -->
-    <section class="dash-section">
+    <section class="dash-section" id="section-overview">
       <h2 class="dash-section-title">Market Overview</h2>
       <div class="kpi-grid">
+        <!-- Skeleton: Dashboard KPI Cards -->
+        <div class="kpi-card skeleton-kpi" data-skeleton="kpi-cards">
+          <div class="skeleton skeleton-text">&nbsp;</div>
+          <div class="skeleton skeleton-title">&nbsp;</div>
+          <div class="skeleton skeleton-text" style="width:60%">&nbsp;</div>
+        </div>
+        <div class="kpi-card skeleton-kpi" data-skeleton="kpi-cards">
+          <div class="skeleton skeleton-text">&nbsp;</div>
+          <div class="skeleton skeleton-title">&nbsp;</div>
+          <div class="skeleton skeleton-text" style="width:60%">&nbsp;</div>
+        </div>
+        <div class="kpi-card skeleton-kpi" data-skeleton="kpi-cards">
+          <div class="skeleton skeleton-text">&nbsp;</div>
+          <div class="skeleton skeleton-title">&nbsp;</div>
+          <div class="skeleton skeleton-text" style="width:60%">&nbsp;</div>
+        </div>
+        <div class="kpi-card skeleton-kpi" data-skeleton="kpi-cards">
+          <div class="skeleton skeleton-text">&nbsp;</div>
+          <div class="skeleton skeleton-title">&nbsp;</div>
+          <div class="skeleton skeleton-text" style="width:60%">&nbsp;</div>
+        </div>
+        <div class="kpi-card skeleton-kpi" data-skeleton="kpi-cards">
+          <div class="skeleton skeleton-text">&nbsp;</div>
+          <div class="skeleton skeleton-title">&nbsp;</div>
+          <div class="skeleton skeleton-text" style="width:60%">&nbsp;</div>
+        </div>
+        <!-- End Skeleton: Dashboard KPI Cards -->
         <div class="kpi-card">
           <span class="kpi-label">Shops Tracked</span>
           <span class="kpi-value">47</span>
@@ -109,10 +154,10 @@
     <div id="dash-gated">
 
       <!-- Charlotte Pricing Heat Map -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-heatmap">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Charlotte Pricing Heat Map</h2>
-          <p class="dash-section-sub">Average service price by zip code — darker zones have less data, red zones are premium pricing</p>
+          <p class="dash-section-sub">Average service price by zip code — click any zip to expand details, shops, and strengths</p>
           <div class="dash-filters">
             <button class="heatmap-filter-btn active" data-service="haircut">Men's Cut</button>
             <button class="heatmap-filter-btn" data-service="beard">Beard</button>
@@ -124,16 +169,16 @@
           <div class="heatmap-legend-bar"></div>
           <div class="heatmap-legend-labels">
             <span><span class="heatmap-legend-swatch"></span>No Data</span>
-            <span>$20</span>
+            <span>$20 (Low)</span>
             <span>$35</span>
             <span>$50</span>
-            <span>$65</span>
+            <span>$65 (High)</span>
           </div>
         </div>
       </section>
 
       <!-- Pricing by Zip -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-pricing">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Pricing by Zip Code</h2>
           <div class="dash-filters">
@@ -157,13 +202,20 @@
                 <th>Shops</th>
               </tr>
             </thead>
+            <!-- Skeleton: Pricing Table Rows -->
+            <tbody class="skeleton-rows" data-skeleton="pricing-table">
+              <tr><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:120px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td></tr>
+              <tr><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:140px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td></tr>
+              <tr><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:100px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td></tr>
+            </tbody>
+            <!-- End Skeleton: Pricing Table Rows -->
             <tbody id="pricing-tbody"></tbody>
           </table>
         </div>
       </section>
 
       <!-- Interactive Tools -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-tools">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Market Tools</h2>
           <p class="dash-section-sub">Interactive calculators to help you price, plan, and find your edge</p>
@@ -176,7 +228,7 @@
       </section>
 
       <!-- Competitor Directory -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-competitors">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Competitor Directory</h2>
           <div class="dash-search">
@@ -196,13 +248,20 @@
                 <th>Model</th>
               </tr>
             </thead>
+            <!-- Skeleton: Competitor Table Rows -->
+            <tbody class="skeleton-rows" data-skeleton="competitor-table">
+              <tr><td><span class="skeleton skeleton-cell" style="width:130px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:100px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:70px">&nbsp;</span></td></tr>
+              <tr><td><span class="skeleton skeleton-cell" style="width:110px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:90px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:80px">&nbsp;</span></td></tr>
+              <tr><td><span class="skeleton skeleton-cell" style="width:120px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:110px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:30px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:75px">&nbsp;</span></td></tr>
+            </tbody>
+            <!-- End Skeleton: Competitor Table Rows -->
             <tbody id="competitor-tbody"></tbody>
           </table>
         </div>
       </section>
 
       <!-- Social Leaderboard -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-social">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Social Media Leaderboard</h2>
           <p class="dash-section-sub">Top barbers and shops by Instagram following and engagement</p>
@@ -219,13 +278,20 @@
                 <th>Engagement</th>
               </tr>
             </thead>
+            <!-- Skeleton: Social Leaderboard Rows -->
+            <tbody class="skeleton-rows" data-skeleton="social-table">
+              <tr><td><span class="skeleton skeleton-cell" style="width:20px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:120px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:60px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td></tr>
+              <tr><td><span class="skeleton skeleton-cell" style="width:20px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:100px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:60px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td></tr>
+              <tr><td><span class="skeleton skeleton-cell" style="width:20px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:110px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:60px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:50px">&nbsp;</span></td><td><span class="skeleton skeleton-cell" style="width:40px">&nbsp;</span></td></tr>
+            </tbody>
+            <!-- End Skeleton: Social Leaderboard Rows -->
             <tbody id="social-tbody"></tbody>
           </table>
         </div>
       </section>
 
       <!-- Market Moves -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-moves">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Recent Market Moves</h2>
           <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
@@ -234,7 +300,7 @@
       </section>
 
       <!-- Shop Density Map -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-density">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Shop Density by Zip Code</h2>
           <p class="dash-section-sub">Where the competition is concentrated — and where the gaps are</p>
@@ -243,7 +309,7 @@
       </section>
 
       <!-- Industry News -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-news">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Industry News</h2>
           <p class="dash-section-sub">Original reporting from the RE UP newsroom covering Charlotte barbershops and industry trends</p>
@@ -255,7 +321,28 @@
             <button class="news-tab" data-news-filter="clt-events">CLT Events</button>
           </div>
         </div>
-        <div class="news-grid" id="news-grid"></div>
+        <div class="news-grid" id="news-grid">
+          <!-- Skeleton: Dashboard News Cards -->
+          <div class="skeleton-news-card" data-skeleton="news-cards">
+            <div class="skeleton skeleton-text" style="width:30%"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text" style="width:90%"></div>
+            <div class="skeleton skeleton-text" style="width:75%"></div>
+          </div>
+          <div class="skeleton-news-card" data-skeleton="news-cards">
+            <div class="skeleton skeleton-text" style="width:25%"></div>
+            <div class="skeleton skeleton-title" style="width:55%"></div>
+            <div class="skeleton skeleton-text" style="width:85%"></div>
+            <div class="skeleton skeleton-text" style="width:70%"></div>
+          </div>
+          <div class="skeleton-news-card" data-skeleton="news-cards">
+            <div class="skeleton skeleton-text" style="width:35%"></div>
+            <div class="skeleton skeleton-title" style="width:50%"></div>
+            <div class="skeleton skeleton-text" style="width:80%"></div>
+            <div class="skeleton skeleton-text" style="width:65%"></div>
+          </div>
+          <!-- End Skeleton: Dashboard News Cards -->
+        </div>
       </section>
 
     </div><!-- end #dash-gated -->
@@ -272,10 +359,20 @@
   </footer>
 
   <!-- Bottom Ticker — Live Market Prices -->
-  <div class="bottom-ticker" aria-label="Live market pricing ticker">
+  <div class="bottom-ticker" aria-label="Live market pricing ticker" aria-live="off">
     <div class="ticker-label-fixed">CLT LIVE</div>
     <div class="ticker-track">
-      <div class="ticker-scroll" id="ticker-scroll"></div>
+      <div class="ticker-scroll" id="ticker-scroll">
+        <!-- Skeleton: Dashboard Ticker Items -->
+        <div class="skeleton-ticker-items" data-skeleton="ticker">
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
+        </div>
+        <!-- End Skeleton: Dashboard Ticker Items -->
+      </div>
     </div>
   </div>
 
@@ -284,5 +381,49 @@
   <script src="../js/dashboard.js"></script>
   <script src="../js/ticker.js"></script>
   <script src="../js/news.js"></script>
+
+  <!-- Dashboard Section Nav — Scroll Tracking -->
+  <script>
+  (function() {
+    const navLinks = document.querySelectorAll('.dash-nav-link');
+    const sections = [];
+
+    navLinks.forEach(function(link) {
+      var href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        var section = document.getElementById(href.substring(1));
+        if (section) sections.push({ id: href.substring(1), el: section, link: link });
+      }
+    });
+
+    if (!sections.length) return;
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function(l) { l.classList.remove('active'); });
+          var match = sections.find(function(s) { return s.el === entry.target; });
+          if (match) {
+            match.link.classList.add('active');
+            // Scroll the active link into view within the nav track
+            var track = document.querySelector('.dash-section-nav-track');
+            if (track) {
+              var linkRect = match.link.getBoundingClientRect();
+              var trackRect = track.getBoundingClientRect();
+              if (linkRect.left < trackRect.left || linkRect.right > trackRect.right) {
+                match.link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+              }
+            }
+          }
+        }
+      });
+    }, {
+      rootMargin: '-120px 0px -60% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(function(s) { observer.observe(s.el); });
+  })();
+  </script>
 </body>
 </html>
