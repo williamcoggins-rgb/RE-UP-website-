@@ -3297,6 +3297,102 @@ a.news-card--link:hover .news-title {
     font-size: 9px;
     padding: 0 10px;
   }
+
+  /* --- Table-to-Card Layout --- */
+  .data-table-wrapper,
+  .competitor-table-wrapper {
+    overflow-x: visible;
+    border: none;
+    background: none;
+  }
+
+  .data-table thead,
+  .competitor-table-wrapper table thead {
+    display: none;
+  }
+
+  .data-table tbody,
+  .competitor-table-wrapper table tbody {
+    display: block;
+  }
+
+  .data-table tbody tr,
+  .competitor-table-wrapper table tbody tr {
+    display: block;
+    background: var(--card-bg, rgba(255, 255, 255, 0.04));
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--accent);
+  }
+
+  .data-table tbody tr:hover,
+  .competitor-table-wrapper table tbody tr:hover {
+    background: var(--card-bg, rgba(255, 255, 255, 0.06));
+  }
+
+  .data-table tbody td,
+  .competitor-table-wrapper table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    white-space: normal;
+    min-height: 44px;
+  }
+
+  .data-table tbody td:last-child,
+  .competitor-table-wrapper table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .data-table tbody td::before,
+  .competitor-table-wrapper table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.5));
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  /* First cell (name/zip) — prominent, full width, no label */
+  .data-table tbody td:first-child,
+  .competitor-table-wrapper table tbody td:first-child {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .data-table tbody td:first-child::before,
+  .competitor-table-wrapper table tbody td:first-child::before {
+    display: none;
+  }
+
+  /* Price cells keep tabular nums */
+  .data-table tbody td.cell-price,
+  .competitor-table-wrapper table tbody td.cell-price {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Touch-friendly tap targets */
+  .data-table tbody tr a,
+  .data-table tbody tr button,
+  .competitor-table-wrapper table tbody tr a,
+  .competitor-table-wrapper table tbody tr button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* ============================================

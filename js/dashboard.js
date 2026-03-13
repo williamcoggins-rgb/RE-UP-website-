@@ -279,14 +279,14 @@ function renderPricingTable() {
   PRICING_BY_ZIP.forEach(function (row) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td class="cell-mono">' + escapeHtml(row.zip) + "</td>" +
-      "<td>" + escapeHtml(row.area) + "</td>" +
-      '<td class="cell-price" data-service="haircut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
-      '<td class="cell-price" data-service="beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
-      '<td class="cell-price" data-service="students">' + escapeHtml(formatPrice(row.students)) + "</td>" +
-      '<td class="cell-price" data-service="hotTowel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
-      '<td class="cell-price" data-service="lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
-      '<td class="cell-count">' + escapeHtml(row.shops) + "</td>";
+      '<td class="cell-mono" data-label="Zip">' + escapeHtml(row.zip) + "</td>" +
+      '<td data-label="Area">' + escapeHtml(row.area) + "</td>" +
+      '<td class="cell-price" data-service="haircut" data-label="Men\'s Cut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
+      '<td class="cell-price" data-service="beard" data-label="Beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
+      '<td class="cell-price" data-service="students" data-label="Students">' + escapeHtml(formatPrice(row.students)) + "</td>" +
+      '<td class="cell-price" data-service="hotTowel" data-label="Hot Towel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
+      '<td class="cell-price" data-service="lineup" data-label="Lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
+      '<td class="cell-count" data-label="Shops">' + escapeHtml(row.shops) + "</td>";
     tbody.appendChild(tr);
   });
 }
@@ -302,13 +302,13 @@ function renderCompetitorTable(data) {
   list.forEach(function (c) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      "<td>" + escapeHtml(c.name) + "</td>" +
-      "<td>" + escapeHtml(c.neighborhood) + "</td>" +
-      '<td class="cell-mono">' + escapeHtml(c.zip) + "</td>" +
-      '<td class="cell-price">' + escapeHtml(formatPrice(c.avgCut)) + "</td>" +
-      "<td>" + escapeHtml(c.rating === "—" ? "—" : c.rating.toFixed(1)) + "</td>" +
-      "<td>" + escapeHtml(c.barbers) + "</td>" +
-      "<td>" + escapeHtml(c.model) + "</td>";
+      '<td data-label="Shop Name">' + escapeHtml(c.name) + "</td>" +
+      '<td data-label="Neighborhood">' + escapeHtml(c.neighborhood) + "</td>" +
+      '<td class="cell-mono" data-label="Zip">' + escapeHtml(c.zip) + "</td>" +
+      '<td class="cell-price" data-label="Avg Cut">' + escapeHtml(formatPrice(c.avgCut)) + "</td>" +
+      '<td data-label="Rating">' + escapeHtml(c.rating === "—" ? "—" : c.rating.toFixed(1)) + "</td>" +
+      '<td data-label="Barbers">' + escapeHtml(c.barbers) + "</td>" +
+      '<td data-label="Model">' + escapeHtml(c.model) + "</td>";
     tbody.appendChild(tr);
   });
 }
@@ -323,12 +323,12 @@ function renderSocialTable() {
   SOCIAL_LEADERS.forEach(function (s) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      "<td>" + escapeHtml(s.rank) + "</td>" +
-      "<td>" + escapeHtml(s.name) + "</td>" +
-      "<td>" + escapeHtml(s.type) + "</td>" +
-      "<td>" + escapeHtml(s.platform) + "</td>" +
-      "<td>" + escapeHtml(formatFollowers(s.followers)) + "</td>" +
-      "<td>" + escapeHtml(s.engagement) + "</td>";
+      '<td data-label="#">' + escapeHtml(s.rank) + "</td>" +
+      '<td data-label="Name">' + escapeHtml(s.name) + "</td>" +
+      '<td data-label="Type">' + escapeHtml(s.type) + "</td>" +
+      '<td data-label="Platform">' + escapeHtml(s.platform) + "</td>" +
+      '<td data-label="Followers">' + escapeHtml(formatFollowers(s.followers)) + "</td>" +
+      '<td data-label="Engagement">' + escapeHtml(s.engagement) + "</td>";
     tbody.appendChild(tr);
   });
 }
@@ -525,14 +525,14 @@ function renderPricingTableFromData(data) {
   data.forEach(function (row) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td class="cell-mono">' + escapeHtml(row.zip) + "</td>" +
-      "<td>" + escapeHtml(row.area) + "</td>" +
-      '<td class="cell-price" data-service="haircut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
-      '<td class="cell-price" data-service="beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
-      '<td class="cell-price" data-service="students">' + escapeHtml(formatPrice(row.students)) + "</td>" +
-      '<td class="cell-price" data-service="hotTowel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
-      '<td class="cell-price" data-service="lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
-      '<td class="cell-count">' + escapeHtml(row.shops) + "</td>";
+      '<td class="cell-mono" data-label="Zip">' + escapeHtml(row.zip) + "</td>" +
+      '<td data-label="Area">' + escapeHtml(row.area) + "</td>" +
+      '<td class="cell-price" data-service="haircut" data-label="Men\'s Cut">' + escapeHtml(formatPrice(row.haircut)) + "</td>" +
+      '<td class="cell-price" data-service="beard" data-label="Beard">' + escapeHtml(formatPrice(row.beard)) + "</td>" +
+      '<td class="cell-price" data-service="students" data-label="Students">' + escapeHtml(formatPrice(row.students)) + "</td>" +
+      '<td class="cell-price" data-service="hotTowel" data-label="Hot Towel">' + escapeHtml(formatPrice(row.hotTowel)) + "</td>" +
+      '<td class="cell-price" data-service="lineup" data-label="Lineup">' + escapeHtml(formatPrice(row.lineup)) + "</td>" +
+      '<td class="cell-count" data-label="Shops">' + escapeHtml(row.shops) + "</td>";
     tbody.appendChild(tr);
   });
 
