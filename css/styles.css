@@ -84,6 +84,11 @@ table {
   width: 100%;
 }
 
+h1, h2, h3 {
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
 /* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 6px;
@@ -653,6 +658,7 @@ table {
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin-bottom: 16px;
+  text-wrap: balance;
 }
 
 .section-desc {
@@ -732,6 +738,7 @@ table {
 .data-table thead th {
   position: sticky;
   top: 0;
+  z-index: 2;
   background: var(--gray-900);
   padding: 12px 16px;
   text-align: left;
@@ -741,6 +748,7 @@ table {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   border-bottom: 1px solid var(--gray-800);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
 }
 
@@ -751,6 +759,10 @@ table {
 
 .data-table tbody tr:last-child {
   border-bottom: none;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .data-table tbody tr:hover {
@@ -768,6 +780,7 @@ table {
   font-size: 12px;
   color: var(--gray-300);
   letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .cell-price {
@@ -776,6 +789,7 @@ table {
   font-weight: 500;
   color: var(--green);
   font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .cell-count {
@@ -783,6 +797,7 @@ table {
   font-size: 12px;
   text-align: right;
   color: var(--gray-300);
+  font-variant-numeric: tabular-nums;
 }
 
 .table-cta {
@@ -989,16 +1004,68 @@ table {
    ============================================ */
 .body-dashboard {
   background: var(--black);
+  scroll-padding-top: 116px;
 }
 
 .dashboard {
-  padding-top: 72px;
+  padding-top: 116px;
   min-height: 100vh;
   max-width: 1440px;
   margin: 0 auto;
   padding-left: 24px;
   padding-right: 24px;
   padding-bottom: 40px;
+}
+
+/* Dashboard Section Navigation */
+.dash-section-nav {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--gray-800);
+}
+
+.dash-section-nav-track {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.dash-section-nav-track::-webkit-scrollbar {
+  display: none;
+}
+
+.dash-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-400);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.dash-nav-link:hover {
+  color: var(--gray-200);
+  background: var(--black-hover);
+}
+
+.dash-nav-link.active {
+  color: var(--white);
+  border-bottom-color: var(--accent);
 }
 
 .dash-section {
@@ -1024,6 +1091,7 @@ table {
   font-weight: 700;
   color: var(--white);
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .dash-section-sub {
@@ -3325,6 +3393,11 @@ a.news-card--link:hover .news-title {
     margin-bottom: 12px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-left: 3px solid var(--accent);
+  }
+
+  .data-table tbody tr:nth-child(even),
+  .competitor-table-wrapper table tbody tr:nth-child(even) {
+    background: var(--card-bg, rgba(255, 255, 255, 0.04));
   }
 
   .data-table tbody tr:hover,
