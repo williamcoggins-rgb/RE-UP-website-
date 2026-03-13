@@ -2630,28 +2630,67 @@ a.news-card--link:hover .news-title {
    ============================================ */
 #heatmap-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 12px;
+}
+
+.heatmap-wrapper {
+  display: contents;
+}
+
+.heatmap-wrapper--expanded {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / -1;
+}
+
+.heatmap-wrapper--expanded .heatmap-tile {
+  max-width: 260px;
 }
 
 .heatmap-tile {
   border-radius: 10px;
   padding: 18px 20px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: default;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 4px;
   min-height: 120px;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .heatmap-tile:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.heatmap-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .heatmap-tile--hot:hover {
   box-shadow: 0 4px 24px rgba(229, 9, 20, 0.25);
+}
+
+.heatmap-tile--active {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 16px rgba(229, 9, 20, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+.heatmap-tile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .heatmap-zip {
@@ -2661,10 +2700,31 @@ a.news-card--link:hover .news-title {
   color: var(--white);
 }
 
+.heatmap-shop-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
 .heatmap-area {
   font-size: 12px;
   color: var(--gray-400);
   margin-bottom: 8px;
+}
+
+.heatmap-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .heatmap-price {
@@ -2672,6 +2732,15 @@ a.news-card--link:hover .news-title {
   font-size: 22px;
   font-weight: 700;
   color: var(--white);
+}
+
+.heatmap-price-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .heatmap-shops {
@@ -2693,6 +2762,140 @@ a.news-card--link:hover .news-title {
   margin: 8px 0 4px;
 }
 
+/* Detail Panel — expands below clicked tile */
+.heatmap-detail-panel {
+  background: var(--black-card);
+  border: 1px solid var(--gray-800);
+  border-radius: 10px;
+  padding: 24px;
+  margin-top: 12px;
+  animation: heatmapPanelIn 0.25s ease-out;
+}
+
+@keyframes heatmapPanelIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.heatmap-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.heatmap-detail-title {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+}
+
+.heatmap-detail-shopcount {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.heatmap-detail-strengths {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.heatmap-strength-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  background: var(--accent-dim);
+  border: 1px solid rgba(229, 9, 20, 0.2);
+  border-radius: 4px;
+  padding: 3px 10px;
+}
+
+.heatmap-detail-services {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.heatmap-detail-service {
+  background: var(--gray-900);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heatmap-detail-service.heatmap-detail-na .heatmap-detail-service-value {
+  color: var(--gray-500);
+}
+
+.heatmap-detail-service-label {
+  font-size: 11px;
+  color: var(--gray-400);
+}
+
+.heatmap-detail-service-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.heatmap-detail-comps {
+  border-top: 1px solid var(--gray-800);
+  padding-top: 14px;
+}
+
+.heatmap-detail-comps-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-300);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.heatmap-detail-comps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.heatmap-comp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--gray-900);
+  border-radius: 6px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.heatmap-comp-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.heatmap-comp-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+}
+
+/* Legend */
 .heatmap-legend {
   margin-top: 20px;
   max-width: 500px;
@@ -2702,7 +2905,7 @@ a.news-card--link:hover .news-title {
   width: 100%;
   height: 8px;
   border-radius: 4px;
-  background: linear-gradient(to right, rgb(40, 3, 3) 0%, rgb(120, 6, 10) 50%, #e50914 100%);
+  background: linear-gradient(to right, #2e8b57 0%, #eab308 50%, #e50914 100%);
 }
 
 .heatmap-legend-labels {
@@ -2725,6 +2928,7 @@ a.news-card--link:hover .news-title {
   vertical-align: middle;
 }
 
+/* Filter buttons */
 .heatmap-filter-btn {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -3672,11 +3876,25 @@ a.news-card--link:hover .news-title {
 
   /* Heat map — phone */
   #heatmap-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .heatmap-zip { font-size: 18px; }
   .heatmap-price { font-size: 18px; }
+
+  .heatmap-wrapper--expanded .heatmap-tile {
+    max-width: 100%;
+  }
+
+  .heatmap-detail-services {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .heatmap-comp-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 
   /* Tools — phone */
   .tool-card {
