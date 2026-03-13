@@ -4339,3 +4339,294 @@ textarea:focus-visible,
     transform: none !important;
   }
 }
+
+/* ============================================================
+   Article — Market Context Sidebar
+   ============================================================ */
+
+.article-full--with-sidebar .article-content-wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.article-full--with-sidebar .article-body-column {
+  flex: 1;
+  min-width: 0;
+}
+
+.article-market-context {
+  width: 300px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.market-context-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.market-context-zips,
+.market-context-shops {
+  margin-bottom: 1rem;
+}
+
+.context-zip-card,
+.context-shop-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.context-zip {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e50914;
+}
+
+.context-area {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.context-price {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.context-vs {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.context-shops {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.context-shop-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.context-shop-meta {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.context-cta {
+  display: block;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  background: rgba(229, 9, 20, 0.1);
+  border: 1px solid rgba(229, 9, 20, 0.3);
+  border-radius: 8px;
+  color: #e50914;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.context-cta:hover {
+  background: rgba(229, 9, 20, 0.2);
+  border-color: rgba(229, 9, 20, 0.5);
+}
+
+/* ============================================================
+   Article — Playbook Section
+   ============================================================ */
+
+.article-playbook {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid #e50914;
+  border-radius: 0 12px 12px 0;
+}
+
+.playbook-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 1.25rem 0;
+}
+
+.playbook-summary,
+.playbook-impact,
+.playbook-actions,
+.playbook-watch {
+  margin-bottom: 1.25rem;
+}
+
+.playbook-summary:last-child,
+.playbook-impact:last-child,
+.playbook-actions:last-child,
+.playbook-watch:last-child {
+  margin-bottom: 0;
+}
+
+.article-playbook h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 0.5rem 0;
+}
+
+.article-playbook p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.playbook-actions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playbook-actions ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.playbook-actions ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  background: #e50914;
+  border-radius: 50%;
+}
+
+.playbook-watch p {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ============================================================
+   Article — Related Data Cards
+   ============================================================ */
+
+.article-related-data {
+  margin: 2rem 0;
+}
+
+.article-related-data h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1rem 0;
+}
+
+.related-data-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.related-data-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.related-data-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(229, 9, 20, 0.3);
+  transform: translateY(-2px);
+}
+
+.related-data-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.related-data-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.related-data-desc {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Article — Tag Deep Links
+   ============================================================ */
+
+.article-tag--link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.article-tag--link:hover {
+  background: rgba(229, 9, 20, 0.15);
+  border-color: rgba(229, 9, 20, 0.4);
+  color: #e50914;
+}
+
+/* ============================================================
+   Responsive — Market Context & Playbook
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .article-full--with-sidebar .article-content-wrapper {
+    flex-direction: column;
+  }
+
+  .article-market-context {
+    width: 100%;
+    position: static;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .article-playbook {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .related-data-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .article-market-context {
+    padding: 1rem;
+  }
+}
