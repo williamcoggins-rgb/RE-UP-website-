@@ -1443,6 +1443,15 @@ h1, h2, h3 {
     padding-right: 16px;
   }
 
+  .dash-section-nav-track {
+    padding: 0 12px;
+  }
+
+  .dash-nav-link {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
   .hero-report-inner {
     padding: 40px 16px;
   }

@@ -71,11 +71,26 @@
     </ul>
   </div>
 
+  <!-- Dashboard Section Nav -->
+  <nav class="dash-section-nav" id="dash-section-nav" aria-label="Dashboard sections">
+    <div class="dash-section-nav-track">
+      <a href="#section-overview" class="dash-nav-link active">Overview</a>
+      <a href="#section-heatmap" class="dash-nav-link">Heat Map</a>
+      <a href="#section-pricing" class="dash-nav-link">Pricing</a>
+      <a href="#section-tools" class="dash-nav-link">Tools</a>
+      <a href="#section-competitors" class="dash-nav-link">Competitors</a>
+      <a href="#section-social" class="dash-nav-link">Social</a>
+      <a href="#section-moves" class="dash-nav-link">Market Moves</a>
+      <a href="#section-density" class="dash-nav-link">Density</a>
+      <a href="#section-news" class="dash-nav-link">News</a>
+    </div>
+  </nav>
+
   <!-- Dashboard -->
   <main class="dashboard" id="main-content">
 
     <!-- Market Overview Cards — FREE PREVIEW -->
-    <section class="dash-section">
+    <section class="dash-section" id="section-overview">
       <h2 class="dash-section-title">Market Overview</h2>
       <div class="kpi-grid">
         <!-- Skeleton: Dashboard KPI Cards -->
@@ -137,7 +152,7 @@
     <div id="dash-gated">
 
       <!-- Charlotte Pricing Heat Map -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-heatmap">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Charlotte Pricing Heat Map</h2>
           <p class="dash-section-sub">Average service price by zip code — darker zones have less data, red zones are premium pricing</p>
@@ -161,7 +176,7 @@
       </section>
 
       <!-- Pricing by Zip -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-pricing">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Pricing by Zip Code</h2>
           <div class="dash-filters">
@@ -198,7 +213,7 @@
       </section>
 
       <!-- Interactive Tools -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-tools">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Market Tools</h2>
           <p class="dash-section-sub">Interactive calculators to help you price, plan, and find your edge</p>
@@ -211,7 +226,7 @@
       </section>
 
       <!-- Competitor Directory -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-competitors">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Competitor Directory</h2>
           <div class="dash-search">
@@ -244,7 +259,7 @@
       </section>
 
       <!-- Social Leaderboard -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-social">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Social Media Leaderboard</h2>
           <p class="dash-section-sub">Top barbers and shops by Instagram following and engagement</p>
@@ -274,7 +289,7 @@
       </section>
 
       <!-- Market Moves -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-moves">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Recent Market Moves</h2>
           <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
@@ -283,7 +298,7 @@
       </section>
 
       <!-- Shop Density Map -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-density">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Shop Density by Zip Code</h2>
           <p class="dash-section-sub">Where the competition is concentrated — and where the gaps are</p>
@@ -292,7 +307,7 @@
       </section>
 
       <!-- Industry News -->
-      <section class="dash-section">
+      <section class="dash-section" id="section-news">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Industry News</h2>
           <p class="dash-section-sub">Original reporting from the RE UP newsroom covering Charlotte barbershops and industry trends</p>
@@ -364,5 +379,49 @@
   <script src="../js/dashboard.js"></script>
   <script src="../js/ticker.js"></script>
   <script src="../js/news.js"></script>
+
+  <!-- Dashboard Section Nav — Scroll Tracking -->
+  <script>
+  (function() {
+    const navLinks = document.querySelectorAll('.dash-nav-link');
+    const sections = [];
+
+    navLinks.forEach(function(link) {
+      var href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        var section = document.getElementById(href.substring(1));
+        if (section) sections.push({ id: href.substring(1), el: section, link: link });
+      }
+    });
+
+    if (!sections.length) return;
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function(l) { l.classList.remove('active'); });
+          var match = sections.find(function(s) { return s.el === entry.target; });
+          if (match) {
+            match.link.classList.add('active');
+            // Scroll the active link into view within the nav track
+            var track = document.querySelector('.dash-section-nav-track');
+            if (track) {
+              var linkRect = match.link.getBoundingClientRect();
+              var trackRect = track.getBoundingClientRect();
+              if (linkRect.left < trackRect.left || linkRect.right > trackRect.right) {
+                match.link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+              }
+            }
+          }
+        }
+      });
+    }, {
+      rootMargin: '-120px 0px -60% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(function(s) { observer.observe(s.el); });
+  })();
+  </script>
 </body>
 </html>
