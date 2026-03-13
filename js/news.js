@@ -40,7 +40,17 @@
         "The school, which operates alongside No Grease\u2019s barbershop locations, has trained hundreds of barbers who now work chairs across the Charlotte metro. Graduates have gone on to open their own shops, join established teams, and build clientele through the social media skills they pick up during training.",
         "What makes this cohort stand out isn\u2019t just the size \u2014 it\u2019s the demand signal. More people want into the barber trade in Charlotte than ever before, and established programs like No Grease are the pipeline. With booth rent rising and shop owners competing for talent, a bigger graduating class means more options for shops looking to fill chairs this summer."
       ],
-      outlook: { timeframe: "This Month", text: "If you\u2019re a shop owner looking to hire, keep an eye on this graduating class. New barbers will be entering the market by late spring, and the ones trained at No Grease come with a built-in network. If you\u2019re a barber considering education, this enrollment surge signals strong demand \u2014 the trade is growing." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "No Grease Barber School enrolled its largest spring class ever with 30+ students, signaling surging demand for barber training in Charlotte.",
+        impact: "A bigger graduating class floods the local talent market by late spring. Shop owners gain more hiring options, but new barbers also mean more competition for walk-in clients and booth-rental spots across the metro.",
+        actions: [
+          "If you are hiring, contact No Grease now to get early introductions to graduating students before they commit elsewhere.",
+          "Review your booth-rental or commission structure so your offer is competitive when new talent starts shopping chairs.",
+          "If you are considering barber school yourself, the enrollment surge confirms strong demand — apply before cohorts fill."
+        ],
+        watchFor: "Watch for the spring graduation date announcement on No Grease social media. That is when 30+ new barbers enter the Charlotte market simultaneously."
+      }
     },
     {
       id: "9359b686baa4", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
@@ -54,7 +64,17 @@
         "This isn\u2019t new territory for Lucky Spot. The shop has run its annual Back to School Weekend with Cops & Barbers for 15 years, providing free cuts at Walmart locations across Charlotte. But 2026 marks an expansion \u2014 the shop is adding quarterly events throughout the year instead of concentrating everything in August.",
         "The response on social media tells the story. Parents are tagging friends, teachers are sharing the posts, and other barbershops are asking how they can participate. Lucky Spot is proving that community investment isn\u2019t just good will \u2014 it\u2019s good business. The shop\u2019s name recognition across Charlotte neighborhoods is unmatched, and it\u2019s built entirely on showing up."
       ],
-      outlook: { timeframe: "This Week", text: "If you\u2019re in the Charlotte area and have kids, watch Lucky Spot\u2019s social pages for the spring event dates. For barbers \u2014 this is a playbook worth studying. Community events generate the kind of word-of-mouth that no ad spend can buy. Consider partnering with local schools or nonprofits for your own giveback moments." }
+      outlook: {
+        timeframe: "This Week",
+        summary: "Lucky Spot Barbershop launched its 2026 community calendar with free student haircuts, expanding from a single annual event to quarterly givebacks.",
+        impact: "Community givebacks generate organic word-of-mouth that outperforms paid advertising. Lucky Spot's 15-year track record shows this model builds lasting name recognition across neighborhoods.",
+        actions: [
+          "Follow Lucky Spot's social pages to catch spring event dates if you have kids who need a free cut before testing season.",
+          "Partner with a local school or nonprofit to host your own giveback event — even a single Saturday morning builds community trust.",
+          "Document your event on social media with photos and client testimonials to maximize the long-tail marketing value."
+        ],
+        watchFor: "Monitor Lucky Spot's quarterly event announcements as a benchmark for community engagement in Charlotte's barber scene."
+      }
     },
     {
       id: "4bc5a822e1b3", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -68,7 +88,17 @@
         "The events are being coordinated independently \u2014 there\u2019s no single organizer \u2014 but the timing isn\u2019t a coincidence. Charlotte barbers have built a culture of giving back, and spring has become the unofficial kickoff. Social media posts from participating shops are circulating widely, with community organizations and churches helping amplify the word.",
         "For the barbershops involved, these events serve a dual purpose. They provide a genuine community service to people who need it, and they introduce the shop to potential long-term clients. Several shop owners told us that customers they first met at free cut events have become regulars who book weekly."
       ],
-      outlook: { timeframe: "This Month", text: "Check your local barbershop\u2019s social media for event announcements \u2014 most are posted on Instagram and Facebook a week or two in advance. If you\u2019re job hunting or know someone who is, a fresh cut before an interview can make a real difference. Barbers: if you\u2019re not hosting a spring event yet, there\u2019s still time to organize one." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Multiple Charlotte barbershops across West Charlotte, East Charlotte, and University City announced free or discounted spring haircut events for students, job seekers, and seniors.",
+        impact: "The coordinated spring giveback season shows Charlotte's barber culture is maturing. Shops that participate gain long-term regulars — several owners report that free-event clients convert to paying weekly customers.",
+        actions: [
+          "If you are job hunting, look for free cut events on Instagram and Facebook — a fresh cut before an interview makes a measurable difference.",
+          "Organize your own spring event now — there is still time to coordinate with a local church or community center for a Saturday session.",
+          "Track which shops in your area are hosting events and consider a joint event to split costs and amplify reach."
+        ],
+        watchFor: "Watch community organization pages and church bulletins for event listings that may not appear on barbershop social media."
+      }
     },
     {
       id: "89d01b64d01e", desk: "national-biz", type: "original", byline: "RE UP National Desk",
@@ -83,7 +113,17 @@
         "The pricing pressure is creating an interesting split in the market. Premium shops that offer a full experience \u2014 hot towels, beard work, beverages \u2014 can justify higher prices. Value-focused shops that keep it simple and fast are holding the line. The middle ground is where it gets uncomfortable, and barbers in that zone are feeling the squeeze most.",
         "For clients, the takeaway is straightforward: your barber\u2019s prices reflect real cost increases, not greed. And for barbers, the data suggests that the market can absorb modest price increases if you communicate the value clearly."
       ],
-      outlook: { timeframe: "This Quarter", text: "If you haven\u2019t adjusted your prices in the last year, now is the time to evaluate. The national trend gives you cover to make a modest increase without losing clients \u2014 most people understand costs are up everywhere. If you\u2019re a client, tipping well matters more than ever. Your barber\u2019s margins are thinner than they look." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "The national average men's haircut price crossed $35 for the first time, driven by rising booth rent and product costs across the industry.",
+        impact: "Charlotte's market sits in an interesting position — premium shops charge $45-65 while value shops hold at $20-35. The national trend gives Charlotte barbers who have not raised prices in 12+ months clear justification for a modest increase.",
+        actions: [
+          "Audit your pricing against Charlotte zip code averages — if you are more than $5 below your area average, a $3-5 increase is well within market tolerance.",
+          "Communicate any price change to clients two weeks in advance via social media and in-shop signage to minimize surprise and churn.",
+          "If you choose not to raise prices, tighten your schedule to reduce gaps and increase daily volume to protect your income."
+        ],
+        watchFor: "Track whether Charlotte shops follow the national trend with Q2 price increases. A city-wide move gives you even more cover for your own adjustment."
+      }
     },
     {
       id: "5402435f84ab", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
@@ -97,7 +137,17 @@
         "Multiple owners confirmed the trend through their Instagram accounts and booking platforms. Standing weekly appointments \u2014 where clients lock in the same time slot every week \u2014 are up significantly. That\u2019s the gold standard metric for barbershop health: recurring revenue from loyal clients.",
         "The surge is being driven by a combination of factors. Charlotte\u2019s population continues to grow, more men are prioritizing regular grooming, and the city\u2019s barbershop culture has created a competitive market where quality stays high. Shops that invested in online booking during the pandemic are seeing the biggest payoff now."
       ],
-      outlook: { timeframe: "This Week", text: "If your chair is filling up, this is the moment to evaluate your pricing and schedule. Full books mean you have leverage to raise rates modestly or tighten your appointment windows. If you\u2019re a client, book ahead \u2014 walk-in waits are getting longer at popular shops across Charlotte." }
+      outlook: {
+        timeframe: "This Week",
+        summary: "Charlotte barbershops in South End, NoDa, and West Charlotte reported their strongest Q1 booking numbers in years, outpacing pre-pandemic levels.",
+        impact: "Full books signal pricing power. When appointments are filling consistently, you are underpriced or under-scheduled. Standing weekly bookings — the gold standard metric — are up significantly across multiple neighborhoods.",
+        actions: [
+          "If your chair is consistently full, test a $3-5 price increase this month — demand is strong enough to absorb it.",
+          "Tighten your appointment windows by 5-10 minutes if you can maintain quality — one extra client per day compounds to significant revenue.",
+          "Clients: book your regular slot now as a standing appointment before your barber's calendar locks up for spring."
+        ],
+        watchFor: "Monitor whether Q1 momentum carries into Q2. If bookings stay strong through April, a summer price adjustment is well-supported by demand."
+      }
     },
     {
       id: "61459d0d280b", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
@@ -111,7 +161,17 @@
         "Both shops say the strategy is intentional, not accidental. They\u2019re serving the working professionals, families, and regulars who built Charlotte\u2019s barber culture long before premium shops entered the market. The volume makes up for the lower per-cut margin, and the loyalty they\u2019ve built means their chairs rarely sit empty.",
         "There\u2019s a business lesson here that often gets overlooked in the rush to go premium. Not every market needs a $45+ cut. Headz Up and The CUT have found their lane and own it. Their clients know exactly what they\u2019re getting \u2014 a quality cut, no frills, at a fair price \u2014 and they keep coming back."
       ],
-      outlook: { timeframe: "This Month", text: "If you\u2019re a price-conscious client in Charlotte, these two shops are worth your attention. For barbers and shop owners watching the pricing arms race, this is a reminder that volume-based models work when execution is consistent. You don\u2019t have to charge top dollar to run a full book." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Headz Up ($35 in 28273) and The CUT ($30 in 28202) are holding affordable pricing while staying consistently packed, proving the volume model works.",
+        impact: "In a market trending toward premium pricing, these shops demonstrate that high-volume, fair-price models still generate strong revenue when execution is consistent. Their full books show there is a large underserved market of price-conscious clients.",
+        actions: [
+          "If you run a value-focused shop, study Headz Up and The CUT's operations — their efficiency and consistency are what make the model work.",
+          "Consider offering a 'core cut' at a competitive price while adding premium add-ons (beard work, hot towel) to capture additional revenue per visit.",
+          "Price-conscious clients: check both shops' availability this week — they stay busy, so booking ahead is essential."
+        ],
+        watchFor: "Watch whether these shops adjust pricing as the national average continues climbing. If they hold steady, their competitive moat deepens."
+      }
     },
     {
       id: "32081e0d602e", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -125,7 +185,17 @@
         "Tournament weeks are reliable revenue drivers for Charlotte barbers. Visitors want to look sharp for games, watch parties, and the social events that surround the tournament. Shops in uptown, South End, and NoDa report that walk-in traffic spikes noticeably during multi-day events at Spectrum Center.",
         "The smart play for barbers this week: post your location and availability on Instagram and Google. Out-of-town visitors search for \u2018barber near me\u2019 when they arrive, and the shops that show up first capture the walk-in business. Extended evening hours also help catch fans looking for a cut between games."
       ],
-      outlook: { timeframe: "This Week", text: "If your shop is within a few miles of Spectrum Center, this is your week. Post your work and location on social media daily \u2014 tournament visitors are scrolling for local barbers right now. Consider extending hours through Friday to capture the full run of the tournament. Walk-in traffic will be strongest on game days." }
+      outlook: {
+        timeframe: "This Week",
+        summary: "The ACC Men's Basketball Tournament runs March 10-14 at Spectrum Center, bringing thousands of fans and alumni to uptown Charlotte.",
+        impact: "Multi-day sporting events reliably spike walk-in traffic at shops within a few miles of the venue. Tournament visitors search 'barber near me' on arrival and are willing to pay premium prices for convenience.",
+        actions: [
+          "Post your work and shop location on Instagram and Google daily this week — tournament visitors are actively searching for local barbers.",
+          "Extend your hours through Friday evening to capture fans looking for cuts between games and evening events.",
+          "Offer a 'Tournament Special' bundle (cut + beard trim) to increase average ticket on walk-in visitors you may only see once."
+        ],
+        watchFor: "Track your walk-in volume and average ticket this week as a baseline for the next major Spectrum Center event."
+      }
     },
     {
       id: "79c2c1a486eb", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -139,7 +209,17 @@
         "For barbershops near uptown and South End, SHOUT! is a sustained traffic boost rather than a single-day spike. Festival-goers explore the area on foot, and the evening events create demand for fresh cuts from people heading out to performances and parties. Shops that stay open later during SHOUT! capture clients they\u2019d otherwise miss.",
         "The festival also presents a branding opportunity. Some shops have set up pop-up chairs at past SHOUT! events, offering quick trims and building name recognition with a festival audience that skews young and social-media active."
       ],
-      outlook: { timeframe: "This Month", text: "Mark April 3-19 on your calendar. If you\u2019re near uptown, consider extending your evening hours during the festival. If you\u2019re looking for creative marketing, reach out to SHOUT! organizers about participating as a vendor or pop-up \u2014 the audience is exactly the demographic that shares barbershop experiences on social media." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Charlotte SHOUT! returns April 3-19 with two weeks of art installations, live performances, and block parties across uptown.",
+        impact: "Unlike single-day events, SHOUT! creates sustained foot traffic over 17 days. Evening events drive demand for fresh cuts from people heading to performances and parties, especially from the young, social-media-active demographic.",
+        actions: [
+          "Block April 3-19 on your calendar and extend evening hours on event nights — capture clients heading out to SHOUT! performances.",
+          "Contact SHOUT! organizers about a pop-up chair or vendor booth at the festival to build name recognition with a new audience.",
+          "Post festival-related content on your social media to align your brand with the cultural moment and attract the SHOUT! audience."
+        ],
+        watchFor: "Watch the SHOUT! event schedule for the biggest nights and plan your extended hours around peak attendance dates."
+      }
     },
     {
       id: "33e4b4bc03b4", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -153,7 +233,17 @@
         "The demand isn\u2019t just from race fans. Race week coincides with the unofficial start of summer, and Charlotte residents use the long weekend as a reset. Barbers see a surge from regulars wanting a fresh cut for cookouts, parties, and summer kickoff events happening across the city.",
         "Shops near the speedway corridor and along I-85 in Concord and Kannapolis see the biggest lift, but the effect reaches across the metro. Smart shop owners are already posting race week availability on Instagram and extending hours for the holiday weekend. The barbers who prepare early capture the walk-in overflow that less organized shops miss."
       ],
-      outlook: { timeframe: "This Month", text: "Start planning your race week schedule now. If your shop is anywhere near the I-85 corridor or uptown, extend your hours for the Memorial Day weekend. Post your availability on social media early \u2014 out-of-town visitors search Instagram for local barbers. Stock up on product and confirm your team\u2019s availability for the busiest weekend of Q2." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "The Coca-Cola 600 and Memorial Day race week at Charlotte Motor Speedway bring tens of thousands of visitors to the metro, spiking barbershop demand from uptown to Concord.",
+        impact: "Race week is the single biggest booking surge of Q2. Shops along the I-85 corridor and near uptown see walk-in overflow that less-prepared shops miss entirely. The long weekend also triggers summer kickoff demand from locals.",
+        actions: [
+          "Confirm your full team's availability for Memorial Day weekend now — do not wait until May to lock in schedules.",
+          "Post race week availability on Instagram early so out-of-town visitors find you when searching for Charlotte barbers.",
+          "Stock up on product and supplies by mid-May to avoid last-minute distributor delays during the holiday weekend."
+        ],
+        watchFor: "Track race week revenue as a benchmark. If it exceeds a normal week by 30%+, plan for similar prep around the Charlotte FC All-Star Game."
+      }
     },
     {
       id: "c148fef6c1f1", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
@@ -167,7 +257,17 @@
         "The expansion signals confidence in the premium segment of Charlotte\u2019s barbershop market. While some shops compete on price and volume, Charlotte Barber & Beard is betting that there\u2019s a growing clientele willing to pay more for a full grooming experience. The Plaza Midwood location, surrounded by restaurants and boutiques, fits the positioning perfectly.",
         "Adding a second chair also means bringing in another barber, which is its own challenge in a tight labor market. But the shop\u2019s reputation and premium pricing make it an attractive landing spot for skilled barbers looking for higher per-service income."
       ],
-      outlook: { timeframe: "This Month", text: "If you\u2019re a client who values the full barbershop experience, Charlotte Barber & Beard\u2019s new packages are worth checking out. For barbers watching the market, this expansion validates that premium positioning works in Charlotte \u2014 if you deliver on the experience. The second chair also means there may be hiring opportunities." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Charlotte Barber & Beard in Plaza Midwood added a second chair and launched premium grooming packages including hot towel shaves and scalp treatments at its $45 price point.",
+        impact: "This expansion validates the premium segment in Charlotte. A shop adding capacity at $45/cut in Plaza Midwood signals that high-end demand is strong enough to justify investment. It also tightens the labor market for skilled barbers.",
+        actions: [
+          "If you are a skilled barber looking for higher per-service income, Charlotte Barber & Beard may be hiring for the new chair — reach out directly.",
+          "Evaluate whether adding premium add-on packages (beard sculpting, scalp treatments) could increase your average ticket without raising your base price.",
+          "Clients who want the full grooming experience should check out the new packages — premium positioning only works when the experience delivers."
+        ],
+        watchFor: "Watch whether other Plaza Midwood and NoDa shops follow with premium package launches. A cluster of premium shops could shift the area's pricing floor upward."
+      }
     },
     {
       id: "f12310aebd52", desk: "national-biz", type: "original", byline: "RE UP National Desk",
@@ -181,7 +281,17 @@
         "The numbers back up the shift. Shops using digital booking platforms report 20-30% fewer no-shows compared to phone-only scheduling. They\u2019re also seeing higher average ticket prices, thanks to automated upsell prompts that suggest beard trims, hot towel add-ons, or product purchases at the time of booking.",
         "For barbers who\u2019ve resisted going digital, the competitive pressure is real. Clients \u2014 especially younger ones \u2014 expect to book online. A shop without an online presence is invisible to a growing segment of the market. The platforms have also gotten easier to use and more affordable, removing the barriers that kept many shops on the sideline."
       ],
-      outlook: { timeframe: "This Quarter", text: "If your shop still runs on phone calls and walk-ins only, this quarter is the time to evaluate a booking platform. The no-show reduction alone can pay for the subscription. Start with a free trial from Squire or Boulevard and track the difference over 30 days." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "Squire, Boulevard, and other booking platforms reported record Q1 sign-ups, with independent shops driving the growth and seeing 20-30% fewer no-shows.",
+        impact: "Digital booking is no longer optional. Shops without online booking are invisible to younger clients who expect to book from their phone. The no-show reduction alone — 20-30% — covers the platform subscription cost within the first month.",
+        actions: [
+          "Start a free trial with Squire or Boulevard this week and track no-show rates, average ticket, and new client acquisition over 30 days.",
+          "Enable automated upsell prompts at booking time — platforms report higher average tickets when beard trims and add-ons are suggested during scheduling.",
+          "If you already use a booking platform, audit your profile — make sure photos, pricing, and availability are current to maximize conversion."
+        ],
+        watchFor: "Watch for platform pricing changes as adoption grows. Lock in current rates now before platforms raise prices with increased market power."
+      }
     },
     {
       id: "ea30d06a1bcf", desk: "national-biz", type: "original", byline: "RE UP National Desk",
@@ -195,7 +305,17 @@
         "Owner-operators consistently cite the same reasons for going independent: creative freedom to set their own vibe and service menu, deeper community ties that franchises can\u2019t replicate, and higher per-chair revenue since there\u2019s no franchise fee eating into margins.",
         "The trend is especially strong in markets like Charlotte, where barbershop culture is deeply personal. Clients choose their barber, not a brand. That loyalty follows the barber, not the sign on the door \u2014 which gives independents a structural advantage that franchise models struggle to overcome."
       ],
-      outlook: { timeframe: "This Quarter", text: "If you\u2019ve been thinking about opening your own shop, the data says the market is on your side. Independent shops are thriving because clients value the personal connection. Start building your brand and clientele now \u2014 the barrier to entry has never been lower for barbers with a following." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "Independent barbershop openings outpaced franchise locations for the third straight year, driven by creative freedom and higher per-chair revenue for owner-operators.",
+        impact: "The independent model has a structural advantage in barbering — clients follow the barber, not the brand. In Charlotte, where barbershop culture is deeply personal, this trend is even more pronounced.",
+        actions: [
+          "If you are considering opening your own shop, start building your personal brand on social media now — a following of 2,000+ gives you a client base from day one.",
+          "Research booth-rental and lease costs in your target neighborhood to understand the real startup costs before making the leap.",
+          "If you are a shop owner, differentiate on culture and community — that is the advantage franchises cannot replicate."
+        ],
+        watchFor: "Track new shop openings in Charlotte over the next quarter. More independents entering the market means more competition but also more proof that the model works."
+      }
     },
     {
       id: "bc4f0ee1af1c", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
@@ -209,7 +329,17 @@
         "The stabilization isn\u2019t a decrease \u2014 prices are still higher than they were in 2023 \u2014 but the rate of increase has flattened. Barbers who locked in relationships with distributors during the spike are in the best position, often getting preferred pricing and priority on new product releases.",
         "Shops that relied on retail purchases from beauty supply stores felt the pinch hardest over the past two years. The wholesale-to-retail markup on barber products can run 30-50%, and those margins compound when base costs are rising. The lesson: building direct distributor relationships is a business fundamental, not a nice-to-have."
       ],
-      outlook: { timeframe: "This Month", text: "Now that prices have stabilized, it\u2019s a good time to lock in distributor pricing for the rest of 2026. If you\u2019ve been buying retail, reach out to wholesale distributors \u2014 the savings add up fast. Don\u2019t expect prices to drop back to 2022 levels, but you can plan your budget with more confidence now." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Wholesale costs for blades, disinfectants, and styling products leveled off in early 2026 after two consecutive years of price increases.",
+        impact: "Price stabilization means you can finally plan your supply budget with confidence. Shops that built distributor relationships during the spike are in the best position. If you have been buying retail, you are paying a 30-50% markup that directly eats your margin.",
+        actions: [
+          "Contact your distributor this week to lock in pricing for the rest of 2026 while rates are stable.",
+          "If you buy retail, reach out to at least two wholesale distributors for quotes — the savings on a quarterly order can exceed $200.",
+          "Audit your product usage and eliminate items with low sell-through or client demand to reduce carrying costs."
+        ],
+        watchFor: "Monitor raw material costs (steel for blades, petrochemicals for products) for early signals of a second wave of increases in late 2026."
+      }
     },
     {
       id: "86c89dabc766", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
@@ -223,7 +353,17 @@
         "Early reviews from barber influencers on Instagram and YouTube are positive. The consensus: the blade is sharp out of the box, the weight feels right for extended use, and the zero-gap setting holds without the adjustment headaches that plague some competitors. Battery life is rated at 90+ minutes.",
         "The timing is strategic. Skin fades are the most-requested service at barbershops across the country, and the barbers who specialize in them are the industry\u2019s biggest influencers. If Wahl can win the fade specialists, the broader market follows."
       ],
-      outlook: { timeframe: "This Month", text: "If you specialize in fades, this trimmer is worth testing before committing to your next equipment purchase. Watch the reviews from barbers whose work you trust \u2014 not paid promotions, but real chair time reviews. If you\u2019re happy with your current setup, no rush to switch, but keep this on your radar." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Wahl launched a new pro-grade skin fade trimmer with zero-gap blade design and 90+ minute battery, targeting the precision fade market dominated by competitors.",
+        impact: "Skin fades are the most-requested service nationally. A new credible entry from Wahl increases competition among equipment brands, which benefits barbers through better products and potential price pressure on existing options.",
+        actions: [
+          "If you specialize in fades, request a demo unit from your Wahl distributor before committing to a purchase — test it on real clients.",
+          "Watch reviews from barbers you trust (not paid promotions) who post real chair-time results over at least two weeks of use.",
+          "If your current trimmer is working well, no rush to switch — but note the zero-gap spec for your next equipment purchase cycle."
+        ],
+        watchFor: "Watch how competing brands (BaBylissPRO, Andis) respond with their own precision trimmer updates. Competition drives better products for barbers."
+      }
     },
     {
       id: "1342b5f5ec4e", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
@@ -237,7 +377,17 @@
         "The shop\u2019s growth strategy is almost entirely social media driven. Barbers at Midwood regularly post transformation reels on Instagram \u2014 before-and-after fade videos that rack up thousands of views. Each viral post becomes a client acquisition tool, with DMs and booking requests flooding in from viewers who want the same result.",
         "It\u2019s a case study in specialization. Rather than trying to be everything to everyone, Midwood Barbers picked one thing and became the best at it in their area. The result is a shop that can command premium pricing because clients know exactly what they\u2019re getting when they book."
       ],
-      outlook: { timeframe: "This Month", text: "For barbers: specialization is a pricing strategy. If you\u2019re great at one particular service, lean into it on social media. Midwood\u2019s approach proves that you can charge a premium when your work speaks for itself. For clients in 28205 looking for a quality fade, Midwood is worth the investment." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Midwood Barbers in 28205 built a dedicated clientele around $60 premium fades, using Instagram transformation reels as its primary growth channel.",
+        impact: "Specialization is a pricing strategy. Midwood proves that owning one service category lets you command premium pricing because clients know exactly what they are getting. Each viral reel becomes a direct client acquisition tool.",
+        actions: [
+          "Identify your strongest service and lean into it on social media — post one transformation reel per week showing your best work in that category.",
+          "If fades are your specialty, benchmark your pricing against Midwood's $60 rate and the 28205 area average of $38 to see if you are underpriced.",
+          "Clients in the Plaza Midwood area: book Midwood Barbers for fades specifically — their specialization means higher consistency and quality."
+        ],
+        watchFor: "Watch Midwood's Instagram engagement rates for signals on which content formats drive the most bookings — replicate what works for your own specialization."
+      }
     },
     {
       id: "3462992ccb8d", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
@@ -251,7 +401,17 @@
         "Barbers who\u2019ve made the switch report that it resonates strongly with younger clients \u2014 the same demographic that\u2019s most active on social media and most likely to post about their barbershop experience. Eco-conscious positioning is becoming a genuine competitive advantage, not just a feel-good story.",
         "The products themselves have improved significantly. Early sustainable options had a reputation for lower performance, but the current generation of plant-based pomades, biodegradable sanitizing wipes, and recycled materials are on par with conventional alternatives. The price premium is shrinking too, as more brands enter the space."
       ],
-      outlook: { timeframe: "This Quarter", text: "If you\u2019re looking for a way to differentiate your shop, sustainable products are worth exploring. Start small \u2014 swap out neck strips or sanitizing wipes \u2014 and mention it on social media. Younger clients notice and appreciate it. The cost difference is minimal, and the brand value is real." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "More barbershops are switching to biodegradable neck strips, recycled capes, and plant-based styling products as eco-conscious positioning becomes a competitive advantage.",
+        impact: "Sustainable products resonate strongest with younger clients — the same demographic most active on social media and most likely to post about their barbershop experience. The price premium is shrinking as more brands enter the space.",
+        actions: [
+          "Start small: swap out neck strips or sanitizing wipes for biodegradable alternatives and mention it on social media to test client response.",
+          "Add a visible 'eco-conscious shop' indicator to your booking profile and social bio — it is a differentiator that costs nothing to communicate.",
+          "Evaluate plant-based pomades and styling products from newer brands — current-generation formulas match conventional product performance."
+        ],
+        watchFor: "Watch for distributor bundles on sustainable product lines — as demand grows, wholesale pricing on eco alternatives will become more competitive."
+      }
     },
     {
       id: "dc918d9d0e30", desk: "supply-chain", type: "original", byline: "RE UP Supply Desk",
@@ -265,7 +425,17 @@
         "Barbers on social media are already posting first-look reviews and unboxings. The early consensus: the weight balance feels improved, the blade comes sharp out of the box, and the quieter motor is a welcome upgrade for both barbers and clients who sit in the chair for extended sessions.",
         "Pre-orders through distributor channels are moving fast, which tracks with BaBylissPRO\u2019s position as one of the most trusted brands in the professional barber space. The spring release timing is intentional \u2014 shops tend to refresh equipment ahead of the busy summer season."
       ],
-      outlook: { timeframe: "This Month", text: "If you\u2019re due for a clipper upgrade, the new BaBylissPRO FX is worth considering. Pre-order through your distributor for the best pricing. If your current setup is working well, there\u2019s no urgent reason to switch \u2014 but test one at a trade show or expo before the summer rush." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "BaBylissPRO released its 2026 cordless FX clipper with longer battery life, quieter motor, and improved weight balance. Pre-orders through distributors are moving fast.",
+        impact: "Spring equipment refreshes set barbers up for the busy summer season. The FX line is a staple in professional shops, and the quieter motor addresses one of the top client complaints during longer sessions.",
+        actions: [
+          "If you are due for a clipper upgrade, pre-order through your distributor now for best pricing before retail markup kicks in.",
+          "Test the new model at a trade show or expo before committing — weight balance and motor sound are best evaluated in person.",
+          "If your current setup works well, wait for 90-day reviews from working barbers before switching — first-look hype does not always hold up."
+        ],
+        watchFor: "Watch for bundled deals as BaBylissPRO pushes inventory through distributor channels in the pre-summer window. Best pricing often hits 6-8 weeks post-launch."
+      }
     },
     {
       id: "9bfb9c2217b5", desk: "national-biz", type: "original", byline: "RE UP National Desk",
@@ -279,7 +449,17 @@
         "The reform movement is rooted in workforce development. Current hour requirements can take 9-12 months to complete, during which aspiring barbers earn little to no income. For people in underserved communities, that\u2019s a barrier that keeps talented individuals out of a profitable trade. Reformers argue that practical skill development matters more than seat time.",
         "Opponents, including some barber school owners and established industry associations, worry that reduced hours could lower the quality of newly licensed barbers. But the data from states that have already reduced requirements shows no meaningful decline in safety incidents or client complaints."
       ],
-      outlook: { timeframe: "This Quarter", text: "If you\u2019re in Georgia, Texas, or Ohio, these bills could affect your market within the year. More licensed barbers means more competition, but also more talent available for shops looking to hire. If you\u2019re considering barber school, watch these states \u2014 reduced hour requirements could save you months of training time and tuition." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "Georgia, Texas, and Ohio legislators introduced bills to reduce barber licensing hours from 1,500+ to under 1,000, aiming to lower barriers to entry.",
+        impact: "Reduced hour requirements could add hundreds of new licensed barbers to these markets within a year. For shop owners, that means more hiring options. For existing barbers, it means more competition — but also validation that the trade is growing.",
+        actions: [
+          "If you are in GA, TX, or OH, track the bill status through your state cosmetology board — these changes could affect your market within 12 months.",
+          "Shop owners: start building relationships with barber schools now to get first pick of graduates when new talent enters the pipeline.",
+          "If you are considering barber school, watch these states — reduced hour requirements could save you 3-6 months of training time and significant tuition."
+        ],
+        watchFor: "Watch whether North Carolina follows with its own reform bill. If neighboring states reduce requirements, NC may face pressure to stay competitive."
+      }
     },
     {
       id: "c4acd406420e", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -293,7 +473,17 @@
         "The expo is the biggest annual networking event for barbers across the Carolinas. Charlotte shops typically send teams to compete in battle categories and connect with distributors, product brands, and peers from other markets. Several Charlotte barbershops are organizing group trips, turning the expo into a team-building event.",
         "For Charlotte barbers who haven\u2019t attended before, the education workshops alone are worth the trip. Topics cover business fundamentals \u2014 pricing strategy, social media marketing, booth rent negotiation \u2014 alongside technical sessions on trending cuts and techniques led by nationally recognized barbers."
       ],
-      outlook: { timeframe: "This Quarter", text: "Mark September on your calendar and book your Myrtle Beach accommodations early \u2014 the beachfront hotels near House of Blues fill up during expo weekend. If you\u2019re looking to compete, watch the expo\u2019s social media for registration announcements. If you\u2019re a brand or distributor, vendor booth space goes fast." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "The Carolina Barber Expo returns to House of Blues in North Myrtle Beach this September with expanded vendor floor and education workshops alongside barber battle competitions.",
+        impact: "The expo is the biggest annual networking event for Carolinas barbers. Education workshops cover pricing strategy, social media marketing, and booth rent negotiation — skills that directly affect your bottom line. Competition exposure builds your personal brand.",
+        actions: [
+          "Book Myrtle Beach accommodations now — beachfront hotels near House of Blues sell out during expo weekend every year.",
+          "Watch the expo's social media for barber battle registration announcements if you want to compete and build your brand.",
+          "Plan to attend at least two education workshops on business fundamentals — the ROI on pricing strategy knowledge alone pays for the trip."
+        ],
+        watchFor: "Watch for early-bird registration pricing and Charlotte shop group trip announcements — traveling with a team splits costs and builds camaraderie."
+      }
     },
     {
       id: "82b0751671fb", desk: "clt-events", type: "original", byline: "RE UP Events Desk",
@@ -307,7 +497,17 @@
         "Barbershops near uptown and South End are already seeing match-day booking patterns emerge during Charlotte FC home games. The All-Star Game will amplify that effect significantly \u2014 it\u2019s a multi-day event with fan festivals, concerts, and the game itself, all concentrated near the stadium corridor.",
         "The Charlotte FC effect on barbershops is becoming a real thing. Match-day bookings spike as fans, particularly younger demographics, want a fresh cut before heading to the stadium. Shops that post game-day content on social media \u2014 team colors, match-day specials \u2014 are capturing an audience that indexes high on grooming spend."
       ],
-      outlook: { timeframe: "This Quarter", text: "Start thinking about your summer schedule now. Charlotte FC home games already drive match-day bookings, and the All-Star Game will be a peak event. Consider running match-day promotions or posting Charlotte FC content on your social media to attract the soccer crowd. The All-Star Game date will be announced soon \u2014 block that week off for extended hours." }
+      outlook: {
+        timeframe: "This Quarter",
+        summary: "Charlotte FC's 2026 season is underway, and the city will host the MLS All-Star Game this summer — the first time Charlotte hosts the event, bringing national media and thousands of traveling fans.",
+        impact: "The All-Star Game is a multi-day event with fan festivals, concerts, and the game itself. Shops near uptown and South End will see amplified versions of the match-day booking spikes they already experience during regular Charlotte FC home games.",
+        actions: [
+          "Run match-day promotions tied to Charlotte FC home games now to build the habit before the All-Star Game amplifies demand.",
+          "Post Charlotte FC content on your social media to attract the soccer crowd, which indexes high on grooming spend.",
+          "Block the All-Star Game week for extended hours as soon as the date is announced — treat it like race week for scheduling."
+        ],
+        watchFor: "Watch for the official MLS All-Star Game date announcement. Once confirmed, book your team's schedules immediately — this will be the biggest single-event booking spike of the summer."
+      }
     },
     {
       id: "2c2368b92833", desk: "national-biz", type: "original", byline: "RE UP National Desk",
@@ -321,7 +521,17 @@
         "The numbers are striking. Top-performing barber accounts report that 60% or more of their new clients found them through short-form video content. A single viral fade video can generate weeks of booked appointments. The barbers who understand this are investing real time into content creation \u2014 filming, editing, and posting with the same discipline they bring to the chair.",
         "The shift has created a new type of competitive advantage. A barber with 10,000 engaged Instagram followers has a more valuable asset than a barber with a prime shop location. The audience follows the barber, not the building \u2014 which gives digitally savvy barbers leverage when negotiating booth rent or considering opening their own shop."
       ],
-      outlook: { timeframe: "This Week", text: "If you\u2019re not posting your work on social media, you\u2019re leaving clients on the table. Start with one transformation reel per week on Instagram. Film the before, capture the key moments of the cut, and show the final result. You don\u2019t need expensive equipment \u2014 a phone with good lighting is enough to start." }
+      outlook: {
+        timeframe: "This Week",
+        summary: "Social media has overtaken word-of-mouth as the top client acquisition channel for barbers under 35, with top accounts reporting 60%+ of new clients from short-form video.",
+        impact: "A barber with 10,000 engaged Instagram followers has a more valuable asset than a prime shop location. The audience follows the barber, not the building — giving digitally savvy barbers leverage on booth rent negotiations and shop ownership decisions.",
+        actions: [
+          "Start posting one transformation reel per week on Instagram this week — film the before, key moments of the cut, and the final result.",
+          "Invest in a ring light ($20-30) and phone tripod — good lighting is the single biggest quality improvement for barber content.",
+          "Track which posts generate DMs and booking requests to identify your highest-converting content format and double down on it."
+        ],
+        watchFor: "Watch for TikTok algorithm changes that may boost or suppress barber content. Diversify across Instagram and TikTok to avoid single-platform dependency."
+      }
     },
     {
       id: "5192e4ec8b78", desk: "clt-local", type: "original", byline: "RE UP CLT Desk",
@@ -335,7 +545,17 @@
         "The shop credits its clean, modern aesthetic and seamless online booking for attracting this demographic. Young professionals want efficiency \u2014 book online, get in, get a quality cut, get back to the office. Urban Barber delivers on that promise without the weekend crowds and wait times.",
         "The strategy is smart positioning. By capturing the mid-week professional crowd, Urban Barber fills chairs during what are traditionally slower days for barbershops. The result is more consistent weekly revenue instead of the boom-and-bust pattern of weekend-heavy shops."
       ],
-      outlook: { timeframe: "This Month", text: "If your shop is near office areas, think about how to capture the mid-week professional crowd. Online booking is table stakes for this demographic. Consider offering a \u2018lunch hour express\u2019 slot \u2014 guaranteed in-and-out in 30 minutes. For clients near SouthPark, Urban Barber\u2019s mid-week availability means shorter waits and a more relaxed experience." }
+      outlook: {
+        timeframe: "This Month",
+        summary: "Urban Barber in 28209 near SouthPark is capturing a growing wave of young professionals booking Tuesday-Thursday appointments during lunch and after work.",
+        impact: "Mid-week professional clients fill chairs during traditionally slow days, creating more consistent weekly revenue instead of weekend boom-and-bust patterns. Online booking is table stakes for this demographic.",
+        actions: [
+          "If your shop is near office areas, add dedicated 'lunch hour express' slots — guaranteed in-and-out in 30 minutes — to your booking platform.",
+          "Ensure your online booking profile highlights efficiency and professionalism to attract the mid-week corporate crowd.",
+          "Clients near SouthPark: book Urban Barber mid-week for shorter waits and a more relaxed experience compared to Saturday rushes."
+        ],
+        watchFor: "Watch whether remote work trends shift mid-week demand patterns. More office-return mandates could increase Tuesday-Thursday walk-in traffic near business districts."
+      }
     }
   ];
 
@@ -390,11 +610,11 @@
     }
   };
 
-  // Render an impact badge
+  // Render an impact badge (clickable → filtered news view)
   function impactBadge(impact) {
     if (!impact || impact === 'low') return '';
     var cls = impact === 'high' ? 'news-impact--high' : 'news-impact--medium';
-    return '<span class="news-impact ' + cls + '">' + escapeHtml(impact.toUpperCase()) + '</span>';
+    return '<span class="news-impact ' + cls + '" data-impact-link="' + escapeHtml(impact) + '">' + escapeHtml(impact.toUpperCase()) + '</span>';
   }
 
   // Build article page URL

@@ -13,10 +13,9 @@ function removeSkeleton(key) {
 }
 
 // --------------- SEED DATA ---------------
-
-// All pricing verified via Booksy, Squire, Fresha, shop websites, Yelp, Axios Charlotte
-// "—" = not found in any public source. No fabricated data.
-const PRICING_BY_ZIP = [
+// Data now loaded from js/market-data.js → window.RE_UP_MARKET
+// Local aliases for backward compatibility within this file.
+const PRICING_BY_ZIP = (window.RE_UP_MARKET && window.RE_UP_MARKET.PRICING_BY_ZIP) || [
   { zip: "28202", area: "Uptown / Center City", haircut: 35, beard: "—", students: 26, hotTowel: "—", lineup: "—", shops: 5 },
   { zip: "28203", area: "South End / Dilworth", haircut: 44, beard: 25, students: "—", hotTowel: 40, lineup: 20, shops: 6 },
   { zip: "28205", area: "NoDa / Plaza Midwood", haircut: 38, beard: 23, students: 31, hotTowel: "—", lineup: "—", shops: 5 },
@@ -33,9 +32,8 @@ const PRICING_BY_ZIP = [
   { zip: "28273", area: "Steele Creek", haircut: 35, beard: "—", students: "—", hotTowel: "—", lineup: "—", shops: 2 }
 ];
 
-// All shops verified via Google, Yelp, Booksy, Squire, Fresha, Vagaro, shop websites
-// avgCut derived from pricing.json where available; "—" = no public price found
-const COMPETITORS = [
+// Shops data from js/market-data.js → window.RE_UP_MARKET
+const COMPETITORS = (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) || [
   // 28202 — Uptown / Center City
   { name: "The CUT Barbershop", neighborhood: "Uptown", zip: "28202", avgCut: 30, rating: 4.7, barbers: 3, model: "Hybrid", tier: "Mid-tier" },
   { name: "Uptown Cuts", neighborhood: "Uptown", zip: "28202", avgCut: 40, rating: 5.0, barbers: 4, model: "Appointment", tier: "Premium" },
