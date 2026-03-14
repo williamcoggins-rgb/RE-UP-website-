@@ -194,8 +194,40 @@
     </div>
   </section>
 
+  <!-- Industry News — Lead section, free feature -->
+  <section class="section section-black" id="news-section">
+    <div class="container">
+      <div class="newsroom-header">
+        <div class="newsroom-masthead">
+          <p class="section-tag">THE RE UP NEWSROOM</p>
+          <h2 class="newsroom-title">Charlotte Barbershop Report</h2>
+          <div class="newsroom-dateline">
+            <span class="newsroom-edition">Daily Edition</span>
+            <span class="newsroom-separator">&bull;</span>
+            <span class="newsroom-date" id="newsroom-date"></span>
+            <span class="newsroom-separator">&bull;</span>
+            <span class="newsroom-market">Charlotte, NC</span>
+          </div>
+        </div>
+        <div class="news-tabs">
+          <button class="news-tab active" data-news-filter="all">All Desks</button>
+          <button class="news-tab" data-news-filter="clt-local">CLT Local</button>
+          <button class="news-tab" data-news-filter="national-biz">National</button>
+          <button class="news-tab" data-news-filter="supply-chain">Supply Chain</button>
+          <button class="news-tab" data-news-filter="clt-events">CLT Events</button>
+        </div>
+      </div>
+      <div class="newsroom-layout" id="news-grid" data-animate>
+        <!-- JS renders: featured hero story + sidebar stories -->
+      </div>
+      <div class="newsroom-more">
+        <a href="pages/dashboard.html" class="btn btn-ghost">Read All Stories &rarr;</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Market Preview — Pricing table -->
-  <section class="section section-black" id="pricing-section">
+  <section class="section section-dark" id="pricing-section">
     <div class="container">
       <div class="section-header">
         <p class="section-tag">CHARLOTTE PRICING DATA</p>
@@ -317,7 +349,7 @@
   </section>
 
   <!-- Competitor Preview -->
-  <section class="section section-dark" id="competitors-section">
+  <section class="section section-black" id="competitors-section">
     <div class="container">
       <div class="section-header">
         <p class="section-tag">COMPETITOR INTELLIGENCE</p>
@@ -400,49 +432,6 @@
       </div>
       <div class="table-cta">
         <a href="pages/dashboard.html" class="btn btn-primary">View All 47 Competitors &rarr;</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Industry News -->
-  <section class="section section-black" id="news-section">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-tag">INDUSTRY NEWS</p>
-        <h2 class="section-title">What's Happening in Charlotte</h2>
-        <p class="section-desc">Original reporting from the RE UP newsroom. Local coverage of Charlotte barbershops, neighborhood trends, and the moves shaping your market.</p>
-        <div class="news-tabs" style="margin-top: 16px; justify-content: center;">
-          <button class="news-tab active" data-news-filter="all">All Desks</button>
-          <button class="news-tab" data-news-filter="clt-local">CLT Local</button>
-          <button class="news-tab" data-news-filter="national-biz">National</button>
-          <button class="news-tab" data-news-filter="supply-chain">Supply Chain</button>
-          <button class="news-tab" data-news-filter="clt-events">CLT Events</button>
-        </div>
-      </div>
-      <div class="news-grid" id="news-grid" data-animate>
-        <!-- Skeleton: News Cards -->
-        <div class="skeleton-news-card" data-skeleton="news-cards">
-          <div class="skeleton skeleton-text" style="width:30%"></div>
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-text" style="width:90%"></div>
-          <div class="skeleton skeleton-text" style="width:75%"></div>
-          <div class="skeleton skeleton-text" style="width:40%"></div>
-        </div>
-        <div class="skeleton-news-card" data-skeleton="news-cards">
-          <div class="skeleton skeleton-text" style="width:25%"></div>
-          <div class="skeleton skeleton-title" style="width:55%"></div>
-          <div class="skeleton skeleton-text" style="width:85%"></div>
-          <div class="skeleton skeleton-text" style="width:70%"></div>
-          <div class="skeleton skeleton-text" style="width:35%"></div>
-        </div>
-        <div class="skeleton-news-card" data-skeleton="news-cards">
-          <div class="skeleton skeleton-text" style="width:35%"></div>
-          <div class="skeleton skeleton-title" style="width:50%"></div>
-          <div class="skeleton skeleton-text" style="width:80%"></div>
-          <div class="skeleton skeleton-text" style="width:65%"></div>
-          <div class="skeleton skeleton-text" style="width:45%"></div>
-        </div>
-        <!-- End Skeleton: News Cards -->
       </div>
     </div>
   </section>

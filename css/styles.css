@@ -1831,8 +1831,216 @@ body.has-ticker {
 }
 
 /* ============================================
-   NEWS SECTIONS
+   NEWS SECTIONS — Newspaper-style layout
    ============================================ */
+
+/* Masthead / header */
+.newsroom-header {
+  margin-bottom: 32px;
+}
+
+.newsroom-masthead {
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--gray-800);
+  margin-bottom: 16px;
+}
+
+.newsroom-title {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin: 8px 0 12px;
+  font-family: var(--font-heading);
+  line-height: 1.1;
+}
+
+.newsroom-dateline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--gray-500);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.newsroom-edition {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.newsroom-separator {
+  color: var(--gray-700);
+}
+
+.newsroom-header .news-tabs {
+  justify-content: center;
+}
+
+/* Main layout: featured left, sidebar right */
+.newsroom-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 0;
+  border-top: 1px solid var(--gray-800);
+}
+
+/* Featured / lead story */
+.newsroom-featured {
+  padding: 28px 28px 28px 0;
+  border-right: 1px solid var(--gray-800);
+}
+
+.newsroom-lead-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.newsroom-lead-link:hover .newsroom-lead-title {
+  color: var(--accent-text);
+}
+
+.newsroom-lead-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.newsroom-lead-title {
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.25;
+  margin-bottom: 16px;
+  transition: color 0.15s;
+}
+
+.newsroom-lead-excerpt {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--gray-300);
+  margin-bottom: 16px;
+}
+
+.newsroom-lead-byline {
+  margin-bottom: 12px;
+}
+
+.newsroom-read-more {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-text);
+  letter-spacing: 0.02em;
+}
+
+.newsroom-lead-link:hover .newsroom-read-more {
+  text-decoration: underline;
+}
+
+/* Sidebar stories */
+.newsroom-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsroom-sidebar-story {
+  display: block;
+  padding: 24px 0 24px 28px;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--gray-800);
+}
+
+.newsroom-sidebar-story:last-child {
+  border-bottom: none;
+}
+
+.newsroom-sidebar-story:hover .newsroom-sidebar-title {
+  color: var(--accent-text);
+}
+
+.newsroom-sidebar-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.newsroom-sidebar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.35;
+  margin-bottom: 8px;
+  transition: color 0.15s;
+}
+
+.newsroom-sidebar-summary {
+  font-size: 13px;
+  color: var(--gray-400);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.newsroom-sidebar-byline {
+  font-size: 11px;
+}
+
+/* Below-the-fold compact story list */
+.newsroom-more-stories {
+  grid-column: 1 / -1;
+  border-top: 2px solid var(--gray-800);
+  padding-top: 20px;
+}
+
+.newsroom-more-stories-header {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.newsroom-compact-story {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-900);
+  text-decoration: none;
+  color: inherit;
+}
+
+.newsroom-compact-story:hover .newsroom-compact-title {
+  color: var(--accent-text);
+}
+
+.newsroom-compact-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-200);
+  transition: color 0.15s;
+}
+
+.newsroom-compact-story .news-date {
+  flex-shrink: 0;
+}
+
+/* "Read All Stories" link */
+.newsroom-more {
+  text-align: center;
+  margin-top: 28px;
+}
+
+/* Keep old .news-grid for dashboard or other pages */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
@@ -3524,6 +3732,29 @@ a.news-card--link:hover .news-title {
    iPad Mini portrait, small tablets
    ============================================ */
 @media (max-width: 768px) {
+  /* Newsroom layout — stack on tablet/mobile */
+  .newsroom-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .newsroom-featured {
+    padding: 20px 0;
+    border-right: none;
+    border-bottom: 1px solid var(--gray-800);
+  }
+
+  .newsroom-sidebar-story {
+    padding: 20px 0;
+  }
+
+  .newsroom-lead-title {
+    font-size: 22px;
+  }
+
+  .newsroom-lead-excerpt {
+    font-size: 14px;
+  }
+
   .news-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;

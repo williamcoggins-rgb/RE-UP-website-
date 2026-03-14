@@ -658,55 +658,110 @@
     return 'pages/article.html?id=' + article.id;
   }
 
-  // Render articles into the grid
+  // Format a date string for display
+  function formatDate(dateStr) {
+    var displayDate = dateStr || '';
+    try {
+      var d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        displayDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+    } catch (e) { /* keep raw */ }
+    return displayDate;
+  }
+
+  // Build the source/byline HTML for a story
+  function sourceHtml(a) {
+    if (a.type === 'original') {
+      return '<span class="news-byline">' + escapeHtml(a.byline || 'RE UP Report Staff') + '</span>';
+    }
+    return '<span>' + escapeHtml(a.source) + '</span>' +
+      ' &middot; ' +
+      '<a href="' + encodeURI(a.url) + '" target="_blank" rel="noopener noreferrer">Read article</a>';
+  }
+
+  // Render articles in newspaper layout: featured hero + sidebar
   function renderNewsCards(articles) {
     var grid = document.getElementById('news-grid');
     if (!grid) return;
+
+    // Set the dateline
+    var datelineEl = document.getElementById('newsroom-date');
+    if (datelineEl) {
+      datelineEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+      });
+    }
 
     if (articles.length === 0) {
       grid.innerHTML = '<div class="news-empty">No stories from this desk yet.</div>';
       return;
     }
 
-    var html = '';
-    for (var i = 0; i < articles.length; i++) {
-      var a = articles[i];
-      var meta = DESK_META[a.desk] || { tagClass: 'news-tag--charlotte', label: a.desk };
+    var lead = articles[0];
+    var meta = DESK_META[lead.desk] || { tagClass: 'news-tag--charlotte', label: lead.desk };
 
-      // Format date nicely
-      var displayDate = a.date || '';
-      try {
-        var d = new Date(a.date);
-        if (!isNaN(d.getTime())) {
-          displayDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-      } catch (e) { /* keep raw */ }
-
-      // Source line: original stories show byline, aggregated show link
-      var sourceHtml;
-      if (a.type === 'original') {
-        sourceHtml =
-          '<span class="news-byline">' + escapeHtml(a.byline || 'RE UP Report Staff') + '</span>';
-      } else {
-        sourceHtml =
-          '<span>' + escapeHtml(a.source) + '</span>' +
-          ' &middot; ' +
-          '<a href="' + encodeURI(a.url) + '" target="_blank" rel="noopener noreferrer">Read article</a>';
+    // Get lead paragraph from body if available
+    var leadExcerpt = lead.summary;
+    if (lead.body && lead.body.length > 0) {
+      leadExcerpt = lead.body[0];
+      if (leadExcerpt.length > 280) {
+        leadExcerpt = leadExcerpt.substring(0, 277) + '...';
       }
+    }
 
-      html +=
-        '<a class="news-card news-card--link" href="' + articleUrl(a) + '" data-desk="' + escapeHtml(a.desk) + '" data-score="' + escapeHtml(a.score || 0) + '">' +
-          '<div class="news-card-header">' +
+    // Featured story (left column)
+    var html =
+      '<div class="newsroom-featured">' +
+        '<a class="newsroom-lead-link" href="' + articleUrl(lead) + '">' +
+          '<div class="newsroom-lead-meta">' +
             '<span class="news-tag ' + meta.tagClass + '">' + escapeHtml(meta.label) + '</span>' +
-            '<span class="news-date">' + escapeHtml(displayDate) + '</span>' +
+            impactBadge(lead.impact) +
+            '<span class="news-date">' + escapeHtml(formatDate(lead.date)) + '</span>' +
           '</div>' +
-          '<h3 class="news-title">' + escapeHtml(a.title) + '</h3>' +
-          '<p class="news-summary">' + escapeHtml(a.summary) + '</p>' +
-          '<div class="news-source">' +
-            sourceHtml +
-            impactBadge(a.impact) +
-          '</div>' +
-        '</a>';
+          '<h2 class="newsroom-lead-title">' + escapeHtml(lead.title) + '</h2>' +
+          '<p class="newsroom-lead-excerpt">' + escapeHtml(leadExcerpt) + '</p>' +
+          '<div class="newsroom-lead-byline">' + sourceHtml(lead) + '</div>' +
+          '<span class="newsroom-read-more">Read full story &rarr;</span>' +
+        '</a>' +
+      '</div>';
+
+    // Sidebar stories (right column) — next 2 stories
+    var sidebarCount = Math.min(articles.length - 1, 2);
+    if (sidebarCount > 0) {
+      html += '<div class="newsroom-sidebar">';
+      for (var i = 1; i <= sidebarCount; i++) {
+        var a = articles[i];
+        var aMeta = DESK_META[a.desk] || { tagClass: 'news-tag--charlotte', label: a.desk };
+        html +=
+          '<a class="newsroom-sidebar-story" href="' + articleUrl(a) + '">' +
+            '<div class="newsroom-sidebar-meta">' +
+              '<span class="news-tag ' + aMeta.tagClass + '">' + escapeHtml(aMeta.label) + '</span>' +
+              '<span class="news-date">' + escapeHtml(formatDate(a.date)) + '</span>' +
+            '</div>' +
+            '<h3 class="newsroom-sidebar-title">' + escapeHtml(a.title) + '</h3>' +
+            '<p class="newsroom-sidebar-summary">' + escapeHtml(a.summary) + '</p>' +
+            '<div class="newsroom-sidebar-byline">' + sourceHtml(a) + '</div>' +
+          '</a>';
+      }
+      html += '</div>';
+    }
+
+    // Below-the-fold stories (remaining articles as compact list)
+    if (articles.length > 3) {
+      html += '<div class="newsroom-more-stories">';
+      html += '<div class="newsroom-more-stories-header">More Stories</div>';
+      for (var j = 3; j < articles.length; j++) {
+        var b = articles[j];
+        var bMeta = DESK_META[b.desk] || { tagClass: 'news-tag--charlotte', label: b.desk };
+        html +=
+          '<a class="newsroom-compact-story" href="' + articleUrl(b) + '">' +
+            '<span class="news-tag ' + bMeta.tagClass + '">' + escapeHtml(bMeta.label) + '</span>' +
+            '<span class="newsroom-compact-title">' + escapeHtml(b.title) + '</span>' +
+            '<span class="news-date">' + escapeHtml(formatDate(b.date)) + '</span>' +
+          '</a>';
+      }
+      html += '</div>';
     }
 
     grid.innerHTML = html;
