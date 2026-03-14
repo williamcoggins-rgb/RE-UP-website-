@@ -355,28 +355,20 @@
   <!-- Footer -->
   <footer class="footer footer-dashboard">
     <div class="container">
+      <div class="footer-nav">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#about-section">About</a>
+        <a href="data-sources.html">Data Sources</a>
+      </div>
       <div class="footer-bottom">
         <p>&copy; 2026 RE UP Report. Charlotte market data updated regularly.</p>
       </div>
     </div>
   </footer>
 
-  <!-- Bottom Ticker — Live Market Prices -->
-  <div class="bottom-ticker" aria-label="Live market pricing ticker" aria-live="off">
-    <div class="ticker-label-fixed">CLT LIVE</div>
-    <div class="ticker-track">
-      <div class="ticker-scroll" id="ticker-scroll">
-        <!-- Skeleton: Dashboard Ticker Items -->
-        <div class="skeleton-ticker-items" data-skeleton="ticker">
-          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
-          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
-          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
-          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
-          <div class="skeleton-ticker-item"><span class="skeleton skeleton-cell">&nbsp;</span><span class="skeleton skeleton-cell">&nbsp;</span></div>
-        </div>
-        <!-- End Skeleton: Dashboard Ticker Items -->
-      </div>
-    </div>
+  <!-- Bottom Bar — Weekly Market Snapshot -->
+  <div class="bottom-ticker" aria-label="Charlotte market snapshot">
+    <!-- Content injected by js/ticker.js -->
   </div>
 
   <script src="../js/utils.js"></script>
