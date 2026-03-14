@@ -44,7 +44,7 @@
       </ul>
       <div class="nav-actions">
         <a href="pages/dashboard.html" class="btn btn-nav">View Market Data</a>
-        <button class="btn btn-nav btn-nav-waitlist" id="nav-waitlist-btn" onclick="document.getElementById('hero-waitlist-form').scrollIntoView({behavior:'smooth'});document.querySelector('#hero-waitlist-form input').focus();">Join Waitlist</button>
+        <button class="btn btn-nav btn-nav-waitlist" id="nav-waitlist-btn" onclick="document.getElementById('hero-waitlist-form').scrollIntoView({behavior:'smooth'});document.querySelector('#hero-waitlist-form input').focus();">Get Your Report</button>
         <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span>
           <span></span>
@@ -64,7 +64,7 @@
     </ul>
   </div>
 
-  <!-- Hero — Data-forward, Bloomberg style -->
+  <!-- Hero — Data-forward, market style -->
   <section class="hero-report" id="main-content">
     <div class="hero-report-inner">
       <div class="hero-report-content">
@@ -72,8 +72,8 @@
           <span class="badge-dot"></span>
           LIVE MARKET DATA
         </div>
-        <h1 class="hero-report-title">The Barbershop<br>Market Report</h1>
-        <p class="hero-report-subtitle">Real pricing data, competitor intelligence, and market analytics for the barbering industry. No opinions. No courses. Just the numbers.</p>
+        <h1 class="hero-report-title">Your $35 Haircut Is Leaving<br>Money on the Table</h1>
+        <p class="hero-report-subtitle">We called 47 barbershops in Charlotte so you don't have to. No opinions. No courses. Just the numbers.</p>
         <div class="hero-report-stats">
           <div class="hero-stat">
             <span class="hero-stat-number" data-count="47">47</span>
@@ -99,8 +99,11 @@
         <div class="hero-waitlist" id="hero-waitlist">
           <p class="hero-waitlist-label">Get early access when subscriptions launch</p>
           <form class="hero-waitlist-form" id="hero-waitlist-form">
-            <input type="email" placeholder="your@email.com" required>
-            <button type="submit" class="btn btn-primary">Join the Waitlist</button>
+            <input type="text" name="name" placeholder="Your name" required>
+            <input type="email" name="email" placeholder="your@email.com" required>
+            <input type="tel" name="phone" placeholder="Phone (optional)">
+            <input type="text" name="zip" placeholder="Zip code" required pattern="[0-9]{5}" maxlength="5">
+            <button type="submit" class="btn btn-primary">See Where You Rank</button>
           </form>
           <p class="hero-waitlist-msg" id="hero-waitlist-msg" style="display:none;"></p>
         </div>
@@ -154,7 +157,7 @@
       <div class="section-header">
         <p class="section-tag">WHY THIS EXISTS</p>
         <h2 class="section-title">Everyone has a course.<br>Nobody has the data.</h2>
-        <p class="section-desc">The barber industry runs on gut feeling. RE UP Report brings Wall Street-level market intelligence to the chair.</p>
+        <p class="section-desc">The barber industry runs on gut feeling. RE UP Report gives you the numbers so you can run your chair like a business.</p>
       </div>
       <div class="value-grid">
         <div class="value-card" data-animate>
@@ -162,28 +165,28 @@
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
           </div>
           <h3 class="value-title">Pricing Intelligence</h3>
-          <p class="value-desc">See what every shop in your market charges for every service. Know where you stand. Price with confidence.</p>
+          <p class="value-desc">We tracked 52 prices so you know exactly where your $35 cut sits in the Charlotte market.</p>
         </div>
         <div class="value-card" data-animate>
           <div class="value-icon">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           </div>
           <h3 class="value-title">Competitor Tracking</h3>
-          <p class="value-desc">47 shops across Charlotte. Names, locations, pricing, reviews, social presence — all in one dashboard.</p>
+          <p class="value-desc">Your competitor three blocks away just raised their prices. Did you know? Now you will.</p>
         </div>
         <div class="value-card" data-animate>
           <div class="value-icon">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9"/></svg>
           </div>
           <h3 class="value-title">Market Coverage</h3>
-          <p class="value-desc">Starting with Charlotte. Every zip code, every neighborhood. Real data from real shops on the ground.</p>
+          <p class="value-desc">Every zip code in Charlotte, mapped. See where the money is — and where the gaps are.</p>
         </div>
         <div class="value-card" data-animate>
           <div class="value-icon">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           </div>
           <h3 class="value-title">Trend Analysis</h3>
-          <p class="value-desc">Price history over time. See which services are trending up, which neighborhoods are heating up, where the opportunity is.</p>
+          <p class="value-desc">Know which neighborhoods are heating up before everyone else does.</p>
         </div>
       </div>
     </div>
@@ -404,8 +407,8 @@
     <div class="container">
       <div class="section-header">
         <p class="section-tag">INDUSTRY NEWS</p>
-        <h2 class="section-title">What's Happening in Barber Culture</h2>
-        <p class="section-desc">Original reporting from the RE UP newsroom. Our beat reporters cover Charlotte barbershops, industry trends, and the culture that drives it all.</p>
+        <h2 class="section-title">What's Happening in Charlotte</h2>
+        <p class="section-desc">Original reporting from the RE UP newsroom. Local coverage of Charlotte barbershops, neighborhood trends, and the moves shaping your market.</p>
         <div class="news-tabs" style="margin-top: 16px; justify-content: center;">
           <button class="news-tab active" data-news-filter="all">All Desks</button>
           <button class="news-tab" data-news-filter="clt-local">CLT Local</button>
@@ -442,42 +445,61 @@
     </div>
   </section>
 
+  <!-- About / Founder Story -->
+  <section class="section section-dark" id="about-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">WHO BUILT THIS</p>
+        <h2 class="section-title">Built in Charlotte.<br>Built for barbers.</h2>
+      </div>
+      <div class="about-content">
+        <p>RE UP Report started with a simple question: why does every other industry have market data except barbers?</p>
+        <p>We built this in Charlotte because this is home. We know these shops, these neighborhoods, these barbers. Every number on this platform comes from real, verified sources — no estimates, no fakes, no guesses.</p>
+        <p>This isn't a tech company pretending to understand barbers. This is a data tool built by people who believe barbers deserve the same market intelligence that every other industry takes for granted.</p>
+        <p class="about-cta">Questions? Data corrections? <a href="pages/data-sources.html">See our data sources</a> or reach out directly.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA — Subscribe -->
   <section class="section section-cta-report">
     <div class="container">
       <div class="cta-report-content">
         <p class="section-tag">MARKET ACCESS</p>
-        <h2 class="section-title">Stop guessing.<br>Start knowing.</h2>
-        <p class="section-desc">The RE UP Report gives you the same market intelligence that every other industry takes for granted. It's time barbers had it too.</p>
+        <h2 class="section-title">Everyone has a course.<br>Nobody has the data.</h2>
+        <p class="section-desc">We tracked 52 prices across 47 shops so you know exactly where your chair sits in the Charlotte market.</p>
         <div class="cta-report-features">
           <div class="cta-feature">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-            <span>Full Charlotte market data</span>
+            <span>Know what every shop in your zip code charges</span>
           </div>
           <div class="cta-feature">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-            <span>47 shops, 52 verified price points</span>
+            <span>We called 47 shops so you don't have to</span>
           </div>
           <div class="cta-feature">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-            <span>Competitor profiles &amp; reviews</span>
+            <span>See who's gaining ground in your neighborhood</span>
           </div>
           <div class="cta-feature">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-            <span>Social media analytics</span>
+            <span>Track which barbers are building the biggest followings</span>
           </div>
           <div class="cta-feature">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-            <span>Updated regularly</span>
+            <span>Fresh data, not stale guesses</span>
           </div>
         </div>
         <div class="cta-waitlist" id="cta-waitlist">
           <form class="hero-waitlist-form" id="cta-waitlist-form">
-            <input type="email" placeholder="your@email.com" required>
-            <button type="submit" class="btn btn-primary btn-lg">Join the Waitlist</button>
+            <input type="text" name="name" placeholder="Your name" required>
+            <input type="email" name="email" placeholder="your@email.com" required>
+            <input type="tel" name="phone" placeholder="Phone (optional)">
+            <input type="text" name="zip" placeholder="Zip code" required pattern="[0-9]{5}" maxlength="5">
+            <button type="submit" class="btn btn-primary btn-lg">See Where You Rank</button>
           </form>
           <p class="hero-waitlist-msg" id="cta-waitlist-msg" style="display:none;"></p>
-          <p class="cta-social-proof">Built by Charlotte barbers, for Charlotte barbers</p>
+          <p class="cta-social-proof">The average men's cut in Charlotte is $37. Where do you sit?</p>
         </div>
       </div>
     </div>

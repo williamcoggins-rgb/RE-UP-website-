@@ -356,6 +356,15 @@ function renderMoves() {
   if (!grid) return;
   grid.innerHTML = "";
 
+  if (!MARKET_MOVES || MARKET_MOVES.length === 0) {
+    grid.innerHTML =
+      '<div class="coming-soon-card">' +
+        '<p class="coming-soon-title">Coming Soon</p>' +
+        '<p class="coming-soon-desc">We\'re collecting historical data. This section will populate as the market moves.</p>' +
+      '</div>';
+    return;
+  }
+
   MARKET_MOVES.forEach(function (m) {
     var card = document.createElement("div");
     card.className = "move-card";
