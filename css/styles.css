@@ -1545,8 +1545,11 @@ h1, h2, h3 {
   }
 
   .hero-waitlist-form input[type="email"],
+  .hero-waitlist-form input[type="text"],
+  .hero-waitlist-form input[type="tel"],
   .hero-waitlist-form .btn {
     width: 100%;
+    flex: 1 1 100%;
   }
 
   .value-grid {

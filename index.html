@@ -41,6 +41,7 @@
         <li><a href="#pricing-section" class="nav-link">Pricing Data</a></li>
         <li><a href="#competitors-section" class="nav-link">Competitors</a></li>
         <li><a href="#news-section" class="nav-link">News</a></li>
+        <li><a href="#about-section" class="nav-link">About</a></li>
       </ul>
       <div class="nav-actions">
         <a href="pages/dashboard.html" class="btn btn-nav">View Market Data</a>
@@ -60,6 +61,7 @@
       <li><a href="pages/dashboard.html">Charlotte Market</a></li>
       <li><a href="#pricing-section">Pricing Data</a></li>
       <li><a href="#competitors-section">Competitors</a></li>
+      <li><a href="#about-section">About</a></li>
       <li><a href="pages/dashboard.html" class="btn btn-primary">View Market Data</a></li>
     </ul>
   </div>
@@ -515,6 +517,8 @@
         <a href="pages/dashboard.html">Dashboard</a>
         <a href="#pricing-section">Pricing Data</a>
         <a href="#competitors-section">Competitors</a>
+        <a href="#about-section">About</a>
+        <a href="pages/data-sources.html">Data Sources</a>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 RE UP Report. Market intelligence for the barbering industry.</p>
@@ -555,7 +559,7 @@
   (function () {
     'use strict';
 
-    // Waitlist form handler — reusable for hero and CTA forms
+    // Waitlist form handler — collects name, email, phone (optional), zip
     function handleWaitlistSubmit(formId, msgId) {
       var form = document.getElementById(formId);
       var msgEl = document.getElementById(msgId);
@@ -563,22 +567,41 @@
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var input = form.querySelector('input[type="email"]');
-        var email = (input.value || '').trim();
+        var name = (form.querySelector('input[name="name"]').value || '').trim();
+        var email = (form.querySelector('input[name="email"]').value || '').trim();
+        var phone = (form.querySelector('input[name="phone"]').value || '').trim();
+        var zip = (form.querySelector('input[name="zip"]').value || '').trim();
 
-        // Validate
+        // Validate required fields
+        if (!name) {
+          msgEl.textContent = 'Please enter your name.';
+          msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
+          msgEl.style.display = '';
+          return;
+        }
         if (!email || email.indexOf('@') < 1) {
           msgEl.textContent = 'Please enter a valid email address.';
           msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
           msgEl.style.display = '';
           return;
         }
+        if (!zip || !/^[0-9]{5}$/.test(zip)) {
+          msgEl.textContent = 'Please enter a valid 5-digit zip code.';
+          msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
+          msgEl.style.display = '';
+          return;
+        }
 
         // Store in localStorage under reup_waitlist
+        var entry = { name: name, email: email, phone: phone, zip: zip, date: new Date().toISOString() };
         var list = [];
         try { list = JSON.parse(localStorage.getItem('reup_waitlist')) || []; } catch (ex) { list = []; }
-        if (list.indexOf(email) === -1) {
-          list.push(email);
+        var exists = false;
+        for (var i = 0; i < list.length; i++) {
+          if ((list[i].email || list[i]) === email) { exists = true; break; }
+        }
+        if (!exists) {
+          list.push(entry);
           localStorage.setItem('reup_waitlist', JSON.stringify(list));
         }
 
