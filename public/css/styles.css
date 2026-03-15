@@ -811,6 +811,7 @@ h1, h2, h3 {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 16px;
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
 }
 
 .section-title {
@@ -1511,9 +1512,9 @@ h1, h2, h3 {
    ============================================ */
 .footer,
 .footer-dashboard {
-  background: var(--black);
-  border-top: 1px solid var(--gray-800);
-  padding: 40px 0;
+  background: linear-gradient(180deg, var(--black-soft) 0%, var(--black) 100%);
+  border-top: 1px solid var(--gray-700);
+  padding: 60px 0;
 }
 
 .footer-top {
@@ -1533,6 +1534,10 @@ h1, h2, h3 {
 
 .footer-logo .logo-text {
   font-size: 16px;
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .footer-nav {
@@ -1991,6 +1996,11 @@ body.has-ticker {
   margin: 8px 0 12px;
   font-family: var(--font-heading);
   line-height: 1.1;
+  background: linear-gradient(180deg, #ffffff 0%, #cccccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
 
 .newsroom-dateline {
