@@ -1,18 +1,13 @@
 import { onRequestPost as waitlistPost, onRequestOptions as waitlistOptions } from '../functions/api/waitlist.js';
 import { onRequestPost as authPost, onRequestOptions as authOptions } from '../functions/api/auth.js';
 
-var ALLOWED_ORIGINS = ['https://reupreport.com', 'https://www.reupreport.com'];
-
 function getAllowedOrigin(request) {
   var origin = request.headers.get('Origin');
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    return origin;
-  }
-  // Allow same-origin requests (workers.dev, custom domains, etc.)
-  var requestUrl = new URL(request.url);
-  if (origin && origin === requestUrl.origin) {
-    return origin;
-  }
+  var requestOrigin = new URL(request.url).origin;
+  if (!origin) return requestOrigin;
+  if (origin === requestOrigin) return origin;
+  var allowed = ['https://reupreport.com', 'https://www.reupreport.com'];
+  if (allowed.includes(origin)) return origin;
   return null;
 }
 

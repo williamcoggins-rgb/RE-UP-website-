@@ -7,26 +7,26 @@ const loginAttempts = new Map();
 const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
-const ALLOWED_ORIGINS = [
-  'https://reupreport.com',
-  'https://www.reupreport.com'
-];
-
 function getAllowedOrigin(request) {
-  const origin = request.headers.get('Origin') || '';
-  // Allow known origins
-  if (ALLOWED_ORIGINS.includes(origin)) {
-    return origin;
-  }
-  // Allow same-origin requests (workers.dev, custom domains, etc.)
-  const requestUrl = new URL(request.url);
-  if (origin === requestUrl.origin) {
-    return origin;
-  }
-  // Allow requests with no Origin header (same-origin navigations)
+  const origin = request.headers.get('Origin');
+  const requestOrigin = new URL(request.url).origin;
+
+  // No Origin header = same-origin navigation, always allow
   if (!origin) {
-    return requestUrl.origin;
+    return requestOrigin;
   }
+
+  // Same-origin request (works for any domain: workers.dev, custom domain, etc.)
+  if (origin === requestOrigin) {
+    return origin;
+  }
+
+  // Cross-origin: allow known production domains
+  const allowed = ['https://reupreport.com', 'https://www.reupreport.com'];
+  if (allowed.includes(origin)) {
+    return origin;
+  }
+
   return null;
 }
 
