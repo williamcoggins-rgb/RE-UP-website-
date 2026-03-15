@@ -82,24 +82,38 @@
         return;
       }
 
-      // Store in localStorage
-      var entry = { name: name, email: email, phone: phone, zip: zip, date: new Date().toISOString() };
-      var list = [];
-      try { list = JSON.parse(localStorage.getItem('reup_waitlist')) || []; } catch (ex) { list = []; }
-      var exists = false;
-      for (var i = 0; i < list.length; i++) {
-        if ((list[i].email || list[i]) === email) { exists = true; break; }
-      }
-      if (!exists) {
-        list.push(entry);
-        localStorage.setItem('reup_waitlist', JSON.stringify(list));
-      }
+      // Disable button while submitting
+      var btn = form.querySelector('.reup-waitlist-btn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting…';
 
-      // Show confirmation
-      containerEl.innerHTML =
-        '<p class="reup-waitlist-msg reup-waitlist-msg--ok">' +
-          "You\u2019re on the list. We\u2019ll notify you when subscriptions go live." +
-        '</p>';
+      fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, phone: phone, zip: zip })
+      })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.success) {
+          containerEl.innerHTML =
+            '<p class="reup-waitlist-msg reup-waitlist-msg--ok">' +
+              (data.message === 'already_on_list'
+                ? "You\u2019re already on the list. We\u2019ll be in touch soon."
+                : "You\u2019re on the list. Check your email \u2014 we just sent you a welcome.") +
+            '</p>';
+        } else {
+          msgEl.textContent = data.error || 'Something went wrong. Try again.';
+          msgEl.className = 'reup-waitlist-msg reup-waitlist-msg--err';
+          btn.disabled = false;
+          btn.textContent = 'Notify Me';
+        }
+      })
+      .catch(function () {
+        msgEl.textContent = 'Network error \u2014 please try again.';
+        msgEl.className = 'reup-waitlist-msg reup-waitlist-msg--err';
+        btn.disabled = false;
+        btn.textContent = 'Notify Me';
+      });
     });
   }
 
