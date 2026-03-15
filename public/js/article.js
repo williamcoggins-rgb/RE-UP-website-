@@ -8,6 +8,28 @@
    ============================================================ */
 
 (function () {
+  // Sanitize HTML to strip dangerous tags and attributes
+  function sanitizeHtml(html) {
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    var scripts = div.querySelectorAll('script,iframe,object,embed,form,input,textarea,select,button,link,meta,style');
+    for (var i = scripts.length - 1; i >= 0; i--) scripts[i].remove();
+    var all = div.querySelectorAll('*');
+    for (var i = 0; i < all.length; i++) {
+      var attrs = all[i].attributes;
+      for (var j = attrs.length - 1; j >= 0; j--) {
+        if (attrs[j].name.startsWith('on') || attrs[j].name === 'srcdoc') {
+          all[i].removeAttribute(attrs[j].name);
+        }
+      }
+      if (all[i].tagName === 'A') {
+        var href = all[i].getAttribute('href') || '';
+        if (href.startsWith('javascript:')) all[i].removeAttribute('href');
+      }
+    }
+    return div.innerHTML;
+  }
+
   var DESK_META = {
     'clt-local':    { tagClass: 'news-tag--charlotte', label: 'CLT Local' },
     'national-biz': { tagClass: 'news-tag--national',  label: 'National' },
@@ -454,12 +476,12 @@
     var teaserHtml = '';
     var gatedHtml = '';
     if (article.body && article.body.length) {
-      teaserHtml = '<p>' + escapeHtml(article.body[0]) + '</p>';
+      teaserHtml = '<p>' + sanitizeHtml(article.body[0]) + '</p>';
       for (var i = 1; i < article.body.length; i++) {
-        gatedHtml += '<p>' + escapeHtml(article.body[i]) + '</p>';
+        gatedHtml += '<p>' + sanitizeHtml(article.body[i]) + '</p>';
       }
     } else {
-      teaserHtml = '<p>' + escapeHtml(article.summary) + '</p>';
+      teaserHtml = '<p>' + sanitizeHtml(article.summary) + '</p>';
     }
 
     // Playbook / Outlook section

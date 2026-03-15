@@ -1,8 +1,86 @@
+var ALLOWED_ORIGINS = ['https://reupreport.com', 'https://www.reupreport.com'];
+
+function getAllowedOrigin(request) {
+  var origin = request.headers.get('Origin');
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    return origin;
+  }
+  return null;
+}
+
+function corsHeaders(request) {
+  var origin = getAllowedOrigin(request);
+  var headers = { 'Content-Type': 'application/json' };
+  if (origin) {
+    headers['Access-Control-Allow-Origin'] = origin;
+    headers['Vary'] = 'Origin';
+  }
+  return headers;
+}
+
+// In-memory rate limiter: IP -> [timestamps]
+var rateLimitMap = new Map();
+var RATE_LIMIT_MAX = 5;
+var RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function checkRateLimit(request) {
+  var ip = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || 'unknown';
+  var now = Date.now();
+
+  // Clean up old entries across the map
+  for (var [key, timestamps] of rateLimitMap) {
+    var filtered = timestamps.filter(function (t) { return now - t < RATE_LIMIT_WINDOW_MS; });
+    if (filtered.length === 0) {
+      rateLimitMap.delete(key);
+    } else {
+      rateLimitMap.set(key, filtered);
+    }
+  }
+
+  var timestamps = rateLimitMap.get(ip) || [];
+  // Filter to current window
+  timestamps = timestamps.filter(function (t) { return now - t < RATE_LIMIT_WINDOW_MS; });
+
+  if (timestamps.length >= RATE_LIMIT_MAX) {
+    return false;
+  }
+
+  timestamps.push(now);
+  rateLimitMap.set(ip, timestamps);
+  return true;
+}
+
+function checkCsrf(request) {
+  var origin = request.headers.get('Origin');
+  var referer = request.headers.get('Referer');
+
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    return true;
+  }
+
+  if (referer) {
+    for (var i = 0; i < ALLOWED_ORIGINS.length; i++) {
+      if (referer.startsWith(ALLOWED_ORIGINS[i])) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 export async function onRequestPost(context) {
-  var headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  };
+  var headers = corsHeaders(context.request);
+
+  // CSRF protection
+  if (!checkCsrf(context.request)) {
+    return new Response(JSON.stringify({ success: false, error: 'Forbidden' }), { status: 403, headers: headers });
+  }
+
+  // Rate limiting
+  if (!checkRateLimit(context.request)) {
+    return new Response(JSON.stringify({ success: false, error: 'Too many requests. Please try again later.' }), { status: 429, headers: headers });
+  }
 
   try {
     var body = await context.request.json();
@@ -23,10 +101,9 @@ export async function onRequestPost(context) {
   var apiKey = context.env.RESEND_API_KEY;
   var fromEmail = context.env.FROM_EMAIL || 'RE UP Report <hello@reupreport.com>';
   var emailSent = false;
-  var emailError = null;
 
   if (!apiKey) {
-    return new Response(JSON.stringify({ success: false, error: 'RESEND_API_KEY not configured', hasKey: false }), { status: 500, headers: headers });
+    return new Response(JSON.stringify({ success: false, error: 'Email service not configured' }), { status: 500, headers: headers });
   }
 
   var firstName = name.split(' ')[0];
@@ -69,23 +146,25 @@ export async function onRequestPost(context) {
     });
 
     if (!emailRes.ok) {
-      var resBody = await emailRes.text();
-      return new Response(JSON.stringify({ success: false, error: 'Resend API error', status: emailRes.status, detail: resBody }), { status: 500, headers: headers });
+      return new Response(JSON.stringify({ success: false, error: 'Email service error' }), { status: 500, headers: headers });
     }
     emailSent = true;
   } catch (e) {
-    return new Response(JSON.stringify({ success: false, error: 'Email send failed', detail: e.message }), { status: 500, headers: headers });
+    return new Response(JSON.stringify({ success: false, error: 'Email send failed' }), { status: 500, headers: headers });
   }
 
   return new Response(JSON.stringify({ success: true, message: 'added', emailSent: emailSent }), { status: 201, headers: headers });
 }
 
-export async function onRequestOptions() {
-  return new Response(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    }
-  });
+export async function onRequestOptions(context) {
+  var origin = getAllowedOrigin(context.request);
+  var headers = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  };
+  if (origin) {
+    headers['Access-Control-Allow-Origin'] = origin;
+    headers['Vary'] = 'Origin';
+  }
+  return new Response(null, { headers: headers });
 }

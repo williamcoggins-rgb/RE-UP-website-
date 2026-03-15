@@ -24,6 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="has-ticker">
   <!-- Scroll progress indicator — CSS-only, fills as user scrolls -->
@@ -105,6 +106,7 @@
             <input type="email" name="email" placeholder="your@email.com" required>
             <input type="tel" name="phone" placeholder="Phone (optional)">
             <input type="text" name="zip" placeholder="Zip code" required pattern="[0-9]{5}" maxlength="5">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAAAAAAAAAAAAAAAAA" data-theme="dark"></div>
             <button type="submit" class="btn btn-primary">See Where You Rank</button>
           </form>
           <p class="hero-waitlist-msg" id="hero-waitlist-msg" style="display:none;"></p>
@@ -486,6 +488,7 @@
             <input type="email" name="email" placeholder="your@email.com" required>
             <input type="tel" name="phone" placeholder="Phone (optional)">
             <input type="text" name="zip" placeholder="Zip code" required pattern="[0-9]{5}" maxlength="5">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAAAAAAAAAAAAAAAAA" data-theme="dark"></div>
             <button type="submit" class="btn btn-primary btn-lg">See Where You Rank</button>
           </form>
           <p class="hero-waitlist-msg" id="cta-waitlist-msg" style="display:none;"></p>
@@ -567,6 +570,9 @@
           return;
         }
 
+        // Get Turnstile token
+        var turnstileToken = form.querySelector('[name="cf-turnstile-response"]').value;
+
         // Submit to API
         var submitBtn = form.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
@@ -575,7 +581,7 @@
         fetch('/api/waitlist', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name, email: email, phone: phone, zip: zip })
+          body: JSON.stringify({ name: name, email: email, phone: phone, zip: zip, token: turnstileToken })
         })
         .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
         .then(function (result) {
@@ -596,12 +602,14 @@
             msgEl.innerHTML = escapeHtml("You\u2019re on the list. We\u2019ll notify you when subscriptions go live.");
             msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--ok';
             msgEl.style.display = '';
+            if (window.turnstile) turnstile.reset();
           } else {
             msgEl.textContent = result.data.error || 'Something went wrong. Please try again.';
             msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
             msgEl.style.display = '';
             submitBtn.disabled = false;
             submitBtn.textContent = 'See Where You Rank';
+            if (window.turnstile) turnstile.reset();
           }
         })
         .catch(function () {
@@ -610,6 +618,7 @@
           msgEl.style.display = '';
           submitBtn.disabled = false;
           submitBtn.textContent = 'See Where You Rank';
+          if (window.turnstile) turnstile.reset();
         });
       });
     }

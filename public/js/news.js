@@ -18,6 +18,28 @@
    ============================================================ */
 
 (function () {
+  // Sanitize HTML to strip dangerous tags and attributes
+  function sanitizeHtml(html) {
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    var scripts = div.querySelectorAll('script,iframe,object,embed,form,input,textarea,select,button,link,meta,style');
+    for (var i = scripts.length - 1; i >= 0; i--) scripts[i].remove();
+    var all = div.querySelectorAll('*');
+    for (var i = 0; i < all.length; i++) {
+      var attrs = all[i].attributes;
+      for (var j = attrs.length - 1; j >= 0; j--) {
+        if (attrs[j].name.startsWith('on') || attrs[j].name === 'srcdoc') {
+          all[i].removeAttribute(attrs[j].name);
+        }
+      }
+      if (all[i].tagName === 'A') {
+        var href = all[i].getAttribute('href') || '';
+        if (href.startsWith('javascript:')) all[i].removeAttribute('href');
+      }
+    }
+    return div.innerHTML;
+  }
+
   // Desk metadata for rendering
   var DESK_META = {
     'clt-local':    { tagClass: 'news-tag--charlotte', label: 'CLT Local' },
