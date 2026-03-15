@@ -88,6 +88,32 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ success: false, error: 'Invalid request' }), { status: 400, headers: headers });
   }
 
+  // Verify Cloudflare Turnstile token
+  var turnstileSecret = context.env.TURNSTILE_SECRET_KEY;
+  var turnstileToken = body.token || '';
+
+  if (turnstileSecret) {
+    if (!turnstileToken) {
+      return new Response(JSON.stringify({ success: false, error: 'CAPTCHA verification required' }), { status: 400, headers: headers });
+    }
+
+    var ip = context.request.headers.get('CF-Connecting-IP') || '';
+    var turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret: turnstileSecret,
+        response: turnstileToken,
+        remoteip: ip
+      })
+    });
+
+    var turnstileData = await turnstileRes.json();
+    if (!turnstileData.success) {
+      return new Response(JSON.stringify({ success: false, error: 'CAPTCHA verification failed' }), { status: 403, headers: headers });
+    }
+  }
+
   var name = (body.name || '').trim().slice(0, 100);
   var email = (body.email || '').trim().toLowerCase().slice(0, 255);
   var phone = (body.phone || '').trim().slice(0, 20);
