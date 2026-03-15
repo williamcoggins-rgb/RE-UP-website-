@@ -132,23 +132,10 @@ const DENSITY = PRICING_BY_ZIP.map(function (row) {
 function setupAdminLogin(isLoggedIn) {
   var loginLink = document.getElementById('adminLoginLink');
   var logoutLink = document.getElementById('adminLogoutLink');
-  var modal = document.getElementById('adminModal');
-  var closeBtn = document.getElementById('adminModalClose');
-  var submitBtn = document.getElementById('adminSubmitBtn');
-  var passwordInput = document.getElementById('adminPasswordInput');
-  var errorMsg = document.getElementById('adminError');
 
   if (isLoggedIn) {
     if (loginLink) loginLink.style.display = 'none';
     if (logoutLink) logoutLink.style.display = 'inline';
-  }
-
-  if (loginLink) {
-    loginLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      if (modal) modal.style.display = 'flex';
-      if (passwordInput) passwordInput.focus();
-    });
   }
 
   if (logoutLink) {
@@ -157,41 +144,6 @@ function setupAdminLogin(isLoggedIn) {
       window.RE_UP_AUTH.logout().then(function () {
         location.reload();
       });
-    });
-  }
-
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', function () { modal.style.display = 'none'; });
-  }
-
-  if (modal) {
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) modal.style.display = 'none';
-    });
-  }
-
-  if (submitBtn && passwordInput) {
-    submitBtn.addEventListener('click', function () {
-      var pw = passwordInput.value;
-      if (!pw) return;
-      submitBtn.disabled = true;
-      window.RE_UP_AUTH.login(pw).then(function (data) {
-        if (data.success) {
-          location.reload();
-        } else {
-          if (errorMsg) errorMsg.style.display = 'block';
-          passwordInput.value = '';
-          submitBtn.disabled = false;
-        }
-      }).catch(function () {
-        if (errorMsg) errorMsg.style.display = 'block';
-        passwordInput.value = '';
-        submitBtn.disabled = false;
-      });
-    });
-
-    passwordInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') submitBtn.click();
     });
   }
 }

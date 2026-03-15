@@ -1,4 +1,5 @@
-import { onRequestPost, onRequestOptions } from '../functions/api/waitlist.js';
+import { onRequestPost as waitlistPost, onRequestOptions as waitlistOptions } from '../functions/api/waitlist.js';
+import { onRequestPost as authPost, onRequestOptions as authOptions } from '../functions/api/auth.js';
 
 var ALLOWED_ORIGINS = ['https://reupreport.com', 'https://www.reupreport.com'];
 
@@ -13,16 +14,26 @@ function getAllowedOrigin(request) {
 export default {
   async fetch(request, env, ctx) {
     var url = new URL(request.url);
+    var context = { request: request, env: env, ctx: ctx };
+
+    // Handle /api/auth
+    if (url.pathname === '/api/auth') {
+      if (request.method === 'OPTIONS') {
+        return authOptions(context);
+      }
+      if (request.method === 'POST') {
+        return authPost(context);
+      }
+      return new Response('Method not allowed', { status: 405 });
+    }
 
     // Handle /api/waitlist
     if (url.pathname === '/api/waitlist') {
-      var context = { request: request, env: env, ctx: ctx };
-
       if (request.method === 'OPTIONS') {
-        return onRequestOptions(context);
+        return waitlistOptions(context);
       }
       if (request.method === 'POST') {
-        return onRequestPost(context);
+        return waitlistPost(context);
       }
 
       // Health check — no sensitive info

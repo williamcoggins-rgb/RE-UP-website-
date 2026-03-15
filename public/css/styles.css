@@ -1568,6 +1568,17 @@ h1, h2, h3 {
   gap: 8px;
 }
 
+.admin-login-link {
+  font-size: 11px;
+  color: var(--gray-700);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.admin-login-link:hover {
+  color: var(--gray-400);
+}
+
 /* ============================================
    ANIMATIONS
    ============================================ */
