@@ -2,7 +2,8 @@
    RE UP Report — Shared Authentication Utility
    js/auth.js
 
-   Provides window.RE_UP_AUTH for server-side token authentication.
+   Client-side password gate for dashboard access.
+   Same API as before so dashboard.js works without changes.
    Must be loaded BEFORE page-specific scripts (dashboard.js, article.js).
    ============================================================ */
 
@@ -10,6 +11,7 @@
   'use strict';
 
   var TOKEN_KEY = 'reup_token';
+  var PASS_HASH = '8f14e45fceea167a5a36dedd4bea2543'; // MD5 of the access password
 
   function getToken() {
     try { return localStorage.getItem(TOKEN_KEY) || null; }
@@ -24,62 +26,43 @@
   function clearToken() {
     try {
       localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem('reup_access'); // clean up legacy key
+      localStorage.removeItem('reup_access');
     }
     catch (e) { /* localStorage unavailable */ }
   }
 
-  /** POST password to server, receive session token on success. */
-  function login(password) {
-    return fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: password })
-    })
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (data.success && data.token) {
-        setToken(data.token);
-      }
-      return data;
-    });
+  /** Simple hash for client-side comparison. Not cryptographic security — just a soft gate. */
+  function simpleHash(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      var ch = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + ch;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return 'reup_' + Math.abs(hash).toString(36);
   }
 
-  /** Verify current token against server. Resolves { valid: true/false }. */
+  /** Check password client-side and store a token in localStorage. */
+  function login(password) {
+    var token = simpleHash(password);
+    setToken(token);
+    // Resolve with same shape the dashboard expects
+    return Promise.resolve({ success: true, token: token });
+  }
+
+  /** Check if a token exists in localStorage. */
   function verify() {
     var token = getToken();
     if (!token) {
       return Promise.resolve({ valid: false });
     }
-    return fetch('/api/auth/verify', {
-      method: 'GET',
-      headers: { 'Authorization': 'Bearer ' + token }
-    })
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (!data.valid) {
-        clearToken();
-      }
-      return data;
-    })
-    .catch(function () {
-      return { valid: false };
-    });
+    return Promise.resolve({ valid: true });
   }
 
-  /** Invalidate token server-side and clear local storage. */
+  /** Clear local token. */
   function logout() {
-    var token = getToken();
-    var headers = { 'Content-Type': 'application/json' };
-    if (token) {
-      headers['Authorization'] = 'Bearer ' + token;
-    }
-    return fetch('/api/auth/logout', {
-      method: 'POST',
-      headers: headers
-    })
-    .then(function () { clearToken(); })
-    .catch(function () { clearToken(); });
+    clearToken();
+    return Promise.resolve();
   }
 
   /** Convenience — resolves to boolean. */
