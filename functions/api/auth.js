@@ -114,29 +114,13 @@ export async function onRequestPost(context) {
   }
 
   // Hash the submitted password and compare to stored hash
-  var expectedHash = context.env.DASHBOARD_PASSWORD_HASH;
-  if (!expectedHash) {
-    return new Response(JSON.stringify({ success: false, error: 'Server configuration error' }), {
-      status: 500,
-      headers: headers
-    });
-  }
+  // Hardcoded hash to bypass env var delivery issues
+  var expectedHash = 'a9fa0c3c12c98e98c95545d28d9b0fff578002c01637984c5db5e222eba78587';
 
   var submittedHash = await hashPassword(password);
-  var cleanExpected = expectedHash.trim().toLowerCase();
 
-  if (submittedHash !== cleanExpected) {
-    // Include hash lengths to help debug mismatches
-    return new Response(JSON.stringify({
-      success: false,
-      error: 'Invalid password',
-      debug: {
-        submittedLen: submittedHash.length,
-        expectedLen: cleanExpected.length,
-        submittedPrefix: submittedHash.substring(0, 8),
-        expectedPrefix: cleanExpected.substring(0, 8)
-      }
-    }), {
+  if (submittedHash !== expectedHash) {
+    return new Response(JSON.stringify({ success: false, error: 'Invalid password' }), {
       status: 401,
       headers: headers
     });
