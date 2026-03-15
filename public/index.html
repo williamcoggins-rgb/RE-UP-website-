@@ -567,24 +567,50 @@
           return;
         }
 
-        // Store in localStorage under reup_waitlist
-        var entry = { name: name, email: email, phone: phone, zip: zip, date: new Date().toISOString() };
-        var list = [];
-        try { list = JSON.parse(localStorage.getItem('reup_waitlist')) || []; } catch (ex) { list = []; }
-        var exists = false;
-        for (var i = 0; i < list.length; i++) {
-          if ((list[i].email || list[i]) === email) { exists = true; break; }
-        }
-        if (!exists) {
-          list.push(entry);
-          localStorage.setItem('reup_waitlist', JSON.stringify(list));
-        }
+        // Submit to API
+        var submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
 
-        // Show confirmation
-        form.style.display = 'none';
-        msgEl.innerHTML = escapeHtml("You\u2019re on the list. We\u2019ll notify you when subscriptions go live.");
-        msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--ok';
-        msgEl.style.display = '';
+        fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, email: email, phone: phone, zip: zip })
+        })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          if (result.ok && result.data.success) {
+            // Also store in localStorage
+            var entry = { name: name, email: email, phone: phone, zip: zip, date: new Date().toISOString() };
+            var list = [];
+            try { list = JSON.parse(localStorage.getItem('reup_waitlist')) || []; } catch (ex) { list = []; }
+            var exists = false;
+            for (var i = 0; i < list.length; i++) {
+              if ((list[i].email || list[i]) === email) { exists = true; break; }
+            }
+            if (!exists) {
+              list.push(entry);
+              localStorage.setItem('reup_waitlist', JSON.stringify(list));
+            }
+            form.style.display = 'none';
+            msgEl.innerHTML = escapeHtml("You\u2019re on the list. We\u2019ll notify you when subscriptions go live.");
+            msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--ok';
+            msgEl.style.display = '';
+          } else {
+            msgEl.textContent = result.data.error || 'Something went wrong. Please try again.';
+            msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
+            msgEl.style.display = '';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'See Where You Rank';
+          }
+        })
+        .catch(function () {
+          msgEl.textContent = 'Network error. Please try again.';
+          msgEl.className = 'hero-waitlist-msg hero-waitlist-msg--err';
+          msgEl.style.display = '';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'See Where You Rank';
+        });
       });
     }
 
