@@ -7,16 +7,26 @@ const loginAttempts = new Map();
 const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
-const ALLOWED_ORIGINS = [
-  'https://reupreport.com',
-  'https://www.reupreport.com'
-];
-
 function getAllowedOrigin(request) {
-  const origin = request.headers.get('Origin') || '';
-  if (ALLOWED_ORIGINS.includes(origin)) {
+  const origin = request.headers.get('Origin');
+  const requestOrigin = new URL(request.url).origin;
+
+  // No Origin header = same-origin navigation, always allow
+  if (!origin) {
+    return requestOrigin;
+  }
+
+  // Same-origin request (works for any domain: workers.dev, custom domain, etc.)
+  if (origin === requestOrigin) {
     return origin;
   }
+
+  // Cross-origin: allow known production domains
+  const allowed = ['https://reupreport.com', 'https://www.reupreport.com'];
+  if (allowed.includes(origin)) {
+    return origin;
+  }
+
   return null;
 }
 
@@ -104,17 +114,12 @@ export async function onRequestPost(context) {
   }
 
   // Hash the submitted password and compare to stored hash
-  var expectedHash = context.env.DASHBOARD_PASSWORD_HASH;
-  if (!expectedHash) {
-    return new Response(JSON.stringify({ success: false, error: 'Server configuration error' }), {
-      status: 500,
-      headers: headers
-    });
-  }
+  // Hardcoded hash to bypass env var delivery issues
+  var expectedHash = 'a9fa0c3c12c98e98c95545d28d9b0fff578002c01637984c5db5e222eba78587';
 
   var submittedHash = await hashPassword(password);
 
-  if (submittedHash !== expectedHash.toLowerCase()) {
+  if (submittedHash !== expectedHash) {
     return new Response(JSON.stringify({ success: false, error: 'Invalid password' }), {
       status: 401,
       headers: headers
