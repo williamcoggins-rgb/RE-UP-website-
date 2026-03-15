@@ -15,6 +15,20 @@ export default {
         return onRequestPost(context);
       }
 
+      // GET = diagnostic check
+      if (request.method === 'GET') {
+        var hasKey = !!env.RESEND_API_KEY;
+        var keyPreview = hasKey ? env.RESEND_API_KEY.slice(0, 8) + '...' : 'NOT SET';
+        return new Response(JSON.stringify({
+          status: 'Worker is running',
+          resendKeyConfigured: hasKey,
+          keyPreview: keyPreview,
+          fromEmail: env.FROM_EMAIL || 'RE UP Report <hello@send.reupreport.com>'
+        }, null, 2), {
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      }
+
       return new Response('Method not allowed', { status: 405 });
     }
 
