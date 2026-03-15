@@ -23,7 +23,7 @@ export default {
           status: 'Worker is running',
           resendKeyConfigured: hasKey,
           keyPreview: keyPreview,
-          fromEmail: env.FROM_EMAIL || 'RE UP Report <hello@send.reupreport.com>'
+          fromEmail: env.FROM_EMAIL || 'RE UP Report <hello@reupreport.com>'
         }, null, 2), {
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });

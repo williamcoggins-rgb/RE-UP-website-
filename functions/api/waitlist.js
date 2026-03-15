@@ -21,7 +21,7 @@ export async function onRequestPost(context) {
 
   // Send welcome email via Resend
   var apiKey = context.env.RESEND_API_KEY;
-  var fromEmail = context.env.FROM_EMAIL || 'RE UP Report <hello@send.reupreport.com>';
+  var fromEmail = context.env.FROM_EMAIL || 'RE UP Report <hello@reupreport.com>';
   var emailSent = false;
   var emailError = null;
 
