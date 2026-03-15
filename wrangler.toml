@@ -6,7 +6,4 @@ compatibility_date = "2024-09-23"
 directory = "./public"
 
 [vars]
-# DASHBOARD_PASSWORD_HASH must be set as a secret via:
-#   npx wrangler secret put DASHBOARD_PASSWORD_HASH
-# Value should be the SHA-256 hex hash of your admin password.
-# Generate it with: echo -n "yourpassword" | sha256sum
+DASHBOARD_PASSWORD_HASH = "a9fa0c3c12c98e98c95545d28d9b0fff578002c01637984c5db5e222eba78587"
