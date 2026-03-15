@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — RE UP Report</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .admin-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--black);
+      padding: 20px;
+    }
+    .admin-card {
+      background: var(--black-card);
+      border: 1px solid var(--gray-800);
+      border-radius: 8px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+    }
+    .admin-card h1 {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .admin-card .admin-subtitle {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-bottom: 28px;
+    }
+    .admin-card label {
+      display: block;
+      font-size: 12px;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .admin-card input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--black);
+      border: 1px solid var(--gray-700);
+      border-radius: 4px;
+      color: var(--white);
+      font-size: 14px;
+      font-family: var(--font-mono);
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .admin-card input[type="password"]:focus {
+      border-color: var(--accent);
+    }
+    .admin-card .admin-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 10px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .admin-card .admin-btn:hover {
+      background: var(--accent-hover);
+    }
+    .admin-card .admin-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .admin-msg {
+      margin-top: 12px;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+    .admin-msg--err {
+      color: var(--accent);
+    }
+    .admin-msg--ok {
+      color: #22c55e;
+    }
+    .admin-back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .admin-back:hover {
+      color: var(--white);
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-page">
+    <div class="admin-card">
+      <h1>Admin Login</h1>
+      <p class="admin-subtitle">RE UP Report Dashboard Access</p>
+      <form id="admin-login-form">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" name="password" placeholder="Enter admin password" required autocomplete="current-password">
+        <button type="submit" class="admin-btn" id="admin-submit">Sign In</button>
+      </form>
+      <p class="admin-msg" id="admin-msg"></p>
+      <a href="../index.html" class="admin-back">&larr; Back to site</a>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // If already authenticated, redirect to dashboard
+    if (window.RE_UP_AUTH) {
+      RE_UP_AUTH.isAuthenticated().then(function (authed) {
+        if (authed) window.location.href = 'dashboard.html';
+      });
+    }
+
+    var form = document.getElementById('admin-login-form');
+    var passwordInput = document.getElementById('admin-password');
+    var submitBtn = document.getElementById('admin-submit');
+    var msgEl = document.getElementById('admin-msg');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var password = passwordInput.value.trim();
+      if (!password) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+      msgEl.style.display = 'none';
+
+      RE_UP_AUTH.login(password).then(function (result) {
+        if (result.success) {
+          msgEl.textContent = 'Authenticated. Redirecting...';
+          msgEl.className = 'admin-msg admin-msg--ok';
+          msgEl.style.display = '';
+          setTimeout(function () {
+            window.location.href = 'dashboard.html';
+          }, 500);
+        } else {
+          msgEl.textContent = result.error || 'Invalid password.';
+          msgEl.className = 'admin-msg admin-msg--err';
+          msgEl.style.display = '';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
