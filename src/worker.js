@@ -8,6 +8,11 @@ function getAllowedOrigin(request) {
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
     return origin;
   }
+  // Allow same-origin requests (workers.dev, custom domains, etc.)
+  var requestUrl = new URL(request.url);
+  if (origin && origin === requestUrl.origin) {
+    return origin;
+  }
   return null;
 }
 

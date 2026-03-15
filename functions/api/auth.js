@@ -14,8 +14,18 @@ const ALLOWED_ORIGINS = [
 
 function getAllowedOrigin(request) {
   const origin = request.headers.get('Origin') || '';
+  // Allow known origins
   if (ALLOWED_ORIGINS.includes(origin)) {
     return origin;
+  }
+  // Allow same-origin requests (workers.dev, custom domains, etc.)
+  const requestUrl = new URL(request.url);
+  if (origin === requestUrl.origin) {
+    return origin;
+  }
+  // Allow requests with no Origin header (same-origin navigations)
+  if (!origin) {
+    return requestUrl.origin;
   }
   return null;
 }
