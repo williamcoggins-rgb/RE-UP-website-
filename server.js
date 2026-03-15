@@ -6,7 +6,7 @@ var { Resend } = require('resend');
 
 // --- Email ---
 var resend = new Resend(process.env.RESEND_API_KEY || '');
-var FROM_EMAIL = process.env.FROM_EMAIL || 'RE UP Report <onboarding@resend.dev>';
+var FROM_EMAIL = process.env.FROM_EMAIL || 'RE UP Report <hello@send.reupreport.com>';
 
 var app = express();
 var PORT = process.env.PORT || 3000;
