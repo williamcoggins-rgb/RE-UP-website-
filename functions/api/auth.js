@@ -123,9 +123,20 @@ export async function onRequestPost(context) {
   }
 
   var submittedHash = await hashPassword(password);
+  var cleanExpected = expectedHash.trim().toLowerCase();
 
-  if (submittedHash !== expectedHash.toLowerCase()) {
-    return new Response(JSON.stringify({ success: false, error: 'Invalid password' }), {
+  if (submittedHash !== cleanExpected) {
+    // Include hash lengths to help debug mismatches
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'Invalid password',
+      debug: {
+        submittedLen: submittedHash.length,
+        expectedLen: cleanExpected.length,
+        submittedPrefix: submittedHash.substring(0, 8),
+        expectedPrefix: cleanExpected.substring(0, 8)
+      }
+    }), {
       status: 401,
       headers: headers
     });
