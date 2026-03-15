@@ -354,8 +354,20 @@ h1, h2, h3 {
   align-items: center;
   padding-top: 56px;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(229, 9, 20, 0.04) 0%, transparent 60%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      rgba(255, 255, 255, 0.01) 2px,
+      transparent 4px
+    ),
+    radial-gradient(ellipse at 20% 50%, rgba(229, 9, 20, 0.08) 0%, transparent 60%),
     linear-gradient(180deg, var(--black) 0%, var(--black-soft) 100%);
+  background-size:
+    24px 24px,
+    auto,
+    auto,
+    auto;
 }
 
 .hero-report-inner {
@@ -388,6 +400,7 @@ h1, h2, h3 {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 24px;
+  animation: heroFadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
 }
 
 .badge-dot {
@@ -403,6 +416,40 @@ h1, h2, h3 {
   50% { opacity: 0.7; box-shadow: 0 0 0 6px transparent; }
 }
 
+/* Hero entrance animations */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes heroFadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .hero-report-title {
   font-family: var(--font-display);
   font-size: clamp(36px, 5vw, 64px);
@@ -411,6 +458,7 @@ h1, h2, h3 {
   line-height: 1.05;
   letter-spacing: -0.03em;
   margin-bottom: 20px;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
 
 .hero-report-subtitle {
@@ -419,6 +467,7 @@ h1, h2, h3 {
   line-height: 1.6;
   max-width: 520px;
   margin-bottom: 40px;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 }
 
 /* Hero stats row */
@@ -429,6 +478,7 @@ h1, h2, h3 {
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: 40px;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
 }
 
 .hero-stat {
@@ -467,11 +517,13 @@ h1, h2, h3 {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
 }
 
 /* Hero & CTA Waitlist Forms */
 .hero-waitlist {
   margin-top: 32px;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
 }
 
 .hero-waitlist-label {
@@ -577,6 +629,7 @@ h1, h2, h3 {
 .hero-report-ticker {
   flex-shrink: 0;
   width: 380px;
+  animation: heroFadeInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
 }
 
 .ticker-card {
