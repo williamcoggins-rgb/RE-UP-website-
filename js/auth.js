@@ -2,7 +2,7 @@
    RE UP Report — Shared Authentication Utility
    js/auth.js
 
-   Provides window.RE_UP_AUTH for server-side token authentication.
+   Provides window.RE_UP_AUTH for JWT-based authentication.
    Must be loaded BEFORE page-specific scripts (dashboard.js, article.js).
    ============================================================ */
 
@@ -29,12 +29,12 @@
     catch (e) { /* localStorage unavailable */ }
   }
 
-  /** POST password to server, receive session token on success. */
-  function login(password) {
+  /** POST credentials to server, receive JWT on success. */
+  function login(email, password) {
     return fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: password })
+      body: JSON.stringify({ email: email, password: password })
     })
     .then(function (res) { return res.json(); })
     .then(function (data) {
@@ -67,19 +67,13 @@
     });
   }
 
-  /** Invalidate token server-side and clear local storage. */
+  /** Clear local token (JWT is stateless — no server invalidation needed). */
   function logout() {
-    var token = getToken();
-    var headers = { 'Content-Type': 'application/json' };
-    if (token) {
-      headers['Authorization'] = 'Bearer ' + token;
-    }
+    clearToken();
     return fetch('/api/auth/logout', {
       method: 'POST',
-      headers: headers
-    })
-    .then(function () { clearToken(); })
-    .catch(function () { clearToken(); });
+      headers: { 'Content-Type': 'application/json' }
+    }).catch(function () { /* ignore network errors on logout */ });
   }
 
   /** Convenience — resolves to boolean. */
@@ -87,11 +81,24 @@
     return verify().then(function (data) { return data.valid; });
   }
 
+  /** Get authorization header for API calls. */
+  function authHeaders() {
+    var token = getToken();
+    var headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = 'Bearer ' + token;
+    }
+    return headers;
+  }
+
   window.RE_UP_AUTH = {
     login: login,
     verify: verify,
     logout: logout,
     getToken: getToken,
-    isAuthenticated: isAuthenticated
+    setToken: setToken,
+    clearToken: clearToken,
+    isAuthenticated: isAuthenticated,
+    authHeaders: authHeaders
   };
 })();
