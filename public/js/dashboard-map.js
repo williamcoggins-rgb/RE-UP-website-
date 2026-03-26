@@ -492,23 +492,33 @@
       return;
     }
 
-    // Try to load via a script tag — the key comes from the server
-    // We load it dynamically so the page doesn't break without a key
-    var script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?callback=__reupMapInit&libraries=places';
-    script.async = true;
-    script.defer = true;
-    script.onerror = function () {
-      // API key not set or load failed — show fallback
-      initMap();
-    };
-
-    // Global callback
+    // Global callback must exist before the script tag runs
     window.__reupMapInit = function () {
       initMap();
     };
 
-    document.head.appendChild(script);
+    // Fetch the key from the server, then inject the Maps script with it
+    fetch('/api/maps-key')
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        var key = data.key || '';
+        var script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js' +
+          '?key=' + encodeURIComponent(key) +
+          '&callback=__reupMapInit' +
+          '&libraries=places';
+        script.async = true;
+        script.defer = true;
+        script.onerror = function () {
+          // Key invalid or network failure — show static fallback
+          initMap();
+        };
+        document.head.appendChild(script);
+      })
+      .catch(function () {
+        // Endpoint unavailable — show fallback without crashing
+        initMap();
+      });
   }
 
   // ── Expose for dashboard.js init ────────────────────────────

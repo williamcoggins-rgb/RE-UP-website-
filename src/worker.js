@@ -28,6 +28,36 @@ export default {
       return new Response('Method not allowed', { status: 405 });
     }
 
+    // Handle /api/maps-key — returns Maps JS API key for client-side map loader
+    if (url.pathname === '/api/maps-key') {
+      if (request.method === 'OPTIONS') {
+        var mapsOrigin = getAllowedOrigin(request);
+        return new Response(null, {
+          status: 204,
+          headers: {
+            'Access-Control-Allow-Origin': mapsOrigin || '',
+            'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Vary': 'Origin'
+          }
+        });
+      }
+      if (request.method === 'GET') {
+        var keyOrigin = getAllowedOrigin(request);
+        var mapsKey = env.GOOGLE_PLACES_API_KEY || '';
+        return new Response(JSON.stringify({ key: mapsKey }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': keyOrigin || '',
+            'Vary': 'Origin',
+            'Cache-Control': 'no-store'
+          }
+        });
+      }
+      return new Response('Method not allowed', { status: 405 });
+    }
+
     // Handle /api/places/*
     if (url.pathname.startsWith('/api/places')) {
       return handlePlaces(request, env);
