@@ -4,10 +4,11 @@
 
    Handles:
    1. Google Maps interactive map with shop pins
-   2. "Refresh Live Data" button — pulls from /api/places/*
-   3. Shop detail sidebar (hours, reviews, photos)
-   4. Shop directory panel with search/filter
-   5. Auto-merge Google Places data with static data
+   2. Auto-loads ALL Charlotte barbershops from Google Places
+   3. DB shops = colored pins (Premium/Mid-tier/Value)
+   4. Google-only shops = gray secondary pins
+   5. Shop detail sidebar (hours, reviews, photos)
+   6. Shop directory panel with search/filter
    ============================================================ */
 
 (function () {
@@ -18,20 +19,21 @@
   var markers = [];
   var infoWindow = null;
   var activeTierFilter = 'all';
-  var liveShops = [];       // Shops fetched from Google Places
+  var liveShops = [];
   var isMapReady = false;
-  var allShopsRegistry = []; // Unified registry of all shops (static + live merged)
+  var allShopsRegistry = [];
   var directorySearchTerm = '';
+  var googleShopsLoaded = false;
 
   // Charlotte center
   var CLT_CENTER = { lat: 35.2271, lng: -80.8431 };
 
-  // Tier colors for map pins
+  // Tier colors — DB shops get brand colors, Google gets gray
   var TIER_COLORS = {
     'Premium':  '#e50914',
     'Mid-tier': '#f59e0b',
     'Value':    '#22c55e',
-    'live':     '#3b82f6'
+    'google':   '#888888'
   };
 
   // ── Map Initialization ──────────────────────────────────────
@@ -40,15 +42,12 @@
     var canvas = document.getElementById('map-canvas');
     if (!canvas) return;
 
-    // Check if Google Maps is loaded
     if (typeof google === 'undefined' || !google.maps) {
-      // Show fallback — map loads async, may not be available
       canvas.innerHTML =
         '<div class="map-fallback">' +
           '<p class="map-fallback-title">Interactive Map</p>' +
           '<p class="map-fallback-desc">Configure your Google Maps API key to enable the interactive map.<br>' +
           'Shops are plotted from your competitor data + live Google Places lookups.</p>' +
-          '<p class="map-fallback-hint">Add your key to wrangler.toml &rarr; GOOGLE_PLACES_API_KEY</p>' +
         '</div>';
       return;
     }
@@ -65,17 +64,18 @@
     infoWindow = new google.maps.InfoWindow();
     isMapReady = true;
 
-    // Build shop registry for directory panel
+    // Build registry from DB data
     buildStaticRegistry();
 
-    // Plot static competitor data
+    // Plot DB shops first (colored pins)
     plotStaticShops();
 
-    // Set up filter buttons
+    // Set up UI
     setupMapFilters();
-
-    // Set up directory panel
     setupDirectory();
+
+    // Auto-load Google Places data
+    loadCharlotteShops();
 
     // Set up sidebar close
     var closeBtn = document.getElementById('map-sidebar-close');
@@ -87,7 +87,49 @@
     }
   }
 
-  // ── Plot Static Shops ───────────────────────────────────────
+  // ── Auto-Load Charlotte Shops from Backend ────────────────
+
+  function loadCharlotteShops() {
+    var status = document.getElementById('live-status');
+    if (status) {
+      status.textContent = 'Loading Charlotte barbershops...';
+      status.className = 'live-status live-status--loading';
+    }
+
+    fetch('/api/places/charlotte-shops')
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        if (data.status !== 'OK' || !data.results) {
+          if (status) {
+            status.textContent = 'Could not load Google Places data';
+            status.className = 'live-status live-status--error';
+          }
+          return;
+        }
+
+        liveShops = data.results;
+        googleShopsLoaded = true;
+
+        // Plot as gray secondary pins
+        plotGoogleShops(data.results);
+
+        // Merge into competitor table
+        mergeWithCompetitorTable(data.results);
+
+        if (status) {
+          status.textContent = data.total + ' shops from Google Places' + (data.cached !== false ? ' (cached)' : '');
+          status.className = 'live-status live-status--success';
+        }
+      })
+      .catch(function (err) {
+        if (status) {
+          status.textContent = 'Error loading shops: ' + err.message;
+          status.className = 'live-status live-status--error';
+        }
+      });
+  }
+
+  // ── Plot Static (DB) Shops ────────────────────────────────
 
   function plotStaticShops() {
     if (!map || !window.RE_UP_MARKET) return;
@@ -99,7 +141,6 @@
       var coords = places ? places.getZipCoords(shop.zip) : null;
       if (!coords) return;
 
-      // Jitter slightly so pins in same zip don't stack perfectly
       var lat = coords.lat + (Math.random() - 0.5) * 0.008;
       var lng = coords.lng + (Math.random() - 0.5) * 0.008;
 
@@ -114,19 +155,27 @@
         zip: shop.zip,
         neighborhood: shop.neighborhood,
         source: 'static',
-        placeId: null
+        placeId: null,
+        totalRatings: null,
+        priceLevel: null,
+        openNow: null,
+        address: null
       });
     });
   }
 
-  // ── Plot Live Shops ─────────────────────────────────────────
+  // ── Plot Google Places Shops (Gray Secondary Pins) ────────
 
-  function plotLiveShops(shops) {
+  function plotGoogleShops(shops) {
     shops.forEach(function (shop) {
-      // Check for duplicates by name (fuzzy)
+      // Skip if we already have a DB marker with a matching name
       var isDuplicate = markers.some(function (m) {
-        return m._shopData && m._shopData.name &&
-          m._shopData.name.toLowerCase() === shop.name.toLowerCase();
+        if (!m._shopData || !m._shopData.name) return false;
+        var dbName = m._shopData.name.toLowerCase().trim();
+        var googleName = shop.name.toLowerCase().trim();
+        return dbName === googleName ||
+          dbName.indexOf(googleName) !== -1 ||
+          googleName.indexOf(dbName) !== -1;
       });
       if (isDuplicate) return;
 
@@ -134,26 +183,32 @@
         lat: shop.lat,
         lng: shop.lng,
         name: shop.name,
-        tier: 'live',
+        tier: 'google',
         rating: shop.rating,
         avgCut: null,
         model: null,
         zip: null,
         neighborhood: shop.address,
         source: 'google',
-        placeId: shop.place_id
+        placeId: shop.place_id,
+        totalRatings: shop.total_ratings,
+        priceLevel: shop.price_level,
+        openNow: shop.open_now,
+        address: shop.address
       });
     });
 
     // Add to registry and refresh directory
     shops.forEach(function(shop) {
       var isDup = allShopsRegistry.some(function(s) {
-        return s.name.toLowerCase() === shop.name.toLowerCase();
+        var a = s.name.toLowerCase().trim();
+        var b = shop.name.toLowerCase().trim();
+        return a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1;
       });
       if (!isDup) {
         allShopsRegistry.push({
           name: shop.name,
-          tier: 'live',
+          tier: 'google',
           rating: shop.rating,
           zip: null,
           neighborhood: shop.address,
@@ -174,7 +229,8 @@
   function addMarker(data) {
     if (!map) return;
 
-    var color = TIER_COLORS[data.tier] || TIER_COLORS['Mid-tier'];
+    var color = TIER_COLORS[data.tier] || TIER_COLORS['google'];
+    var isGoogle = data.source === 'google';
 
     var marker = new google.maps.Marker({
       position: { lat: data.lat, lng: data.lng },
@@ -183,11 +239,12 @@
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         fillColor: color,
-        fillOpacity: 0.9,
-        strokeColor: '#ffffff',
-        strokeWeight: 1.5,
-        scale: 8
-      }
+        fillOpacity: isGoogle ? 0.6 : 0.9,
+        strokeColor: isGoogle ? '#aaaaaa' : '#ffffff',
+        strokeWeight: isGoogle ? 1 : 1.5,
+        scale: isGoogle ? 6 : 8
+      },
+      zIndex: isGoogle ? 1 : 10  // DB pins always on top
     });
 
     marker._shopData = data;
@@ -204,15 +261,36 @@
   function showShopInfo(marker) {
     var data = marker._shopData;
 
-    // Brief info window on map — dark styled
+    // Dark-styled InfoWindow
     var ratingStr = data.rating && data.rating !== '---' ? data.rating + ' stars' : 'No rating';
-    var priceStr = data.avgCut && data.avgCut !== '---' ? '$' + data.avgCut : '';
+    var extras = '';
+
+    if (data.source === 'google') {
+      // Google pin — show what Google provides
+      if (data.priceLevel != null) {
+        var dollars = '';
+        for (var i = 0; i < data.priceLevel; i++) dollars += '$';
+        extras += ' <span style="color:#e50914;">&middot;</span> ' + dollars;
+      }
+      if (data.totalRatings) {
+        extras += ' <span style="color:#666;">(' + data.totalRatings + ')</span>';
+      }
+    } else {
+      // DB pin — show avg cut
+      if (data.avgCut && data.avgCut !== '---') {
+        extras += ' <span style="color:#e50914;">&middot;</span> $' + escapeHtml(String(data.avgCut));
+      }
+    }
+
+    var sourceLabel = data.source === 'google'
+      ? '<div style="font-size:10px;color:#888;margin-top:3px;">Google Places</div>'
+      : '<div style="font-size:10px;color:#e50914;margin-top:3px;">RE UP Database</div>';
 
     infoWindow.setContent(
       '<div style="background:#1a1a1a;color:#f0f0f0;font-family:sans-serif;padding:10px 12px;border-radius:6px;">' +
         '<strong style="color:#fff;font-size:13px;">' + escapeHtml(data.name) + '</strong><br>' +
-        '<span style="font-size:12px;color:#999;">' + escapeHtml(ratingStr) +
-        (priceStr ? ' <span style="color:#e50914;">&middot;</span> ' + escapeHtml(priceStr) : '') + '</span>' +
+        '<span style="font-size:12px;color:#999;">' + escapeHtml(ratingStr) + extras + '</span>' +
+        sourceLabel +
       '</div>'
     );
     infoWindow.open(map, marker);
@@ -230,9 +308,17 @@
 
     sidebar.classList.add('map-sidebar--open');
 
-    var sourceTag = data.source === 'google'
-      ? '<span class="map-source-tag map-source-tag--live">Live Google Data</span>'
-      : '<span class="map-source-tag map-source-tag--static">RE UP Database</span>';
+    if (data.source === 'google') {
+      // Google Places sidebar
+      renderGoogleSidebar(content, data);
+    } else {
+      // DB sidebar — full enriched data
+      renderDbSidebar(content, data);
+    }
+  }
+
+  function renderDbSidebar(content, data) {
+    var sourceTag = '<span class="map-source-tag map-source-tag--static">RE UP Database</span>';
 
     var ratingHtml = '';
     if (data.rating && data.rating !== '---') {
@@ -256,12 +342,53 @@
     if (data.avgCut && data.avgCut !== '---') {
       detailsHtml += '<div class="map-detail-row"><span class="map-detail-label">Avg Cut</span><span>$' + escapeHtml(String(data.avgCut)) + '</span></div>';
     }
+    if (data.tier) {
+      detailsHtml += '<div class="map-detail-row"><span class="map-detail-label">Tier</span><span>' + escapeHtml(data.tier) + '</span></div>';
+    }
     if (data.model) {
       detailsHtml += '<div class="map-detail-row"><span class="map-detail-label">Model</span><span>' + escapeHtml(data.model) + '</span></div>';
     }
     detailsHtml += '</div>';
 
-    // If this is a Google place, offer to load full details
+    content.innerHTML = detailsHtml;
+  }
+
+  function renderGoogleSidebar(content, data) {
+    var sourceTag = '<span class="map-source-tag map-source-tag--live">Google Places</span>';
+
+    var ratingHtml = '';
+    if (data.rating) {
+      ratingHtml = '<div class="map-detail-rating">' + escapeHtml(String(data.rating)) + ' <span class="map-stars">&#9733;</span>';
+      if (data.totalRatings) {
+        ratingHtml += ' <span style="font-size:0.75rem;color:#6b7280;">(' + data.totalRatings + ' reviews)</span>';
+      }
+      ratingHtml += '</div>';
+    }
+
+    var detailsHtml =
+      '<div class="map-shop-header">' +
+        '<h4 class="map-shop-name">' + escapeHtml(data.name) + '</h4>' +
+        sourceTag +
+      '</div>' +
+      ratingHtml +
+      '<div class="map-detail-meta">';
+
+    if (data.address) {
+      detailsHtml += '<div class="map-detail-row"><span class="map-detail-label">Address</span><span>' + escapeHtml(data.address) + '</span></div>';
+    }
+    if (data.priceLevel != null) {
+      var dollars = '';
+      for (var i = 0; i < data.priceLevel; i++) dollars += '$';
+      detailsHtml += '<div class="map-detail-row"><span class="map-detail-label">Price Level</span><span>' + dollars + '</span></div>';
+    }
+    if (data.openNow != null) {
+      detailsHtml += '<div class="map-detail-row"><span class="map-detail-label">Status</span><span>' +
+        '<span class="map-open-badge map-open-badge--' + (data.openNow ? 'open' : 'closed') + '">' +
+        (data.openNow ? 'Open Now' : 'Closed') + '</span></span></div>';
+    }
+    detailsHtml += '</div>';
+
+    // Load full details button
     if (data.placeId && window.RE_UP_PLACES) {
       detailsHtml += '<div id="map-place-details" class="map-place-details">' +
         '<button class="btn btn-sm btn-outline" id="load-place-details">Load Hours, Reviews & Photos</button>' +
@@ -270,7 +397,7 @@
 
     content.innerHTML = detailsHtml;
 
-    // Wire up the load details button
+    // Wire up load details
     var loadBtn = document.getElementById('load-place-details');
     if (loadBtn && data.placeId) {
       loadBtn.addEventListener('click', function () {
@@ -382,74 +509,39 @@
     });
   }
 
-  // ── Refresh Live Data ───────────────────────────────────────
+  // ── Refresh Button (manual re-fetch) ──────────────────────
 
   function setupRefreshButton() {
     var btn = document.getElementById('refresh-live-data');
-    var status = document.getElementById('live-status');
-    var icon = document.getElementById('refresh-icon');
     if (!btn) return;
 
     btn.addEventListener('click', function () {
-      if (!window.RE_UP_PLACES) {
-        if (status) status.textContent = 'Google Places not configured';
-        return;
-      }
-
+      var icon = document.getElementById('refresh-icon');
       btn.disabled = true;
       if (icon) icon.classList.add('spinning');
-      if (status) {
-        status.textContent = 'Fetching live data...';
-        status.className = 'live-status live-status--loading';
-      }
 
-      // Search across key Charlotte zips
-      var targetZips = ['28202', '28203', '28205', '28206', '28208', '28209',
-                        '28211', '28213', '28215', '28216', '28262', '28269', '28273'];
-
-      var searches = targetZips.map(function (zip) {
-        return window.RE_UP_PLACES.searchBarbersByZip(zip).catch(function () {
-          return { results: [] };
-        });
+      // Clear Google markers and re-fetch
+      markers = markers.filter(function(m) {
+        if (m._shopData && m._shopData.source === 'google') {
+          m.setMap(null);
+          return false;
+        }
+        return true;
       });
 
-      Promise.all(searches).then(function (results) {
-        var allShops = [];
-        var seen = {};
-
-        results.forEach(function (res) {
-          (res.results || []).forEach(function (shop) {
-            if (!seen[shop.place_id]) {
-              seen[shop.place_id] = true;
-              allShops.push(shop);
-            }
-          });
-        });
-
-        liveShops = allShops;
-
-        // Merge into competitor table
-        mergeWithCompetitorTable(allShops);
-
-        // Plot on map
-        if (isMapReady) {
-          plotLiveShops(allShops);
-        }
-
-        btn.disabled = false;
-        if (icon) icon.classList.remove('spinning');
-        if (status) {
-          status.textContent = allShops.length + ' shops found via Google Places';
-          status.className = 'live-status live-status--success';
-        }
-      }).catch(function (err) {
-        btn.disabled = false;
-        if (icon) icon.classList.remove('spinning');
-        if (status) {
-          status.textContent = 'Error: ' + err.message;
-          status.className = 'live-status live-status--error';
-        }
+      // Remove google entries from registry
+      allShopsRegistry = allShopsRegistry.filter(function(s) {
+        return s.source !== 'google';
       });
+
+      googleShopsLoaded = false;
+      loadCharlotteShops();
+
+      // Re-enable button after a delay
+      setTimeout(function() {
+        btn.disabled = false;
+        if (icon) icon.classList.remove('spinning');
+      }, 3000);
     });
   }
 
@@ -461,18 +553,15 @@
 
     var competitors = (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) || [];
 
-    // Build a lookup of live results by normalized name
     var liveByName = {};
     liveResults.forEach(function (shop) {
       liveByName[shop.name.toLowerCase().trim()] = shop;
     });
 
-    // Enrich existing static rows with Google data
     competitors.forEach(function (comp) {
       var normalName = comp.name.toLowerCase().trim();
       var match = liveByName[normalName];
       if (!match) {
-        // Try fuzzy: check if any live name contains the static name or vice versa
         Object.keys(liveByName).forEach(function(liveName) {
           if (!match && (liveName.indexOf(normalName) !== -1 || normalName.indexOf(liveName) !== -1)) {
             match = liveByName[liveName];
@@ -480,7 +569,6 @@
         });
       }
       if (match) {
-        // Store merged Google data on the competitor object (static takes priority)
         comp._googleData = {
           place_id: match.place_id,
           rating: match.rating,
@@ -489,25 +577,20 @@
           lng: match.lng
         };
         comp._enriched = true;
-
-        // If static rating is missing, use Google's
         if ((!comp.rating || comp.rating === '---') && match.rating) {
           comp.rating = match.rating;
         }
       }
     });
 
-    // Re-render existing rows with source badges
     var existingRows = tbody.querySelectorAll('tr:not(.live-data-row)');
     existingRows.forEach(function (row, idx) {
       if (idx < competitors.length) {
         var comp = competitors[idx];
         var nameCell = row.querySelector('td:first-child, td[data-label="Shop Name"]');
         if (nameCell) {
-          // Remove old badge if any
           var oldBadge = nameCell.querySelector('.source-badge');
           if (oldBadge) oldBadge.remove();
-          // Add source badge
           var badge = document.createElement('span');
           if (comp._enriched) {
             badge.className = 'source-badge source-badge--enriched';
@@ -518,8 +601,6 @@
           }
           nameCell.appendChild(badge);
         }
-
-        // Update rating cell if it was enriched
         if (comp._enriched && comp.rating && comp.rating !== '---') {
           var ratingCell = row.querySelector('td[data-label="Rating"], td:nth-child(5)');
           if (ratingCell && (ratingCell.textContent.trim() === '---' || ratingCell.textContent.trim() === '')) {
@@ -529,23 +610,19 @@
       }
     });
 
-    // Get existing names for dedup of truly new shops
     var existingNames = {};
     competitors.forEach(function (c) {
       existingNames[c.name.toLowerCase().trim()] = true;
     });
 
-    // Also check fuzzy matches
     var newRows = [];
     liveResults.forEach(function (shop) {
       var lowerName = shop.name.toLowerCase().trim();
       if (existingNames[lowerName]) return;
-      // Fuzzy check
       var isFuzzyMatch = Object.keys(existingNames).some(function(existing) {
         return existing.indexOf(lowerName) !== -1 || lowerName.indexOf(existing) !== -1;
       });
       if (isFuzzyMatch) return;
-
       existingNames[lowerName] = true;
 
       newRows.push({
@@ -560,13 +637,12 @@
       });
     });
 
-    // Append truly new rows
     newRows.forEach(function (c) {
       var tr = document.createElement('tr');
       tr.className = 'live-data-row';
       var ratingStr = (c.rating && c.rating !== '---') ? Number(c.rating).toFixed(1) : '---';
       tr.innerHTML =
-        '<td data-label="Shop Name">' + escapeHtml(c.name) + ' <span class="source-badge source-badge--live">GOOGLE LIVE</span></td>' +
+        '<td data-label="Shop Name">' + escapeHtml(c.name) + ' <span class="source-badge source-badge--live">GOOGLE</span></td>' +
         '<td data-label="Neighborhood">' + escapeHtml(c.neighborhood) + '</td>' +
         '<td class="cell-mono" data-label="Zip">' + escapeHtml(c.zip) + '</td>' +
         '<td class="cell-price" data-label="Avg Cut">' + escapeHtml(c.avgCut) + '</td>' +
@@ -622,7 +698,6 @@
       return haystack.indexOf(directorySearchTerm) !== -1;
     });
 
-    // Also filter by active tier
     if (activeTierFilter !== 'all') {
       filtered = filtered.filter(function(shop) {
         return shop.tier === activeTierFilter;
@@ -638,7 +713,7 @@
       var ratingStr = (shop.rating && shop.rating !== '---') ? shop.rating + ' \u2605' : '';
       var sourceClass = shop.source === 'google' ? 'directory-item--live' : '';
       var sourceBadge = shop.source === 'google'
-        ? '<span class="directory-source directory-source--live">LIVE</span>'
+        ? '<span class="directory-source directory-source--live">GOOGLE</span>'
         : '<span class="directory-source directory-source--db">DB</span>';
       html += '<div class="directory-item ' + sourceClass + '" data-shop-index="' + idx + '" data-registry-name="' + escapeHtml(shop.name) + '">' +
         '<div class="directory-item-main">' +
@@ -655,7 +730,6 @@
 
     list.innerHTML = html || '<div class="directory-empty">No shops match your search.</div>';
 
-    // Click handlers for directory items
     var items = list.querySelectorAll('.directory-item');
     items.forEach(function(item) {
       item.addEventListener('click', function() {
@@ -699,18 +773,15 @@
   // ── Google Maps Loader ──────────────────────────────────────
 
   function loadGoogleMapsAPI() {
-    // Check if already loaded
     if (typeof google !== 'undefined' && google.maps) {
       initMap();
       return;
     }
 
-    // Global callback must exist before the script tag runs
     window.__reupMapInit = function () {
       initMap();
     };
 
-    // Fetch the key from the server, then inject the Maps script with it
     fetch('/api/maps-key')
       .then(function (resp) { return resp.json(); })
       .then(function (data) {
@@ -723,13 +794,11 @@
         script.async = true;
         script.defer = true;
         script.onerror = function () {
-          // Key invalid or network failure — show static fallback
           initMap();
         };
         document.head.appendChild(script);
       })
       .catch(function () {
-        // Endpoint unavailable — show fallback without crashing
         initMap();
       });
   }

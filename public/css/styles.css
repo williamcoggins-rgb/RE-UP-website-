@@ -1586,7 +1586,7 @@ h1, h2, h3 {
 .map-legend-dot--premium { background: #e50914; }
 .map-legend-dot--mid { background: #f59e0b; }
 .map-legend-dot--value { background: #22c55e; }
-.map-legend-dot--live { background: #3b82f6; }
+.map-legend-dot--google { background: #888888; }
 
 /* Map Shop Details */
 .map-shop-header {
@@ -1987,6 +1987,7 @@ h1, h2, h3 {
 .directory-item-tier--midtier { color: #f59e0b; }
 .directory-item-tier--value { color: #22c55e; }
 .directory-item-tier--live { color: #3b82f6; }
+.directory-item-tier--google { color: #888888; }
 
 .directory-empty {
   padding: 2rem 1rem;

@@ -60,7 +60,7 @@ export default {
 
     // Handle /api/places/*
     if (url.pathname.startsWith('/api/places')) {
-      return handlePlaces(request, env);
+      return handlePlaces(request, env, ctx);
     }
 
     // Handle /api/waitlist
