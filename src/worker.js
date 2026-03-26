@@ -1,5 +1,6 @@
 import { onRequestPost as waitlistPost, onRequestOptions as waitlistOptions } from '../functions/api/waitlist.js';
 import { onRequestPost as authPost, onRequestOptions as authOptions } from '../functions/api/auth.js';
+import { handlePlaces } from '../functions/api/places.js';
 
 function getAllowedOrigin(request) {
   var origin = request.headers.get('Origin');
@@ -25,6 +26,11 @@ export default {
         return authPost(context);
       }
       return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Handle /api/places/*
+    if (url.pathname.startsWith('/api/places')) {
+      return handlePlaces(request, env);
     }
 
     // Handle /api/waitlist

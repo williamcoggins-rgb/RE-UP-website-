@@ -9,3 +9,15 @@ run_worker_first = true
 
 [vars]
 DASHBOARD_PASSWORD_HASH = "a9fa0c3c12c98e98c95545d28d9b0fff578002c01637984c5db5e222eba78587"
+
+# ── Google APIs ─────────────────────────────────────────────────
+# Replace with your real key from Google Cloud Console.
+# Required APIs to enable in Google Cloud Console:
+#   1. Places API (New)         — nearby search, text search, details
+#   2. Maps JavaScript API      — interactive map on dashboard
+#   3. Geocoding API            — zip code to lat/lng conversion
+#   4. Places API (Legacy)      — autocomplete, photo proxy
+#
+# For production, use wrangler secret instead:
+#   wrangler secret put GOOGLE_PLACES_API_KEY
+GOOGLE_PLACES_API_KEY = "YOUR_GOOGLE_PLACES_API_KEY_HERE"

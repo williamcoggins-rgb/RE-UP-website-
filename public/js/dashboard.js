@@ -1313,6 +1313,11 @@ document.addEventListener("DOMContentLoaded", function () {
     makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
     makeSortable("competitor-table", COMPETITORS, renderCompetitorTable);
 
+    // Initialize map + live data refresh
+    if (window.RE_UP_MAP) {
+      window.RE_UP_MAP.init();
+    }
+
     // Show replay tour link for logged-in users
     var replayLink = document.getElementById('replayTourLink');
     if (replayLink) {

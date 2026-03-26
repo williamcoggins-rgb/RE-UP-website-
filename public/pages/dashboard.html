@@ -75,6 +75,7 @@
       <a href="#section-competitors" class="dash-nav-link">Competitors</a>
       <a href="#section-social" class="dash-nav-link">Social</a>
       <a href="#section-moves" class="dash-nav-link">Market Moves</a>
+      <a href="#section-map" class="dash-nav-link">Map</a>
       <a href="#section-density" class="dash-nav-link">Density</a>
       <a href="#section-news" class="dash-nav-link">News</a>
     </div>
@@ -223,6 +224,12 @@
       <section class="dash-section" id="section-competitors">
         <div class="dash-section-header">
           <h2 class="dash-section-title">Competitor Directory</h2>
+          <div class="dash-header-actions">
+            <button class="btn btn-sm btn-outline" id="refresh-live-data" title="Pull latest data from Google Places">
+              <span class="refresh-icon" id="refresh-icon">&#8635;</span> Refresh Live Data
+            </button>
+            <span class="live-status" id="live-status"></span>
+          </div>
           <div class="dash-search">
             <input type="text" class="dash-search-input" placeholder="Search shops, neighborhoods..." id="competitor-search">
           </div>
@@ -289,6 +296,38 @@
           <p class="dash-section-sub">Strategic moves, expansions, and partnerships across the Charlotte market</p>
         </div>
         <div class="moves-grid" id="moves-grid"></div>
+      </section>
+
+      <!-- Interactive Map -->
+      <section class="dash-section" id="section-map">
+        <div class="dash-section-header">
+          <h2 class="dash-section-title">Charlotte Barbershop Map</h2>
+          <p class="dash-section-sub">Interactive map of tracked shops — click a pin for details, ratings, and hours</p>
+          <div class="dash-filters">
+            <button class="map-filter-btn active" data-tier="all">All Shops</button>
+            <button class="map-filter-btn" data-tier="Premium">Premium</button>
+            <button class="map-filter-btn" data-tier="Mid-tier">Mid-tier</button>
+            <button class="map-filter-btn" data-tier="Value">Value</button>
+          </div>
+        </div>
+        <div id="map-container" class="map-container">
+          <div id="map-canvas" class="map-canvas"></div>
+          <div id="map-sidebar" class="map-sidebar">
+            <div class="map-sidebar-header">
+              <h3 class="map-sidebar-title">Shop Details</h3>
+              <button class="map-sidebar-close" id="map-sidebar-close">&times;</button>
+            </div>
+            <div id="map-sidebar-content" class="map-sidebar-content">
+              <p class="map-sidebar-placeholder">Click a pin on the map to see shop details, hours, reviews, and photos.</p>
+            </div>
+          </div>
+        </div>
+        <div class="map-legend">
+          <span class="map-legend-item"><span class="map-legend-dot map-legend-dot--premium"></span> Premium</span>
+          <span class="map-legend-item"><span class="map-legend-dot map-legend-dot--mid"></span> Mid-tier</span>
+          <span class="map-legend-item"><span class="map-legend-dot map-legend-dot--value"></span> Value</span>
+          <span class="map-legend-item"><span class="map-legend-dot map-legend-dot--live"></span> Live (Google)</span>
+        </div>
       </section>
 
       <!-- Shop Density Map -->
@@ -363,7 +402,9 @@
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/market-data.js"></script>
+  <script src="../js/google-places.js"></script>
   <script src="../js/dashboard.js"></script>
+  <script src="../js/dashboard-map.js"></script>
   <script src="../js/ticker.js"></script>
   <script src="../js/news.js"></script>
 
