@@ -6,6 +6,8 @@
    1. Google Maps interactive map with shop pins
    2. "Refresh Live Data" button — pulls from /api/places/*
    3. Shop detail sidebar (hours, reviews, photos)
+   4. Shop directory panel with search/filter
+   5. Auto-merge Google Places data with static data
    ============================================================ */
 
 (function () {
@@ -18,6 +20,8 @@
   var activeTierFilter = 'all';
   var liveShops = [];       // Shops fetched from Google Places
   var isMapReady = false;
+  var allShopsRegistry = []; // Unified registry of all shops (static + live merged)
+  var directorySearchTerm = '';
 
   // Charlotte center
   var CLT_CENTER = { lat: 35.2271, lng: -80.8431 };
@@ -61,11 +65,17 @@
     infoWindow = new google.maps.InfoWindow();
     isMapReady = true;
 
+    // Build shop registry for directory panel
+    buildStaticRegistry();
+
     // Plot static competitor data
     plotStaticShops();
 
     // Set up filter buttons
     setupMapFilters();
+
+    // Set up directory panel
+    setupDirectory();
 
     // Set up sidebar close
     var closeBtn = document.getElementById('map-sidebar-close');
@@ -134,6 +144,29 @@
         placeId: shop.place_id
       });
     });
+
+    // Add to registry and refresh directory
+    shops.forEach(function(shop) {
+      var isDup = allShopsRegistry.some(function(s) {
+        return s.name.toLowerCase() === shop.name.toLowerCase();
+      });
+      if (!isDup) {
+        allShopsRegistry.push({
+          name: shop.name,
+          tier: 'live',
+          rating: shop.rating,
+          zip: null,
+          neighborhood: shop.address,
+          avgCut: null,
+          model: null,
+          source: 'google',
+          placeId: shop.place_id,
+          lat: shop.lat,
+          lng: shop.lng
+        });
+      }
+    });
+    renderDirectory();
   }
 
   // ── Marker Management ───────────────────────────────────────
@@ -171,15 +204,15 @@
   function showShopInfo(marker) {
     var data = marker._shopData;
 
-    // Brief info window on map
+    // Brief info window on map — dark styled
     var ratingStr = data.rating && data.rating !== '---' ? data.rating + ' stars' : 'No rating';
     var priceStr = data.avgCut && data.avgCut !== '---' ? '$' + data.avgCut : '';
 
     infoWindow.setContent(
-      '<div style="color:#111;font-family:sans-serif;padding:4px;">' +
-        '<strong>' + escapeHtml(data.name) + '</strong><br>' +
-        '<span style="font-size:12px;color:#666;">' + escapeHtml(ratingStr) +
-        (priceStr ? ' &middot; ' + escapeHtml(priceStr) : '') + '</span>' +
+      '<div style="background:#1a1a1a;color:#f0f0f0;font-family:sans-serif;padding:10px 12px;border-radius:6px;">' +
+        '<strong style="color:#fff;font-size:13px;">' + escapeHtml(data.name) + '</strong><br>' +
+        '<span style="font-size:12px;color:#999;">' + escapeHtml(ratingStr) +
+        (priceStr ? ' <span style="color:#e50914;">&middot;</span> ' + escapeHtml(priceStr) : '') + '</span>' +
       '</div>'
     );
     infoWindow.open(map, marker);
@@ -334,6 +367,7 @@
         btn.classList.add('active');
         activeTierFilter = btn.getAttribute('data-tier');
         applyMarkerFilter();
+        renderDirectory();
       });
     });
   }
@@ -425,17 +459,94 @@
     var tbody = document.getElementById('competitor-tbody');
     if (!tbody) return;
 
-    // Get existing names for dedup
-    var existingNames = {};
     var competitors = (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) || [];
-    competitors.forEach(function (c) {
-      existingNames[c.name.toLowerCase()] = true;
+
+    // Build a lookup of live results by normalized name
+    var liveByName = {};
+    liveResults.forEach(function (shop) {
+      liveByName[shop.name.toLowerCase().trim()] = shop;
     });
 
+    // Enrich existing static rows with Google data
+    competitors.forEach(function (comp) {
+      var normalName = comp.name.toLowerCase().trim();
+      var match = liveByName[normalName];
+      if (!match) {
+        // Try fuzzy: check if any live name contains the static name or vice versa
+        Object.keys(liveByName).forEach(function(liveName) {
+          if (!match && (liveName.indexOf(normalName) !== -1 || normalName.indexOf(liveName) !== -1)) {
+            match = liveByName[liveName];
+          }
+        });
+      }
+      if (match) {
+        // Store merged Google data on the competitor object (static takes priority)
+        comp._googleData = {
+          place_id: match.place_id,
+          rating: match.rating,
+          address: match.address,
+          lat: match.lat,
+          lng: match.lng
+        };
+        comp._enriched = true;
+
+        // If static rating is missing, use Google's
+        if ((!comp.rating || comp.rating === '---') && match.rating) {
+          comp.rating = match.rating;
+        }
+      }
+    });
+
+    // Re-render existing rows with source badges
+    var existingRows = tbody.querySelectorAll('tr:not(.live-data-row)');
+    existingRows.forEach(function (row, idx) {
+      if (idx < competitors.length) {
+        var comp = competitors[idx];
+        var nameCell = row.querySelector('td:first-child, td[data-label="Shop Name"]');
+        if (nameCell) {
+          // Remove old badge if any
+          var oldBadge = nameCell.querySelector('.source-badge');
+          if (oldBadge) oldBadge.remove();
+          // Add source badge
+          var badge = document.createElement('span');
+          if (comp._enriched) {
+            badge.className = 'source-badge source-badge--enriched';
+            badge.textContent = 'DB + LIVE';
+          } else {
+            badge.className = 'source-badge source-badge--static';
+            badge.textContent = 'RE UP DB';
+          }
+          nameCell.appendChild(badge);
+        }
+
+        // Update rating cell if it was enriched
+        if (comp._enriched && comp.rating && comp.rating !== '---') {
+          var ratingCell = row.querySelector('td[data-label="Rating"], td:nth-child(5)');
+          if (ratingCell && (ratingCell.textContent.trim() === '---' || ratingCell.textContent.trim() === '')) {
+            ratingCell.textContent = Number(comp.rating).toFixed(1);
+          }
+        }
+      }
+    });
+
+    // Get existing names for dedup of truly new shops
+    var existingNames = {};
+    competitors.forEach(function (c) {
+      existingNames[c.name.toLowerCase().trim()] = true;
+    });
+
+    // Also check fuzzy matches
     var newRows = [];
     liveResults.forEach(function (shop) {
-      if (existingNames[shop.name.toLowerCase()]) return;
-      existingNames[shop.name.toLowerCase()] = true;
+      var lowerName = shop.name.toLowerCase().trim();
+      if (existingNames[lowerName]) return;
+      // Fuzzy check
+      var isFuzzyMatch = Object.keys(existingNames).some(function(existing) {
+        return existing.indexOf(lowerName) !== -1 || lowerName.indexOf(existing) !== -1;
+      });
+      if (isFuzzyMatch) return;
+
+      existingNames[lowerName] = true;
 
       newRows.push({
         name: shop.name,
@@ -449,13 +560,13 @@
       });
     });
 
-    // Append new rows
+    // Append truly new rows
     newRows.forEach(function (c) {
       var tr = document.createElement('tr');
       tr.className = 'live-data-row';
       var ratingStr = (c.rating && c.rating !== '---') ? Number(c.rating).toFixed(1) : '---';
       tr.innerHTML =
-        '<td data-label="Shop Name">' + escapeHtml(c.name) + ' <span class="live-badge">LIVE</span></td>' +
+        '<td data-label="Shop Name">' + escapeHtml(c.name) + ' <span class="source-badge source-badge--live">GOOGLE LIVE</span></td>' +
         '<td data-label="Neighborhood">' + escapeHtml(c.neighborhood) + '</td>' +
         '<td class="cell-mono" data-label="Zip">' + escapeHtml(c.zip) + '</td>' +
         '<td class="cell-price" data-label="Avg Cut">' + escapeHtml(c.avgCut) + '</td>' +
@@ -466,20 +577,122 @@
     });
   }
 
+  // ── Shop Directory ─────────────────────────────────────────
+
+  function buildStaticRegistry() {
+    if (!window.RE_UP_MARKET) return;
+    var competitors = window.RE_UP_MARKET.COMPETITORS || [];
+    competitors.forEach(function(shop) {
+      allShopsRegistry.push({
+        name: shop.name,
+        tier: shop.tier || 'Mid-tier',
+        rating: shop.rating,
+        zip: shop.zip,
+        neighborhood: shop.neighborhood,
+        avgCut: shop.avgCut,
+        model: shop.model,
+        source: 'static',
+        placeId: null,
+        lat: null,
+        lng: null
+      });
+    });
+  }
+
+  function setupDirectory() {
+    var searchInput = document.getElementById('directory-search');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function() {
+      directorySearchTerm = this.value.toLowerCase().trim();
+      renderDirectory();
+    });
+
+    renderDirectory();
+  }
+
+  function renderDirectory() {
+    var list = document.getElementById('directory-list');
+    var countEl = document.getElementById('directory-count');
+    if (!list) return;
+
+    var filtered = allShopsRegistry.filter(function(shop) {
+      if (!directorySearchTerm) return true;
+      var haystack = (shop.name + ' ' + (shop.zip || '') + ' ' + (shop.neighborhood || '')).toLowerCase();
+      return haystack.indexOf(directorySearchTerm) !== -1;
+    });
+
+    // Also filter by active tier
+    if (activeTierFilter !== 'all') {
+      filtered = filtered.filter(function(shop) {
+        return shop.tier === activeTierFilter;
+      });
+    }
+
+    if (countEl) {
+      countEl.textContent = filtered.length + ' shop' + (filtered.length !== 1 ? 's' : '');
+    }
+
+    var html = '';
+    filtered.forEach(function(shop, idx) {
+      var ratingStr = (shop.rating && shop.rating !== '---') ? shop.rating + ' \u2605' : '';
+      var sourceClass = shop.source === 'google' ? 'directory-item--live' : '';
+      var sourceBadge = shop.source === 'google'
+        ? '<span class="directory-source directory-source--live">LIVE</span>'
+        : '<span class="directory-source directory-source--db">DB</span>';
+      html += '<div class="directory-item ' + sourceClass + '" data-shop-index="' + idx + '" data-registry-name="' + escapeHtml(shop.name) + '">' +
+        '<div class="directory-item-main">' +
+          '<span class="directory-item-name">' + escapeHtml(shop.name) + '</span>' +
+          sourceBadge +
+        '</div>' +
+        '<div class="directory-item-meta">' +
+          (ratingStr ? '<span class="directory-item-rating">' + escapeHtml(ratingStr) + '</span>' : '') +
+          (shop.zip ? '<span class="directory-item-zip">' + escapeHtml(shop.zip) + '</span>' : '') +
+          '<span class="directory-item-tier directory-item-tier--' + shop.tier.toLowerCase().replace(/[- ]/g, '') + '">' + escapeHtml(shop.tier) + '</span>' +
+        '</div>' +
+      '</div>';
+    });
+
+    list.innerHTML = html || '<div class="directory-empty">No shops match your search.</div>';
+
+    // Click handlers for directory items
+    var items = list.querySelectorAll('.directory-item');
+    items.forEach(function(item) {
+      item.addEventListener('click', function() {
+        var shopName = this.getAttribute('data-registry-name');
+        panToShop(shopName);
+      });
+    });
+  }
+
+  function panToShop(shopName) {
+    var target = markers.find(function(m) {
+      return m._shopData && m._shopData.name === shopName;
+    });
+    if (target && map) {
+      map.panTo(target.getPosition());
+      map.setZoom(14);
+      showShopInfo(target);
+    }
+  }
+
   // ── Dark Map Styles ─────────────────────────────────────────
 
   function getMapStyles() {
     return [
-      { elementType: 'geometry', stylers: [{ color: '#1a1a2e' }] },
-      { elementType: 'labels.text.stroke', stylers: [{ color: '#1a1a2e' }] },
-      { elementType: 'labels.text.fill', stylers: [{ color: '#6b7280' }] },
-      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2a2a3e' }] },
-      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#1a1a2e' }] },
-      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a3a4e' }] },
-      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0e1525' }] },
+      { elementType: 'geometry', stylers: [{ color: '#0a0a0a' }] },
+      { elementType: 'labels.text.stroke', stylers: [{ color: '#0a0a0a' }] },
+      { elementType: 'labels.text.fill', stylers: [{ color: '#555555' }] },
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#1a1a1a' }] },
+      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#111111' }] },
+      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#222222' }] },
+      { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#e50914' }] },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#080810' }] },
       { featureType: 'poi', stylers: [{ visibility: 'off' }] },
       { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-      { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2a2a3e' }] }
+      { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#111111' }] },
+      { featureType: 'administrative', elementType: 'labels.text.fill', stylers: [{ color: '#444444' }] },
+      { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#0a0a0a' }] }
     ];
   }
 
@@ -519,6 +732,17 @@
         // Endpoint unavailable — show fallback without crashing
         initMap();
       });
+  }
+
+  // ── Utilities ─────────────────────────────────────────────
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   // ── Expose for dashboard.js init ────────────────────────────
