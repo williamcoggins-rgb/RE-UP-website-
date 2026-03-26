@@ -116,6 +116,16 @@
         // Merge into competitor table
         mergeWithCompetitorTable(data.results);
 
+        // Broadcast enriched Google data to other dashboard sections
+        window.dispatchEvent(new CustomEvent('reup:google-data', {
+          detail: {
+            shops: data.results,
+            stats: data.stats || null,
+            total: data.total,
+            cached: data.cached
+          }
+        }));
+
         if (status) {
           status.textContent = data.total + ' shops from Google Places' + (data.cached !== false ? ' (cached)' : '');
           status.className = 'live-status live-status--success';

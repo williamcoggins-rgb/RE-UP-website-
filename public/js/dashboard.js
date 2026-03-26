@@ -1273,6 +1273,287 @@ function applyDashPaywall() {
   }
 }
 
+// --------------- GOOGLE DATA INTEGRATION ---------------
+// When enriched Google Places data arrives, merge with DB data and re-render all sections
+
+function handleGoogleDataLoaded(event) {
+  var googleShops = event.detail.shops || [];
+  var googleStats = event.detail.stats || {};
+  if (!googleShops.length) return;
+
+  // Build a lookup of DB shop names for dedup
+  var dbNames = {};
+  COMPETITORS.forEach(function(c) { dbNames[c.name.toLowerCase().trim()] = true; });
+
+  // Convert Google shops to competitor format, deduplicating against DB
+  var googleCompetitors = [];
+  googleShops.forEach(function(shop) {
+    var lowerName = shop.name.toLowerCase().trim();
+    // Skip if already in DB (exact or fuzzy match)
+    var isDupe = dbNames[lowerName];
+    if (!isDupe) {
+      Object.keys(dbNames).forEach(function(dbName) {
+        if (!isDupe && (dbName.indexOf(lowerName) !== -1 || lowerName.indexOf(dbName) !== -1)) {
+          isDupe = true;
+        }
+      });
+    }
+    if (isDupe) return;
+    dbNames[lowerName] = true;
+
+    googleCompetitors.push({
+      name: shop.name,
+      neighborhood: shop.address || '',
+      zip: shop.derived_zip || '',
+      avgCut: shop.estimated_haircut || '\u2014',
+      rating: shop.rating || '\u2014',
+      barbers: shop.barber_count || '\u2014',
+      model: '\u2014',
+      tier: shop.estimated_tier || 'Mid-tier',
+      source: 'google',
+      pricing_source: shop.pricing_source || null,
+      price_level: shop.price_level || null,
+      booking_platform: shop.booking_platform || null,
+      total_ratings: shop.total_ratings || 0,
+      phone: shop.phone || null,
+      website: shop.website || null,
+      hours: shop.hours || null,
+      photos: shop.photos || null
+    });
+  });
+
+  // Combined dataset
+  var allShops = COMPETITORS.map(function(c) {
+    var copy = {};
+    for (var k in c) copy[k] = c[k];
+    copy.source = 'db';
+    copy.pricing_source = 'verified';
+    return copy;
+  }).concat(googleCompetitors);
+
+  var totalShops = allShops.length;
+
+  // ─── Update KPIs ───────────────────────────────────────────
+  // Shops tracked
+  var kpiShops = document.getElementById('kpi-shops');
+  var kpiShopsSub = document.getElementById('kpi-shops-sub');
+  if (kpiShops) kpiShops.textContent = totalShops;
+  if (kpiShopsSub) kpiShopsSub.textContent = COMPETITORS.length + ' DB + ' + googleCompetitors.length + ' Google';
+
+  // Avg haircut — combine DB verified prices + Google estimated/booking prices
+  var haircutPrices = [];
+  allShops.forEach(function(s) {
+    if (typeof s.avgCut === 'number' && s.avgCut > 0) haircutPrices.push(s.avgCut);
+  });
+  if (haircutPrices.length > 0) {
+    var avgHaircut = Math.round(haircutPrices.reduce(function(a, b) { return a + b; }, 0) / haircutPrices.length);
+    var minH = Math.min.apply(null, haircutPrices);
+    var maxH = Math.max.apply(null, haircutPrices);
+    var kpiHaircut = document.getElementById('kpi-haircut');
+    var kpiHaircutSub = document.getElementById('kpi-haircut-sub');
+    if (kpiHaircut) kpiHaircut.textContent = '$' + avgHaircut;
+    if (kpiHaircutSub) kpiHaircutSub.textContent = 'Range: $' + minH + ' \u2013 $' + maxH + ' (' + haircutPrices.length + ' shops)';
+  }
+
+  // Barbers profiled — DB barbers + Google booking-scraped barbers
+  var totalBarbers = 0;
+  allShops.forEach(function(s) {
+    if (typeof s.barbers === 'number') totalBarbers += s.barbers;
+  });
+  if (googleStats.total_barbers) totalBarbers += googleStats.total_barbers;
+  var kpiBarbers = document.getElementById('kpi-barbers');
+  var kpiBarbSub = document.getElementById('kpi-barbers-sub');
+  if (kpiBarbers && totalBarbers > 0) kpiBarbers.textContent = totalBarbers;
+  if (kpiBarbSub) kpiBarbSub.textContent = 'Active in CLT market';
+
+  // Avg beard trim
+  var beardPrices = [];
+  googleShops.forEach(function(s) {
+    if (s.estimated_beard && s.estimated_beard > 0) beardPrices.push(s.estimated_beard);
+  });
+  // Include DB beard prices from PRICING_BY_ZIP
+  PRICING_BY_ZIP.forEach(function(z) {
+    if (typeof z.beard === 'number') beardPrices.push(z.beard);
+  });
+  if (beardPrices.length > 0) {
+    var avgBeard = Math.round(beardPrices.reduce(function(a, b) { return a + b; }, 0) / beardPrices.length);
+    var minB = Math.min.apply(null, beardPrices);
+    var maxB = Math.max.apply(null, beardPrices);
+    var kpiBeard = document.getElementById('kpi-beard');
+    var kpiBeardSub = document.getElementById('kpi-beard-sub');
+    if (kpiBeard) kpiBeard.textContent = '$' + avgBeard;
+    if (kpiBeardSub) kpiBeardSub.textContent = 'Range: $' + minB + ' \u2013 $' + maxB + ' (' + beardPrices.length + ' shops)';
+  }
+
+  // Avg rating across all shops
+  var ratingValues = [];
+  allShops.forEach(function(s) {
+    if (typeof s.rating === 'number' && s.rating > 0) ratingValues.push(s.rating);
+  });
+  if (ratingValues.length > 0) {
+    var avgRating = (ratingValues.reduce(function(a, b) { return a + b; }, 0) / ratingValues.length).toFixed(1);
+    var kpiRating = document.getElementById('kpi-rating');
+    var kpiRatingSub = document.getElementById('kpi-rating-sub');
+    if (kpiRating) kpiRating.textContent = avgRating;
+    if (kpiRatingSub) kpiRatingSub.textContent = 'Across ' + ratingValues.length + ' rated shops';
+  }
+
+  // ─── Update Heat Map (zip code counts + pricing) ──────────
+  // Build enriched PRICING_BY_ZIP with Google data
+  var zipShopCounts = {};
+  var zipHaircutPrices = {};
+  var zipBeardPrices = {};
+
+  // Start with DB data
+  PRICING_BY_ZIP.forEach(function(z) {
+    zipShopCounts[z.zip] = z.shops || 0;
+    if (typeof z.haircut === 'number') zipHaircutPrices[z.zip] = [z.haircut];
+    if (typeof z.beard === 'number') zipBeardPrices[z.zip] = [z.beard];
+  });
+
+  // Add Google shop data by derived_zip
+  googleShops.forEach(function(s) {
+    var zip = s.derived_zip;
+    if (!zip) return;
+    zipShopCounts[zip] = (zipShopCounts[zip] || 0) + 1;
+    if (s.estimated_haircut) {
+      if (!zipHaircutPrices[zip]) zipHaircutPrices[zip] = [];
+      zipHaircutPrices[zip].push(s.estimated_haircut);
+    }
+    if (s.estimated_beard) {
+      if (!zipBeardPrices[zip]) zipBeardPrices[zip] = [];
+      zipBeardPrices[zip].push(s.estimated_beard);
+    }
+  });
+
+  // Update PRICING_BY_ZIP shop counts and fill in missing prices
+  PRICING_BY_ZIP.forEach(function(z) {
+    if (zipShopCounts[z.zip]) z.shops = zipShopCounts[z.zip];
+    // Fill missing haircut prices with Google averages
+    if ((z.haircut === '\u2014' || z.haircut === undefined) && zipHaircutPrices[z.zip] && zipHaircutPrices[z.zip].length) {
+      var arr = zipHaircutPrices[z.zip];
+      z.haircut = Math.round(arr.reduce(function(a, b) { return a + b; }, 0) / arr.length);
+      z._estimated = true;
+    }
+    if ((z.beard === '\u2014' || z.beard === undefined) && zipBeardPrices[z.zip] && zipBeardPrices[z.zip].length) {
+      var arr2 = zipBeardPrices[z.zip];
+      z.beard = Math.round(arr2.reduce(function(a, b) { return a + b; }, 0) / arr2.length);
+    }
+  });
+
+  // Add new zip codes that aren't in PRICING_BY_ZIP yet
+  var existingZips = {};
+  PRICING_BY_ZIP.forEach(function(z) { existingZips[z.zip] = true; });
+
+  var ZIP_NAMES = {
+    '28204': 'Plaza Midwood / Elizabeth', '28207': 'Myers Park / Eastover',
+    '28210': 'South Charlotte / Quail Hollow', '28212': 'East Charlotte / Idlewild',
+    '28214': 'West Charlotte / Moores Chapel', '28217': 'Steele Creek',
+    '28226': 'Ballantyne', '28227': 'Mint Hill', '28270': 'Providence / Weddington',
+    '28277': 'Ballantyne / Ardrey Kell', '28278': 'Lake Wylie / Berewick'
+  };
+  Object.keys(zipShopCounts).forEach(function(zip) {
+    if (!existingZips[zip] && zipShopCounts[zip] > 0) {
+      var avgH = zipHaircutPrices[zip] ? Math.round(zipHaircutPrices[zip].reduce(function(a, b) { return a + b; }, 0) / zipHaircutPrices[zip].length) : '\u2014';
+      var avgBd = zipBeardPrices[zip] ? Math.round(zipBeardPrices[zip].reduce(function(a, b) { return a + b; }, 0) / zipBeardPrices[zip].length) : '\u2014';
+      PRICING_BY_ZIP.push({
+        zip: zip,
+        area: ZIP_NAMES[zip] || 'Charlotte ' + zip,
+        haircut: avgH,
+        beard: avgBd,
+        students: '\u2014',
+        hotTowel: '\u2014',
+        lineup: '\u2014',
+        shops: zipShopCounts[zip],
+        _estimated: true
+      });
+    }
+  });
+
+  // Re-render heat map, pricing table, density, and competitor table
+  renderHeatMap('haircut');
+  renderPricingTable();
+  renderCompetitorTableCombined(allShops);
+  renderDensityCombined();
+
+  // Re-render gap finder with updated data
+  renderGapFinder();
+}
+
+// Render competitor table with combined DB + Google data
+function renderCompetitorTableCombined(allShops) {
+  var tbody = document.getElementById('competitor-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  allShops.forEach(function(c) {
+    var tr = document.createElement('tr');
+    var ratingStr = (c.rating === '\u2014' || c.rating === undefined || c.rating === null) ? '\u2014' : Number(c.rating).toFixed(1);
+    var priceStr = formatPrice(c.avgCut);
+    var sourceBadge = '';
+    if (c.source === 'google') {
+      if (c.pricing_source === 'booking') {
+        sourceBadge = ' <span class="source-badge source-badge--booking">BOOKING</span>';
+      } else if (c.pricing_source === 'estimated') {
+        sourceBadge = ' <span class="source-badge source-badge--estimated">EST</span>';
+      } else {
+        sourceBadge = ' <span class="source-badge source-badge--live">GOOGLE</span>';
+      }
+    } else {
+      sourceBadge = ' <span class="source-badge source-badge--static">DB</span>';
+    }
+
+    // Show review count as competitive signal for Google shops
+    var ratingCol = ratingStr;
+    if (c.source === 'google' && c.total_ratings > 0) {
+      ratingCol += ' <span class="rating-count">(' + c.total_ratings + ')</span>';
+    }
+
+    tr.innerHTML =
+      '<td data-label="Shop Name">' + escapeHtml(c.name) + sourceBadge + '</td>' +
+      '<td data-label="Neighborhood">' + escapeHtml(c.neighborhood || c.zip || '') + '</td>' +
+      '<td class="cell-mono" data-label="Zip">' + escapeHtml(c.zip || '') + '</td>' +
+      '<td class="cell-price" data-label="Avg Cut">' + priceStr +
+        (c.pricing_source === 'estimated' ? ' <span class="price-est">~</span>' : '') +
+        (c.pricing_source === 'booking' ? ' <span class="price-verified">\u2713</span>' : '') + '</td>' +
+      '<td data-label="Rating">' + ratingCol + '</td>' +
+      '<td data-label="Barbers">' + escapeHtml(c.barbers) + '</td>' +
+      '<td data-label="Model">' + escapeHtml(c.model || '\u2014') + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+// Re-render density with combined data
+function renderDensityCombined() {
+  var grid = document.getElementById('density-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  var densityData = PRICING_BY_ZIP.map(function(row) {
+    return { zip: row.zip, area: row.area, count: row.shops || 0 };
+  });
+  densityData.sort(function(a, b) { return b.count - a.count; });
+
+  var maxCount = Math.max.apply(null, densityData.map(function(d) { return d.count; }));
+  if (maxCount === 0) maxCount = 1;
+
+  densityData.forEach(function(d) {
+    var pct = Math.round((d.count / maxCount) * 100);
+    var card = document.createElement('div');
+    card.className = 'density-card';
+    card.innerHTML =
+      '<div class="density-header">' +
+        '<span class="density-zip cell-mono">' + escapeHtml(d.zip) + '</span>' +
+        '<span class="density-count">' + escapeHtml(d.count) + ' shops</span>' +
+      '</div>' +
+      '<span class="density-area">' + escapeHtml(d.area) + '</span>' +
+      '<div class="density-bar-track">' +
+        '<div class="density-bar-fill" style="width:' + pct + '%"></div>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
 // --------------- INIT ---------------
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1317,6 +1598,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.RE_UP_MAP) {
       window.RE_UP_MAP.init();
     }
+
+    // Listen for enriched Google Places data to re-render all sections
+    window.addEventListener('reup:google-data', handleGoogleDataLoaded);
 
     // Show replay tour link for logged-in users
     var replayLink = document.getElementById('replayTourLink');

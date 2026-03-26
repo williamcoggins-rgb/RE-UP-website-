@@ -316,8 +316,180 @@ var CLT_SEARCH_POINTS = [
   { lat: 35.1010, lng: -80.9710 }   // Berewick
 ];
 
-var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v1';
+var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v2';
 var CACHE_TTL = 86400; // 24 hours
+
+// Zip code centroids for deriving zip from lat/lng
+var ZIP_CENTROIDS = {
+  '28202': { lat: 35.2271, lng: -80.8431 },
+  '28203': { lat: 35.2118, lng: -80.8587 },
+  '28204': { lat: 35.2177, lng: -80.8247 },
+  '28205': { lat: 35.2283, lng: -80.7971 },
+  '28206': { lat: 35.2620, lng: -80.8107 },
+  '28207': { lat: 35.2050, lng: -80.8190 },
+  '28208': { lat: 35.2230, lng: -80.9080 },
+  '28209': { lat: 35.1810, lng: -80.8530 },
+  '28210': { lat: 35.1510, lng: -80.8770 },
+  '28211': { lat: 35.1800, lng: -80.8080 },
+  '28212': { lat: 35.1780, lng: -80.7450 },
+  '28213': { lat: 35.2870, lng: -80.7470 },
+  '28214': { lat: 35.2600, lng: -80.9540 },
+  '28215': { lat: 35.2490, lng: -80.7280 },
+  '28216': { lat: 35.3100, lng: -80.8870 },
+  '28217': { lat: 35.1700, lng: -80.9180 },
+  '28226': { lat: 35.1180, lng: -80.8100 },
+  '28227': { lat: 35.1610, lng: -80.6960 },
+  '28262': { lat: 35.3370, lng: -80.7440 },
+  '28269': { lat: 35.3420, lng: -80.8380 },
+  '28270': { lat: 35.1130, lng: -80.7620 },
+  '28273': { lat: 35.1210, lng: -80.9510 },
+  '28277': { lat: 35.0590, lng: -80.8470 },
+  '28278': { lat: 35.1010, lng: -80.9710 }
+};
+
+// Price estimation from Google price_level
+var PRICE_ESTIMATES = {
+  1: { haircut: 22, beard: 12, tier: 'Value' },     // $
+  2: { haircut: 35, beard: 20, tier: 'Mid-tier' },   // $$
+  3: { haircut: 50, beard: 30, tier: 'Premium' },     // $$$
+  4: { haircut: 65, beard: 40, tier: 'Premium' }      // $$$$
+};
+
+// Known booking platforms to detect
+var BOOKING_PLATFORMS = [
+  { name: 'Booksy', pattern: /booksy\.com/i },
+  { name: 'Vagaro', pattern: /vagaro\.com/i },
+  { name: 'Square Appointments', pattern: /squareup\.com|square\.site/i },
+  { name: 'Schedulicity', pattern: /schedulicity\.com/i },
+  { name: 'Squire', pattern: /getsquire\.com/i },
+  { name: 'Fresha', pattern: /fresha\.com/i },
+  { name: 'StyleSeat', pattern: /styleseat\.com/i },
+  { name: 'Genbook', pattern: /genbook\.com/i }
+];
+
+function deriveZip(lat, lng) {
+  if (!lat || !lng) return null;
+  var closest = null;
+  var minDist = Infinity;
+  var zips = Object.keys(ZIP_CENTROIDS);
+  for (var i = 0; i < zips.length; i++) {
+    var c = ZIP_CENTROIDS[zips[i]];
+    var d = Math.pow(lat - c.lat, 2) + Math.pow(lng - c.lng, 2);
+    if (d < minDist) {
+      minDist = d;
+      closest = zips[i];
+    }
+  }
+  return closest;
+}
+
+function detectBookingPlatform(website) {
+  if (!website) return null;
+  for (var i = 0; i < BOOKING_PLATFORMS.length; i++) {
+    if (BOOKING_PLATFORMS[i].pattern.test(website)) {
+      return { platform: BOOKING_PLATFORMS[i].name, url: website };
+    }
+  }
+  return null;
+}
+
+// Attempt to scrape service menu from a booking page (best-effort)
+async function scrapeBookingPage(url) {
+  try {
+    var resp = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; REUPBot/1.0)' },
+      redirect: 'follow'
+    });
+    if (!resp.ok) return null;
+    var html = await resp.text();
+
+    var services = [];
+    var barberCount = 0;
+    var specialties = [];
+
+    // Try to extract prices: look for patterns like "$25" or "$30.00" near service keywords
+    var servicePatterns = [
+      { name: "Men's Haircut", regex: /(?:men'?s?\s*(?:hair)?cut|regular\s*cut|classic\s*cut)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Beard Trim', regex: /(?:beard\s*trim|beard\s*line|beard\s*shape)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Kids Cut', regex: /(?:kid'?s?\s*cut|child(?:ren)?'?s?\s*cut|youth\s*cut)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Lineup', regex: /(?:line\s*up|edge\s*up|shape\s*up)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Hot Towel Shave', regex: /(?:hot\s*towel|straight\s*razor|razor\s*shave)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Haircut + Beard', regex: /(?:cut\s*(?:&|and|\+)\s*beard|haircut\s*(?:&|and|\+)\s*beard)[^$]*?\$(\d+(?:\.\d{2})?)/gi }
+    ];
+
+    servicePatterns.forEach(function(sp) {
+      var match = sp.regex.exec(html);
+      if (match) {
+        services.push({ name: sp.name, price: parseFloat(match[1]) });
+      }
+    });
+
+    // Try to count staff/barbers: look for repeated name patterns or team member counts
+    var staffMatch = html.match(/(\d+)\s*(?:barber|stylist|staff|team\s*member|professional)/i);
+    if (staffMatch) barberCount = parseInt(staffMatch[1]);
+
+    // Alternative: count individual barber/stylist profile blocks
+    if (!barberCount) {
+      var profileMatches = html.match(/class="[^"]*(?:team-member|staff-member|barber-card|professional-card)[^"]*"/gi);
+      if (profileMatches) barberCount = profileMatches.length;
+    }
+
+    // Look for specialties
+    var specPatterns = /(?:specializ|expert|focus)[^.]*(?:fade|taper|razor|beard|texture|natural|loc|dread|braid|color)/gi;
+    var specMatches = html.match(specPatterns);
+    if (specMatches) {
+      specMatches.forEach(function(m) {
+        var keywords = m.match(/(?:fade|taper|razor|beard|texture|natural|loc|dread|braid|color)/gi);
+        if (keywords) {
+          keywords.forEach(function(k) {
+            var cap = k.charAt(0).toUpperCase() + k.slice(1).toLowerCase();
+            if (specialties.indexOf(cap) === -1) specialties.push(cap);
+          });
+        }
+      });
+    }
+
+    if (services.length === 0 && barberCount === 0 && specialties.length === 0) return null;
+
+    return {
+      services: services,
+      barber_count: barberCount || null,
+      specialties: specialties
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+// Fetch Place Details for enrichment (phone, website, hours, photos, full address)
+async function fetchPlaceDetails(placeId, apiKey) {
+  try {
+    var fields = 'place_id,name,formatted_address,formatted_phone_number,website,opening_hours,price_level,photos,user_ratings_total';
+    var endpoint = 'https://maps.googleapis.com/maps/api/place/details/json' +
+      '?place_id=' + encodeURIComponent(placeId) +
+      '&fields=' + fields +
+      '&key=' + apiKey;
+    var resp = await fetch(endpoint);
+    var data = await resp.json();
+    if (data.status !== 'OK' || !data.result) return null;
+    var r = data.result;
+    return {
+      full_address: r.formatted_address || null,
+      phone: r.formatted_phone_number || null,
+      website: r.website || null,
+      price_level: r.price_level || null,
+      hours: r.opening_hours ? {
+        open_now: r.opening_hours.open_now || false,
+        weekday_text: r.opening_hours.weekday_text || []
+      } : null,
+      photos: (r.photos || []).slice(0, 4).map(function(p) {
+        return { reference: p.photo_reference, width: p.width, height: p.height };
+      })
+    };
+  } catch (e) {
+    return null;
+  }
+}
 
 async function handleCharlotteShops(apiKey, request, ctx) {
   // Try cache first
@@ -325,17 +497,16 @@ async function handleCharlotteShops(apiKey, request, ctx) {
   var cacheKey = new Request(CACHE_KEY_URL, { method: 'GET' });
   var cached = await cache.match(cacheKey);
   if (cached) {
-    // Clone and add CORS headers for this specific request
     var cachedData = await cached.json();
+    cachedData.cached = true;
     return jsonResponse(cachedData, 200, request);
   }
 
-  // Sweep all search points — 8km radius each for overlap
+  // Phase 1: Sweep all search points for basic data
   var allResults = [];
   var seen = {};
   var errors = 0;
 
-  // Run searches in batches of 6 to avoid overwhelming Google
   for (var i = 0; i < CLT_SEARCH_POINTS.length; i += 6) {
     var batch = CLT_SEARCH_POINTS.slice(i, i + 6);
     var batchPromises = batch.map(function(point) {
@@ -363,6 +534,102 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     });
   }
 
+  // Phase 2: Enrich with Place Details (batch of 8 at a time, cap at 150)
+  var toEnrich = allResults.slice(0, 150);
+  for (var d = 0; d < toEnrich.length; d += 8) {
+    var detailBatch = toEnrich.slice(d, d + 8);
+    var detailPromises = detailBatch.map(function(shop) {
+      return fetchPlaceDetails(shop.place_id, apiKey);
+    });
+    var details = await Promise.all(detailPromises);
+    details.forEach(function(detail, idx) {
+      if (detail) {
+        var shop = toEnrich[d + idx];
+        shop.full_address = detail.full_address;
+        shop.phone = detail.phone;
+        shop.website = detail.website;
+        shop.hours = detail.hours;
+        shop.photos = detail.photos;
+        if (detail.price_level && !shop.price_level) {
+          shop.price_level = detail.price_level;
+        }
+      }
+    });
+  }
+
+  // Phase 3: Derive zip codes and estimate pricing for all shops
+  var bookingChecks = [];
+  allResults.forEach(function(shop) {
+    // Derive zip from coordinates
+    shop.derived_zip = deriveZip(shop.lat, shop.lng);
+
+    // Estimate pricing from price_level
+    var est = shop.price_level ? PRICE_ESTIMATES[shop.price_level] : null;
+    shop.estimated_haircut = est ? est.haircut : null;
+    shop.estimated_beard = est ? est.beard : null;
+    shop.estimated_tier = est ? est.tier : 'Mid-tier';
+    shop.pricing_source = null; // will be set below
+
+    // Detect booking platform
+    var booking = detectBookingPlatform(shop.website);
+    shop.booking_platform = booking;
+
+    if (booking) {
+      shop.pricing_source = 'estimated'; // will upgrade to 'booking' if scrape succeeds
+      bookingChecks.push(shop);
+    } else if (est) {
+      shop.pricing_source = 'estimated';
+    }
+  });
+
+  // Phase 4: Attempt to scrape booking pages for service menus (cap at 30)
+  var toScrape = bookingChecks.slice(0, 30);
+  for (var s = 0; s < toScrape.length; s += 6) {
+    var scrapeBatch = toScrape.slice(s, s + 6);
+    var scrapePromises = scrapeBatch.map(function(shop) {
+      return scrapeBookingPage(shop.booking_platform.url);
+    });
+    var scrapeResults = await Promise.all(scrapePromises);
+    scrapeResults.forEach(function(result, idx) {
+      if (result) {
+        var shop = toScrape[s + idx];
+        shop.booking_data = result;
+        shop.pricing_source = 'booking';
+
+        // Override estimated pricing with actual booking data
+        result.services.forEach(function(svc) {
+          if (/men'?s?\s*(?:hair)?cut|regular\s*cut|classic\s*cut/i.test(svc.name)) {
+            shop.estimated_haircut = svc.price;
+          }
+          if (/beard/i.test(svc.name)) {
+            shop.estimated_beard = svc.price;
+          }
+        });
+
+        // Use barber count from booking page
+        if (result.barber_count) {
+          shop.barber_count = result.barber_count;
+        }
+      }
+    });
+  }
+
+  // Build aggregate stats for the frontend
+  var totalBarbers = 0;
+  var ratingSum = 0;
+  var ratingCount = 0;
+  var haircutSum = 0;
+  var haircutCount = 0;
+  var beardSum = 0;
+  var beardCount = 0;
+
+  allResults.forEach(function(shop) {
+    if (shop.barber_count) totalBarbers += shop.barber_count;
+    if (shop.rating) { ratingSum += shop.rating; ratingCount++; }
+    if (shop.estimated_haircut) { haircutSum += shop.estimated_haircut; haircutCount++; }
+    if (shop.estimated_beard) { beardSum += shop.estimated_beard; beardCount++; }
+  });
+
   var responseData = {
     status: 'OK',
     results: allResults,
@@ -370,7 +637,16 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     search_points: CLT_SEARCH_POINTS.length,
     errors: errors,
     cached: false,
-    cache_ttl: CACHE_TTL
+    cache_ttl: CACHE_TTL,
+    stats: {
+      total_shops: allResults.length,
+      total_barbers: totalBarbers,
+      avg_rating: ratingCount > 0 ? Math.round((ratingSum / ratingCount) * 10) / 10 : null,
+      avg_haircut: haircutCount > 0 ? Math.round(haircutSum / haircutCount) : null,
+      avg_beard: beardCount > 0 ? Math.round(beardSum / beardCount) : null,
+      shops_with_pricing: haircutCount,
+      shops_with_booking: bookingChecks.length
+    }
   };
 
   // Cache the response for 24 hours
@@ -385,8 +661,6 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     ctx.waitUntil(cache.put(cacheKey, cacheResponse.clone()));
   }
 
-  // Return with CORS
-  responseData.cached = false;
   return jsonResponse(responseData, 200, request);
 }
 
