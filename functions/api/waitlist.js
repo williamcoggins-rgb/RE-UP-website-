@@ -154,7 +154,7 @@ export async function onRequestPost(context) {
             '<div style="background:#141414;border:1px solid #2a2a2a;border-radius:8px;padding:20px;margin:24px 0;">' +
               '<p style="color:#fff;font-weight:600;margin-bottom:12px;">Here\'s what you\'ll get access to:</p>' +
               '<ul style="list-style:none;padding:0;margin:0;color:#aaa;font-size:14px;line-height:2;">' +
-                '<li>\u2713 &nbsp;Real-time pricing data across 47+ Charlotte barbershops</li>' +
+                '<li>\u2713 &nbsp;Real-time pricing data across 170+ Charlotte barbershops</li>' +
                 '<li>\u2713 &nbsp;Competitor tracking \u2014 see who\'s moving and how</li>' +
                 '<li>\u2713 &nbsp;Trend analysis so you price with confidence</li>' +
                 '<li>\u2713 &nbsp;Weekly market intelligence delivered to your inbox</li>' +
