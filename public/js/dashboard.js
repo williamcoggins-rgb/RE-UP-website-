@@ -163,8 +163,8 @@ function buildDashPaywall() {
       '</div>' +
       '<div class="dash-paywall-card">' +
         '<h3 class="dash-paywall-card-title">Competitor Directory</h3>' +
-        '<p class="dash-paywall-card-desc">47 shops profiled with pricing, ratings, barber count, and business model. Search by name, neighborhood, or zip to find your direct competition.</p>' +
-        '<span class="dash-paywall-card-tag">47 shops</span>' +
+        '<p class="dash-paywall-card-desc">170+ shops profiled with pricing, ratings, barber count, and business model. Search by name, neighborhood, or zip to find your direct competition.</p>' +
+        '<span class="dash-paywall-card-tag">170+ shops</span>' +
       '</div>' +
       '<div class="dash-paywall-card">' +
         '<h3 class="dash-paywall-card-title">Social Leaderboard</h3>' +
@@ -944,9 +944,10 @@ function renderGapFinder() {
   var allPrices = PRICING_BY_ZIP.map(function (d) { return d.haircut; }).filter(function (p) { return typeof p === 'number' && p > 0; });
   var overallAvg = allPrices.length > 0 ? allPrices.reduce(function (a, b) { return a + b; }, 0) / allPrices.length : 33;
 
+  var allCompetitors = window._reupAllShops || COMPETITORS;
   var maxComps = 0;
   PRICING_BY_ZIP.forEach(function (e) {
-    var c = COMPETITORS.filter(function (comp) { return comp.zip === e.zip; }).length;
+    var c = allCompetitors.filter(function (comp) { return comp.zip === e.zip; }).length;
     if (c > maxComps) maxComps = c;
   });
   if (maxComps === 0) maxComps = 1;
@@ -954,7 +955,7 @@ function renderGapFinder() {
   var scored = PRICING_BY_ZIP.map(function (entry) {
     var shopCount = entry.shops || 0;
     var avgPrice = typeof entry.haircut === 'number' ? entry.haircut : 0;
-    var competitorCount = COMPETITORS.filter(function (c) { return c.zip === entry.zip; }).length;
+    var competitorCount = allCompetitors.filter(function (c) { return c.zip === entry.zip; }).length;
 
     var saturationScore = Math.max(0, 50 * (1 - (shopCount / maxShops)));
     var priceScore = avgPrice > 0 ? Math.min(30, 30 * (avgPrice / overallAvg)) : 20;
@@ -1038,7 +1039,7 @@ var TOUR_STEPS = [
   {
     target: '#competitor-table',
     title: 'Competitor Directory',
-    body: 'Every barbershop we track in Charlotte — 47 shops with their pricing, ratings, barber count, and business model. Use the search bar to find any shop by name, neighborhood, or zip code.',
+    body: 'Every barbershop we track in Charlotte — 170+ shops with their pricing, ratings, barber count, and business model. Use the search bar to find any shop by name, neighborhood, or zip code.',
     tip: 'Sort by "Avg Cut" to see who\'s charging the most in your area.',
     cta: 'Next'
   },
@@ -1340,13 +1341,23 @@ function handleGoogleDataLoaded(event) {
   if (kpiShops) kpiShops.textContent = totalShops;
   if (kpiShopsSub) kpiShopsSub.textContent = COMPETITORS.length + ' DB + ' + googleCompetitors.length + ' Google';
 
-  // Avg haircut — combine DB verified prices + Google estimated/booking prices
+  // Avg haircut — weighted blending: DB=1.0, BOOKING=0.9, ESTIMATED=0.7
   var haircutPrices = [];
+  var haircutWeighted = 0;
+  var haircutWeightSum = 0;
   allShops.forEach(function(s) {
-    if (typeof s.avgCut === 'number' && s.avgCut > 0) haircutPrices.push(s.avgCut);
+    var price = typeof s.avgCut === 'number' && s.avgCut > 0 ? s.avgCut : null;
+    if (!price) return;
+    haircutPrices.push(price);
+    var weight = 1.0;
+    if (s.pricing_source === 'booking') weight = 0.9;
+    else if (s.pricing_source === 'estimated') weight = 0.7;
+    else if (s.source === 'db') weight = 1.0;
+    haircutWeighted += price * weight;
+    haircutWeightSum += weight;
   });
   if (haircutPrices.length > 0) {
-    var avgHaircut = Math.round(haircutPrices.reduce(function(a, b) { return a + b; }, 0) / haircutPrices.length);
+    var avgHaircut = haircutWeightSum > 0 ? Math.round(haircutWeighted / haircutWeightSum) : 37;
     var minH = Math.min.apply(null, haircutPrices);
     var maxH = Math.max.apply(null, haircutPrices);
     var kpiHaircut = document.getElementById('kpi-haircut');
@@ -1355,28 +1366,40 @@ function handleGoogleDataLoaded(event) {
     if (kpiHaircutSub) kpiHaircutSub.textContent = 'Range: $' + minH + ' \u2013 $' + maxH + ' (' + haircutPrices.length + ' shops)';
   }
 
-  // Barbers profiled — DB barbers + Google booking-scraped barbers
+  // Barbers profiled — count from allShops (DB barbers + Google barber_count already merged)
   var totalBarbers = 0;
   allShops.forEach(function(s) {
-    if (typeof s.barbers === 'number') totalBarbers += s.barbers;
+    if (typeof s.barbers === 'number' && s.barbers > 0) totalBarbers += s.barbers;
   });
-  if (googleStats.total_barbers) totalBarbers += googleStats.total_barbers;
   var kpiBarbers = document.getElementById('kpi-barbers');
   var kpiBarbSub = document.getElementById('kpi-barbers-sub');
   if (kpiBarbers && totalBarbers > 0) kpiBarbers.textContent = totalBarbers;
   if (kpiBarbSub) kpiBarbSub.textContent = 'Active in CLT market';
 
-  // Avg beard trim
+  // Avg beard trim — weighted blending: DB=1.0, BOOKING=0.9, ESTIMATED=0.7
   var beardPrices = [];
+  var beardWeighted = 0;
+  var beardWeightSum = 0;
   googleShops.forEach(function(s) {
-    if (s.estimated_beard && s.estimated_beard > 0) beardPrices.push(s.estimated_beard);
+    if (s.estimated_beard && s.estimated_beard > 0) {
+      beardPrices.push(s.estimated_beard);
+      var bw = 1.0;
+      if (s.pricing_source === 'booking') bw = 0.9;
+      else if (s.pricing_source === 'estimated') bw = 0.7;
+      beardWeighted += s.estimated_beard * bw;
+      beardWeightSum += bw;
+    }
   });
-  // Include DB beard prices from PRICING_BY_ZIP
+  // Include DB beard prices from PRICING_BY_ZIP (weight 1.0)
   PRICING_BY_ZIP.forEach(function(z) {
-    if (typeof z.beard === 'number') beardPrices.push(z.beard);
+    if (typeof z.beard === 'number') {
+      beardPrices.push(z.beard);
+      beardWeighted += z.beard * 1.0;
+      beardWeightSum += 1.0;
+    }
   });
   if (beardPrices.length > 0) {
-    var avgBeard = Math.round(beardPrices.reduce(function(a, b) { return a + b; }, 0) / beardPrices.length);
+    var avgBeard = beardWeightSum > 0 ? Math.round(beardWeighted / beardWeightSum) : 20;
     var minB = Math.min.apply(null, beardPrices);
     var maxB = Math.max.apply(null, beardPrices);
     var kpiBeard = document.getElementById('kpi-beard');
@@ -1403,12 +1426,18 @@ function handleGoogleDataLoaded(event) {
   var zipShopCounts = {};
   var zipHaircutPrices = {};
   var zipBeardPrices = {};
+  var zipStudentsPrices = {};
+  var zipHotTowelPrices = {};
+  var zipLineupPrices = {};
 
   // Start with DB data
   PRICING_BY_ZIP.forEach(function(z) {
     zipShopCounts[z.zip] = z.shops || 0;
     if (typeof z.haircut === 'number') zipHaircutPrices[z.zip] = [z.haircut];
     if (typeof z.beard === 'number') zipBeardPrices[z.zip] = [z.beard];
+    if (typeof z.students === 'number') zipStudentsPrices[z.zip] = [z.students];
+    if (typeof z.hotTowel === 'number') zipHotTowelPrices[z.zip] = [z.hotTowel];
+    if (typeof z.lineup === 'number') zipLineupPrices[z.zip] = [z.lineup];
   });
 
   // Add Google shop data by derived_zip
@@ -1424,21 +1453,37 @@ function handleGoogleDataLoaded(event) {
       if (!zipBeardPrices[zip]) zipBeardPrices[zip] = [];
       zipBeardPrices[zip].push(s.estimated_beard);
     }
+    if (s.estimated_students) {
+      if (!zipStudentsPrices[zip]) zipStudentsPrices[zip] = [];
+      zipStudentsPrices[zip].push(s.estimated_students);
+    }
+    if (s.estimated_hotTowel) {
+      if (!zipHotTowelPrices[zip]) zipHotTowelPrices[zip] = [];
+      zipHotTowelPrices[zip].push(s.estimated_hotTowel);
+    }
+    if (s.estimated_lineup) {
+      if (!zipLineupPrices[zip]) zipLineupPrices[zip] = [];
+      zipLineupPrices[zip].push(s.estimated_lineup);
+    }
   });
 
-  // Update PRICING_BY_ZIP shop counts and fill in missing prices
-  PRICING_BY_ZIP.forEach(function(z) {
-    if (zipShopCounts[z.zip]) z.shops = zipShopCounts[z.zip];
-    // Fill missing haircut prices with Google averages
-    if ((z.haircut === '\u2014' || z.haircut === undefined) && zipHaircutPrices[z.zip] && zipHaircutPrices[z.zip].length) {
-      var arr = zipHaircutPrices[z.zip];
-      z.haircut = Math.round(arr.reduce(function(a, b) { return a + b; }, 0) / arr.length);
+  // Helper to fill missing price from Google estimates
+  function fillPrice(z, field, priceMap) {
+    if ((z[field] === '\u2014' || z[field] === undefined) && priceMap[z.zip] && priceMap[z.zip].length) {
+      var arr = priceMap[z.zip];
+      z[field] = Math.round(arr.reduce(function(a, b) { return a + b; }, 0) / arr.length);
       z._estimated = true;
     }
-    if ((z.beard === '\u2014' || z.beard === undefined) && zipBeardPrices[z.zip] && zipBeardPrices[z.zip].length) {
-      var arr2 = zipBeardPrices[z.zip];
-      z.beard = Math.round(arr2.reduce(function(a, b) { return a + b; }, 0) / arr2.length);
-    }
+  }
+
+  // Update PRICING_BY_ZIP shop counts and fill in ALL missing prices
+  PRICING_BY_ZIP.forEach(function(z) {
+    if (zipShopCounts[z.zip]) z.shops = zipShopCounts[z.zip];
+    fillPrice(z, 'haircut', zipHaircutPrices);
+    fillPrice(z, 'beard', zipBeardPrices);
+    fillPrice(z, 'students', zipStudentsPrices);
+    fillPrice(z, 'hotTowel', zipHotTowelPrices);
+    fillPrice(z, 'lineup', zipLineupPrices);
   });
 
   // Add new zip codes that aren't in PRICING_BY_ZIP yet
@@ -1454,21 +1499,25 @@ function handleGoogleDataLoaded(event) {
   };
   Object.keys(zipShopCounts).forEach(function(zip) {
     if (!existingZips[zip] && zipShopCounts[zip] > 0) {
-      var avgH = zipHaircutPrices[zip] ? Math.round(zipHaircutPrices[zip].reduce(function(a, b) { return a + b; }, 0) / zipHaircutPrices[zip].length) : '\u2014';
-      var avgBd = zipBeardPrices[zip] ? Math.round(zipBeardPrices[zip].reduce(function(a, b) { return a + b; }, 0) / zipBeardPrices[zip].length) : '\u2014';
+      var avgFn = function(arr) {
+        return arr && arr.length ? Math.round(arr.reduce(function(a, b) { return a + b; }, 0) / arr.length) : '\u2014';
+      };
       PRICING_BY_ZIP.push({
         zip: zip,
         area: ZIP_NAMES[zip] || 'Charlotte ' + zip,
-        haircut: avgH,
-        beard: avgBd,
-        students: '\u2014',
-        hotTowel: '\u2014',
-        lineup: '\u2014',
+        haircut: avgFn(zipHaircutPrices[zip]),
+        beard: avgFn(zipBeardPrices[zip]),
+        students: avgFn(zipStudentsPrices[zip]),
+        hotTowel: avgFn(zipHotTowelPrices[zip]),
+        lineup: avgFn(zipLineupPrices[zip]),
         shops: zipShopCounts[zip],
         _estimated: true
       });
     }
   });
+
+  // Store combined allShops on window so gap finder and other sections can access it
+  window._reupAllShops = allShops;
 
   // Re-render heat map, pricing table, density, and competitor table
   renderHeatMap('haircut');
@@ -1518,7 +1567,7 @@ function renderCompetitorTableCombined(allShops) {
         (c.pricing_source === 'booking' ? ' <span class="price-verified">\u2713</span>' : '') + '</td>' +
       '<td data-label="Rating">' + ratingCol + '</td>' +
       '<td data-label="Barbers">' + escapeHtml(c.barbers) + '</td>' +
-      '<td data-label="Model">' + escapeHtml(c.model || '\u2014') + '</td>';
+      '<td data-label="Model">' + escapeHtml(c.model === '\u2014' && c.source === 'google' ? 'Unknown' : (c.model || '\u2014')) + '</td>';
     tbody.appendChild(tr);
   });
 }

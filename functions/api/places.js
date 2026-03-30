@@ -316,7 +316,7 @@ var CLT_SEARCH_POINTS = [
   { lat: 35.1010, lng: -80.9710 }   // Berewick
 ];
 
-var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v2';
+var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v3';
 var CACHE_TTL = 86400; // 24 hours
 
 // Zip code centroids for deriving zip from lat/lng
@@ -349,10 +349,10 @@ var ZIP_CENTROIDS = {
 
 // Price estimation from Google price_level
 var PRICE_ESTIMATES = {
-  1: { haircut: 22, beard: 12, tier: 'Value' },     // $
-  2: { haircut: 35, beard: 20, tier: 'Mid-tier' },   // $$
-  3: { haircut: 50, beard: 30, tier: 'Premium' },     // $$$
-  4: { haircut: 65, beard: 40, tier: 'Premium' }      // $$$$
+  1: { haircut: 18, beard: 10, students: 15, hotTowel: null, lineup: 10, tier: 'Value' },
+  2: { haircut: 30, beard: 18, students: 22, hotTowel: 25, lineup: 15, tier: 'Mid-tier' },
+  3: { haircut: 48, beard: 28, students: 35, hotTowel: 40, lineup: 25, tier: 'Premium' },
+  4: { haircut: 65, beard: 40, students: 45, hotTowel: 55, lineup: 35, tier: 'Premium' }
 };
 
 // Known booking platforms to detect
@@ -408,19 +408,29 @@ async function scrapeBookingPage(url) {
     var specialties = [];
 
     // Try to extract prices: look for patterns like "$25" or "$30.00" near service keywords
+    // Each service has two patterns: service name followed by price, and price followed by service name
     var servicePatterns = [
-      { name: "Men's Haircut", regex: /(?:men'?s?\s*(?:hair)?cut|regular\s*cut|classic\s*cut)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
-      { name: 'Beard Trim', regex: /(?:beard\s*trim|beard\s*line|beard\s*shape)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
-      { name: 'Kids Cut', regex: /(?:kid'?s?\s*cut|child(?:ren)?'?s?\s*cut|youth\s*cut)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
-      { name: 'Lineup', regex: /(?:line\s*up|edge\s*up|shape\s*up)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
-      { name: 'Hot Towel Shave', regex: /(?:hot\s*towel|straight\s*razor|razor\s*shave)[^$]*?\$(\d+(?:\.\d{2})?)/gi },
-      { name: 'Haircut + Beard', regex: /(?:cut\s*(?:&|and|\+)\s*beard|haircut\s*(?:&|and|\+)\s*beard)[^$]*?\$(\d+(?:\.\d{2})?)/gi }
+      { name: "Men's Haircut", regex: /(?:men'?s?\s*(?:hair)?cut|regular\s*cut|classic\s*cut|haircut)[^$\d]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: "Men's Haircut", regex: /\$(\d+(?:\.\d{2})?)[^a-z]*?(?:men'?s?\s*(?:hair)?cut|regular\s*cut|classic\s*cut|haircut)/gi },
+      { name: 'Beard Trim', regex: /(?:beard\s*(?:trim|line|shape|groom))[^$\d]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Beard Trim', regex: /\$(\d+(?:\.\d{2})?)[^a-z]*?(?:beard\s*(?:trim|line|shape|groom))/gi },
+      { name: 'Kids Cut', regex: /(?:kid'?s?\s*cut|child(?:ren)?'?s?\s*cut|youth\s*cut|boy'?s?\s*cut)[^$\d]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Lineup', regex: /(?:line\s*-?\s*up|edge\s*-?\s*up|shape\s*-?\s*up)[^$\d]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Hot Towel Shave', regex: /(?:hot\s*towel|straight\s*razor|razor\s*shave)[^$\d]*?\$(\d+(?:\.\d{2})?)/gi },
+      { name: 'Haircut + Beard', regex: /(?:cut\s*(?:&|and|\+)\s*beard|haircut\s*(?:&|and|\+)\s*beard)[^$\d]*?\$(\d+(?:\.\d{2})?)/gi }
     ];
 
     servicePatterns.forEach(function(sp) {
-      var match = sp.regex.exec(html);
-      if (match) {
-        services.push({ name: sp.name, price: parseFloat(match[1]) });
+      var match;
+      while ((match = sp.regex.exec(html)) !== null) {
+        var price = parseFloat(match[1]);
+        if (price > 5 && price < 200) { // sanity check
+          var exists = services.some(function(s) { return s.name === sp.name; });
+          if (!exists) {
+            services.push({ name: sp.name, price: price });
+            break;
+          }
+        }
       }
     });
 
@@ -567,8 +577,21 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     var est = shop.price_level ? PRICE_ESTIMATES[shop.price_level] : null;
     shop.estimated_haircut = est ? est.haircut : null;
     shop.estimated_beard = est ? est.beard : null;
+    shop.estimated_students = est ? est.students : null;
+    shop.estimated_hotTowel = est ? est.hotTowel : null;
+    shop.estimated_lineup = est ? est.lineup : null;
     shop.estimated_tier = est ? est.tier : 'Mid-tier';
     shop.pricing_source = null; // will be set below
+    shop.source_tag = 'google'; // always for Google shops
+
+    // Estimate barber count from review count if not already set
+    if (!shop.barber_count && shop.total_ratings) {
+      if (shop.total_ratings > 100) shop.barber_count = 6;
+      else if (shop.total_ratings > 50) shop.barber_count = 4;
+      else if (shop.total_ratings > 20) shop.barber_count = 3;
+      else shop.barber_count = 2;
+      shop.barber_count_source = 'estimated';
+    }
 
     // Detect booking platform
     var booking = detectBookingPlatform(shop.website);
