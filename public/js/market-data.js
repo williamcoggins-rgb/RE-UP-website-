@@ -30,64 +30,64 @@
     // 28202 — Uptown / Center City
     { name: "The CUT Barbershop", neighborhood: "Uptown", zip: "28202", avgCut: 30, rating: 4.7, barbers: 3, model: "Hybrid", tier: "Mid-tier" },
     { name: "Uptown Cuts", neighborhood: "Uptown", zip: "28202", avgCut: 40, rating: 5.0, barbers: 4, model: "Appointment", tier: "Premium" },
-    { name: "Knights of the Razor by No Grease", neighborhood: "Uptown", zip: "28202", avgCut: "\u2014", rating: 4.3, barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
-    { name: "City Barbers at Uptown", neighborhood: "Uptown", zip: "28202", avgCut: "\u2014", rating: 4.6, barbers: 3, model: "Hybrid", tier: "Mid-tier" },
-    { name: "Scissors & Scotch", neighborhood: "Uptown", zip: "28202", avgCut: "\u2014", rating: 4.9, barbers: "\u2014", model: "Appointment", tier: "Premium" },
+    { name: "Knights of the Razor by No Grease", neighborhood: "Uptown", zip: "28202", avgCut: 50, rating: 4.3, barbers: 6, model: "Appointment", tier: "Mid-tier" },
+    { name: "City Barbers at Uptown", neighborhood: "Uptown", zip: "28202", avgCut: 30, rating: 4.6, barbers: 3, model: "Hybrid", tier: "Mid-tier" },
+    { name: "Scissors & Scotch", neighborhood: "Uptown", zip: "28202", avgCut: 49, rating: 4.9, barbers: 6, model: "Appointment", tier: "Premium" },
     // 28203 — South End / Dilworth
     { name: "Modern Classics South End", neighborhood: "South End", zip: "28203", avgCut: 65, rating: 4.9, barbers: 5, model: "Appointment", tier: "Premium" },
     { name: "Hawk & Fade Barbershop", neighborhood: "South End", zip: "28203", avgCut: 40, rating: 4.8, barbers: 3, model: "Hybrid", tier: "Premium" },
-    { name: "Caliber Men's Grooming", neighborhood: "South End", zip: "28203", avgCut: "\u2014", rating: 4.7, barbers: 5, model: "Hybrid", tier: "Mid-tier" },
-    { name: "Arrow - South End", neighborhood: "South End", zip: "28203", avgCut: 27, rating: 4.8, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "Southside Barber Shop", neighborhood: "South End", zip: "28203", avgCut: "\u2014", rating: 4.0, barbers: 4, model: "Walk-in", tier: "Value" },
-    { name: "Shear Excellence - Dilworth", neighborhood: "Dilworth", zip: "28203", avgCut: "\u2014", rating: 4.7, barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
+    { name: "Caliber Men's Grooming", neighborhood: "South End", zip: "28203", avgCut: 38, rating: 4.7, barbers: 5, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "Arrow - South End", neighborhood: "South End", zip: "28203", avgCut: 27, rating: 4.8, barbers: 5, model: "Hybrid", tier: "Mid-tier" }, // EST barbers
+    { name: "Southside Barber Shop", neighborhood: "South End", zip: "28203", avgCut: 20, rating: 4.0, barbers: 4, model: "Walk-in", tier: "Value" }, // EST
+    { name: "Shear Excellence - Dilworth", neighborhood: "Dilworth", zip: "28203", avgCut: 40, rating: 4.7, barbers: 4, model: "Appointment", tier: "Mid-tier" },
     // 28205 — NoDa / Plaza Midwood
     { name: "Midwood Barbers", neighborhood: "Plaza Midwood", zip: "28205", avgCut: 35, rating: 4.9, barbers: 6, model: "Appointment", tier: "Mid-tier" },
     { name: "NoDa Barbers", neighborhood: "NoDa", zip: "28205", avgCut: 45, rating: 4.7, barbers: 3, model: "Appointment", tier: "Premium" },
     { name: "Charlotte Barber & Beard", neighborhood: "Plaza Midwood", zip: "28205", avgCut: 45, rating: 4.6, barbers: 5, model: "Appointment", tier: "Premium" },
-    { name: "Arrow - Plaza Midwood", neighborhood: "Plaza Midwood", zip: "28205", avgCut: 27, rating: 4.8, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "Next Level Hair Studio", neighborhood: "Plaza Midwood", zip: "28205", avgCut: "\u2014", rating: "\u2014", barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
+    { name: "Arrow - Plaza Midwood", neighborhood: "Plaza Midwood", zip: "28205", avgCut: 27, rating: 4.8, barbers: 5, model: "Hybrid", tier: "Mid-tier" }, // EST barbers
+    { name: "Next Level Hair Studio", neighborhood: "Plaza Midwood", zip: "28205", avgCut: 35, rating: 4.5, barbers: 2, model: "Appointment", tier: "Mid-tier" }, // EST
     // 28206 — North Charlotte / Druid Hills
     { name: "Harris Barber Shop", neighborhood: "Druid Hills", zip: "28206", avgCut: 20, rating: 4.7, barbers: 4, model: "Walk-in", tier: "Value" },
-    { name: "Gillespie Barber & Stylist", neighborhood: "North Charlotte", zip: "28206", avgCut: "\u2014", rating: 4.0, barbers: 6, model: "Hybrid", tier: "Value" },
+    { name: "Gillespie Barber & Stylist", neighborhood: "North Charlotte", zip: "28206", avgCut: 20, rating: 4.0, barbers: 6, model: "Hybrid", tier: "Value" }, // EST
     // 28208 — West Charlotte / Airport
-    { name: "The Man Cave Barbershop Charlotte LLC", neighborhood: "West Charlotte", zip: "28208", avgCut: "\u2014", rating: 4.6, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "Da Lucky Spot", neighborhood: "West Charlotte", zip: "28208", avgCut: "\u2014", rating: 5.0, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "Victory Cutz Barber Lounge CLT", neighborhood: "West Charlotte", zip: "28208", avgCut: "\u2014", rating: "\u2014", barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
+    { name: "The Man Cave Barbershop Charlotte LLC", neighborhood: "West Charlotte", zip: "28208", avgCut: 30, rating: 4.6, barbers: 3, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "Da Lucky Spot", neighborhood: "West Charlotte", zip: "28208", avgCut: 25, rating: 5.0, barbers: 3, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "Victory Cutz Barber Lounge CLT", neighborhood: "West Charlotte", zip: "28208", avgCut: 30, rating: 4.5, barbers: 2, model: "Appointment", tier: "Mid-tier" }, // EST
     // 28209 — Park Road / Selwyn
-    { name: "Modern Haircutters (Park Road Barbers)", neighborhood: "Park Road", zip: "28209", avgCut: "\u2014", rating: 4.5, barbers: 3, model: "Appointment", tier: "Mid-tier" },
+    { name: "Modern Haircutters (Park Road Barbers)", neighborhood: "Park Road", zip: "28209", avgCut: 28, rating: 4.5, barbers: 3, model: "Appointment", tier: "Mid-tier" }, // EST
     { name: "Selwyn Barber & Style", neighborhood: "Myers Park", zip: "28209", avgCut: 23, rating: 4.8, barbers: 6, model: "Hybrid", tier: "Value" },
-    { name: "Arrow - Park Road", neighborhood: "Park Road", zip: "28209", avgCut: 27, rating: 4.8, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
+    { name: "Arrow - Park Road", neighborhood: "Park Road", zip: "28209", avgCut: 27, rating: 4.8, barbers: 5, model: "Hybrid", tier: "Mid-tier" }, // EST barbers
     { name: "Urban Barber & Style", neighborhood: "South Blvd", zip: "28209", avgCut: 30, rating: 5.0, barbers: 2, model: "Hybrid", tier: "Mid-tier" },
     // 28210 — South Charlotte / Sharon Lakes
-    { name: "Bladez Barber Shop", neighborhood: "Sharon Lakes", zip: "28210", avgCut: "\u2014", rating: 4.3, barbers: 5, model: "Hybrid", tier: "Mid-tier" },
+    { name: "Bladez Barber Shop", neighborhood: "Sharon Lakes", zip: "28210", avgCut: 30, rating: 4.3, barbers: 5, model: "Hybrid", tier: "Mid-tier" },
     // 28211 — SouthPark / Myers Park
-    { name: "South Park Barber Shop", neighborhood: "SouthPark", zip: "28211", avgCut: "\u2014", rating: 4.6, barbers: 2, model: "Hybrid", tier: "Mid-tier" },
-    { name: "Freshen Up Barbershop", neighborhood: "SouthPark", zip: "28211", avgCut: "\u2014", rating: 4.9, barbers: 1, model: "Appointment", tier: "Premium" },
+    { name: "South Park Barber Shop", neighborhood: "SouthPark", zip: "28211", avgCut: 35, rating: 4.6, barbers: 2, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "Freshen Up Barbershop", neighborhood: "SouthPark", zip: "28211", avgCut: 50, rating: 4.9, barbers: 1, model: "Appointment", tier: "Premium" }, // EST
     // 28213 — University City / UNCC
-    { name: "Kutt Masters Barbershop", neighborhood: "University City", zip: "28213", avgCut: "\u2014", rating: 4.6, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "Fade Factory Barbershop", neighborhood: "University City", zip: "28213", avgCut: 50, rating: 4.5, barbers: "\u2014", model: "Appointment", tier: "Premium" },
+    { name: "Kutt Masters Barbershop", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.6, barbers: 4, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "Fade Factory Barbershop", neighborhood: "University City", zip: "28213", avgCut: 50, rating: 4.5, barbers: 4, model: "Appointment", tier: "Premium" },
     { name: "DJ The Fademaster", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 5.0, barbers: 1, model: "Booth Rental", tier: "Mid-tier" },
-    { name: "The Cutting Room Grooming Lounge", neighborhood: "University City", zip: "28213", avgCut: 40, rating: 5.0, barbers: "\u2014", model: "Booth Rental", tier: "Mid-tier" },
-    { name: "Just For You Barber & Beauty II", neighborhood: "University City", zip: "28213", avgCut: 25, rating: 4.3, barbers: "\u2014", model: "Hybrid", tier: "Value" },
-    { name: "34th Design Barbershop", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.6, barbers: "\u2014", model: "Booth Rental", tier: "Mid-tier" },
-    { name: "Clean Cuts Barbershop", neighborhood: "University City", zip: "28213", avgCut: 30, rating: 5.0, barbers: "\u2014", model: "Walk-in", tier: "Mid-tier" },
-    { name: "Overton's Barber & Styling", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.8, barbers: "\u2014", model: "Walk-in", tier: "Mid-tier" },
+    { name: "The Cutting Room Grooming Lounge", neighborhood: "University City", zip: "28213", avgCut: 40, rating: 5.0, barbers: 3, model: "Booth Rental", tier: "Mid-tier" }, // EST barbers
+    { name: "Just For You Barber & Beauty II", neighborhood: "University City", zip: "28213", avgCut: 25, rating: 4.3, barbers: 4, model: "Hybrid", tier: "Value" }, // EST barbers
+    { name: "34th Design Barbershop", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.6, barbers: 3, model: "Booth Rental", tier: "Mid-tier" }, // EST barbers
+    { name: "Clean Cuts Barbershop", neighborhood: "University City", zip: "28213", avgCut: 30, rating: 5.0, barbers: 2, model: "Walk-in", tier: "Mid-tier" }, // EST barbers
+    { name: "Overton's Barber & Styling", neighborhood: "University City", zip: "28213", avgCut: 35, rating: 4.8, barbers: 3, model: "Walk-in", tier: "Mid-tier" }, // EST barbers
     // 28215 — East Charlotte / Albemarle Rd
-    { name: "Edward's Boyz Barber Shop", neighborhood: "East Charlotte", zip: "28215", avgCut: "\u2014", rating: 4.8, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "Right Touch Barbershop", neighborhood: "East Charlotte", zip: "28215", avgCut: 25, rating: 5.0, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
+    { name: "Edward's Boyz Barber Shop", neighborhood: "East Charlotte", zip: "28215", avgCut: 25, rating: 4.8, barbers: 4, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "Right Touch Barbershop", neighborhood: "East Charlotte", zip: "28215", avgCut: 25, rating: 5.0, barbers: 3, model: "Hybrid", tier: "Mid-tier" }, // EST barbers
     // 28216 — Brookshire / North Charlotte
-    { name: "M&M Barber Studio", neighborhood: "Brookshire", zip: "28216", avgCut: "\u2014", rating: "\u2014", barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
-    { name: "Tha Kut Club Barbershop Lounge", neighborhood: "Brookshire", zip: "28216", avgCut: 25, rating: 5.0, barbers: "\u2014", model: "Appointment", tier: "Value" },
-    { name: "No Grease Mosaic", neighborhood: "Brookshire", zip: "28216", avgCut: 30, rating: 4.2, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
+    { name: "M&M Barber Studio", neighborhood: "Brookshire", zip: "28216", avgCut: 30, rating: 4.5, barbers: 1, model: "Appointment", tier: "Mid-tier" }, // EST
+    { name: "Tha Kut Club Barbershop Lounge", neighborhood: "Brookshire", zip: "28216", avgCut: 25, rating: 5.0, barbers: 2, model: "Appointment", tier: "Value" }, // EST barbers
+    { name: "No Grease Mosaic", neighborhood: "Brookshire", zip: "28216", avgCut: 30, rating: 4.2, barbers: 5, model: "Hybrid", tier: "Mid-tier" },
     // 28262 — University City / N Tryon
-    { name: "Emperial Barber Lounge", neighborhood: "University City", zip: "28262", avgCut: "\u2014", rating: 4.9, barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
-    { name: "Azeal Barbershop", neighborhood: "University City", zip: "28262", avgCut: "\u2014", rating: "\u2014", barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
+    { name: "Emperial Barber Lounge", neighborhood: "University City", zip: "28262", avgCut: 35, rating: 4.9, barbers: 3, model: "Appointment", tier: "Mid-tier" }, // EST
+    { name: "Azeal Barbershop", neighborhood: "University City", zip: "28262", avgCut: 20, rating: 5.0, barbers: 4, model: "Appointment", tier: "Mid-tier" },
     // 28269 — University City / WT Harris
-    { name: "Just For You", neighborhood: "University City", zip: "28269", avgCut: "\u2014", rating: 4.6, barbers: "\u2014", model: "Hybrid", tier: "Mid-tier" },
-    { name: "MVP's Grooming Lounge", neighborhood: "University City", zip: "28269", avgCut: "\u2014", rating: 5.0, barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
+    { name: "Just For You", neighborhood: "University City", zip: "28269", avgCut: 30, rating: 4.6, barbers: 4, model: "Hybrid", tier: "Mid-tier" }, // EST
+    { name: "MVP's Grooming Lounge", neighborhood: "University City", zip: "28269", avgCut: 35, rating: 5.0, barbers: 2, model: "Appointment", tier: "Mid-tier" }, // EST
     // 28273 — Steele Creek
-    { name: "Verified Cuts", neighborhood: "Steele Creek", zip: "28273", avgCut: "\u2014", rating: 5.0, barbers: "\u2014", model: "Appointment", tier: "Mid-tier" },
-    { name: "Headz Up Barbershop", neighborhood: "Steele Creek", zip: "28273", avgCut: 35, rating: "\u2014", barbers: "\u2014", model: "Appointment", tier: "Mid-tier" }
+    { name: "Verified Cuts", neighborhood: "Steele Creek", zip: "28273", avgCut: 35, rating: 4.9, barbers: 1, model: "Appointment", tier: "Mid-tier" },
+    { name: "Headz Up Barbershop", neighborhood: "Steele Creek", zip: "28273", avgCut: 35, rating: 4.5, barbers: 1, model: "Appointment", tier: "Mid-tier" } // EST rating & barbers
   ];
 
   // Calculate city average haircut price (only from zips with numeric data)
