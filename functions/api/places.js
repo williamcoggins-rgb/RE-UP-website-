@@ -3,6 +3,7 @@
 // Keeps API key secret on the edge. All client calls go through
 // /api/places/* which this module handles.
 // ──────────────────────────────────────────────────────────────
+import { lookupOverride } from './charlotte-prices.js';
 
 // Rate limiting per IP — 60 requests per minute
 const rateLimits = new Map();
@@ -316,7 +317,7 @@ var CLT_SEARCH_POINTS = [
   { lat: 35.1010, lng: -80.9710 }   // Berewick
 ];
 
-var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v6';
+var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v7';
 var CACHE_TTL = 86400; // 24 hours
 
 // Zip code centroids for deriving zip from lat/lng
@@ -605,6 +606,27 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     // pricing_source already set above ('estimated' or 'default')
   });
 
+  // Phase 3b: Apply verified price overrides from research database
+  allResults.forEach(function(shop) {
+    var override = lookupOverride(shop.name);
+    if (!override) return;
+
+    if (override.haircut != null) {
+      shop.estimated_haircut = override.haircut;
+      shop.pricing_source = 'verified';
+    }
+    if (override.beard != null) {
+      shop.estimated_beard = override.beard;
+    }
+    if (override.barbers != null) {
+      shop.barber_count = override.barbers;
+      shop.barber_count_source = 'verified';
+    }
+    if (shop.pricing_source === 'verified') {
+      shop.price_research_source = override.source;
+    }
+  });
+
   // Phase 4: Attempt to scrape booking pages for service menus (cap at 30)
   var toScrape = bookingChecks.slice(0, 30);
   for (var s = 0; s < toScrape.length; s += 6) {
@@ -638,10 +660,13 @@ async function handleCharlotteShops(apiKey, request, ctx) {
   }
 
   // Phase 5: Final safety net — guarantee every shop has non-null pricing
+  // Verified shops keep their real prices; unverified get mid-tier estimates.
   var defaultEst = PRICE_ESTIMATES[2];
   allResults.forEach(function(shop) {
-    if (shop.estimated_haircut == null) shop.estimated_haircut = defaultEst.haircut;
-    if (shop.estimated_beard == null) shop.estimated_beard = defaultEst.beard;
+    var isVerified = shop.pricing_source === 'verified';
+    // Only fill haircut with default if not verified (verified shops with null haircut stay null)
+    if (shop.estimated_haircut == null && !isVerified) shop.estimated_haircut = defaultEst.haircut;
+    if (shop.estimated_beard == null && !isVerified) shop.estimated_beard = defaultEst.beard;
     if (shop.estimated_students == null) shop.estimated_students = defaultEst.students;
     if (shop.estimated_hotTowel == null) shop.estimated_hotTowel = defaultEst.hotTowel;
     if (shop.estimated_lineup == null) shop.estimated_lineup = defaultEst.lineup;
