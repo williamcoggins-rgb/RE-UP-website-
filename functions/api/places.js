@@ -213,7 +213,7 @@ function normalizePlace(place) {
     lng: loc.lng || null,
     rating: place.rating || null,
     total_ratings: place.user_ratings_total || 0,
-    price_level: place.price_level || null,
+    price_level: (place.price_level != null) ? place.price_level : null,
     open_now: place.opening_hours ? place.opening_hours.open_now : null,
     business_status: place.business_status || 'OPERATIONAL',
     types: place.types || []
@@ -233,7 +233,7 @@ function normalizeDetails(result) {
     lng: loc.lng || null,
     rating: result.rating || null,
     total_ratings: result.user_ratings_total || 0,
-    price_level: result.price_level || null,
+    price_level: (result.price_level != null) ? result.price_level : null,
     business_status: result.business_status || 'OPERATIONAL',
     hours: result.opening_hours ? {
       open_now: result.opening_hours.open_now || false,
@@ -316,7 +316,7 @@ var CLT_SEARCH_POINTS = [
   { lat: 35.1010, lng: -80.9710 }   // Berewick
 ];
 
-var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v4';
+var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v6';
 var CACHE_TTL = 86400; // 24 hours
 
 // Zip code centroids for deriving zip from lat/lng
@@ -487,7 +487,7 @@ async function fetchPlaceDetails(placeId, apiKey) {
       full_address: r.formatted_address || null,
       phone: r.formatted_phone_number || null,
       website: r.website || null,
-      price_level: r.price_level || null,
+      price_level: (r.price_level != null) ? r.price_level : null,
       hours: r.opening_hours ? {
         open_now: r.opening_hours.open_now || false,
         weekday_text: r.opening_hours.weekday_text || []
@@ -560,7 +560,7 @@ async function handleCharlotteShops(apiKey, request, ctx) {
         shop.website = detail.website;
         shop.hours = detail.hours;
         shop.photos = detail.photos;
-        if (detail.price_level && !shop.price_level) {
+        if (detail.price_level != null && shop.price_level == null) {
           shop.price_level = detail.price_level;
         }
       }
@@ -574,15 +574,15 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     shop.derived_zip = deriveZip(shop.lat, shop.lng);
 
     // Estimate pricing from price_level (default to tier 2 / mid-tier if no price_level)
-    var tier = shop.price_level || 2;
-    var est = PRICE_ESTIMATES[tier];
+    var tier = (shop.price_level != null && PRICE_ESTIMATES[shop.price_level]) ? shop.price_level : 2;
+    var est = PRICE_ESTIMATES[tier] || PRICE_ESTIMATES[2];
     shop.estimated_haircut = est.haircut;
     shop.estimated_beard = est.beard;
     shop.estimated_students = est.students;
     shop.estimated_hotTowel = est.hotTowel;
     shop.estimated_lineup = est.lineup;
     shop.estimated_tier = est.tier;
-    shop.pricing_source = shop.price_level ? 'estimated' : 'default';
+    shop.pricing_source = (shop.price_level != null) ? 'estimated' : 'default';
     shop.source_tag = 'google'; // always for Google shops
 
     // Estimate barber count from review count if not already set
@@ -636,6 +636,18 @@ async function handleCharlotteShops(apiKey, request, ctx) {
       }
     });
   }
+
+  // Phase 5: Final safety net — guarantee every shop has non-null pricing
+  var defaultEst = PRICE_ESTIMATES[2];
+  allResults.forEach(function(shop) {
+    if (shop.estimated_haircut == null) shop.estimated_haircut = defaultEst.haircut;
+    if (shop.estimated_beard == null) shop.estimated_beard = defaultEst.beard;
+    if (shop.estimated_students == null) shop.estimated_students = defaultEst.students;
+    if (shop.estimated_hotTowel == null) shop.estimated_hotTowel = defaultEst.hotTowel;
+    if (shop.estimated_lineup == null) shop.estimated_lineup = defaultEst.lineup;
+    if (shop.estimated_tier == null) shop.estimated_tier = defaultEst.tier;
+    if (shop.pricing_source == null) shop.pricing_source = 'default';
+  });
 
   // Build aggregate stats for the frontend
   var totalBarbers = 0;
