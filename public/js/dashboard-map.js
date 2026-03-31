@@ -113,10 +113,8 @@
         // Plot as gray secondary pins
         plotGoogleShops(data.results);
 
-        // Merge into competitor table
-        mergeWithCompetitorTable(data.results);
-
         // Broadcast enriched Google data to other dashboard sections
+        // (dashboard.js handleGoogleDataLoaded handles all section re-rendering)
         window.dispatchEvent(new CustomEvent('reup:google-data', {
           detail: {
             shops: data.results,

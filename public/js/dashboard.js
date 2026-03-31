@@ -1300,8 +1300,9 @@ function handleGoogleDataLoaded(event) {
   var googleStats = event.detail.stats || {};
   if (!googleShops.length) return;
 
-  // Guarantee every Google shop has pricing — no conditions, no price_level checks
+  // Fill missing pricing only for shops that don't have verified data
   googleShops.forEach(function(shop) {
+    if (shop.pricing_source === 'verified') return; // never overwrite researched prices
     if (!shop.estimated_haircut || isNaN(shop.estimated_haircut)) shop.estimated_haircut = 30;
     if (!shop.estimated_beard || isNaN(shop.estimated_beard)) shop.estimated_beard = 18;
     if (!shop.estimated_students || isNaN(shop.estimated_students)) shop.estimated_students = 22;
