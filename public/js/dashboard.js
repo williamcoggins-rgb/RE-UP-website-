@@ -412,33 +412,48 @@ function setupCompetitorSearch() {
 
   input.addEventListener("input", function () {
     var query = input.value.toLowerCase().trim();
+    var dataset = _activeCompetitorData || COMPETITORS;
+    var renderFn = _activeCompetitorData ? renderCompetitorTableCombined : renderCompetitorTable;
 
     if (!query) {
-      renderCompetitorTable(COMPETITORS);
+      renderFn(dataset);
       return;
     }
 
-    var filtered = COMPETITORS.filter(function (c) {
+    var filtered = dataset.filter(function (c) {
       return (
         c.name.toLowerCase().indexOf(query) !== -1 ||
-        c.neighborhood.toLowerCase().indexOf(query) !== -1 ||
-        c.zip.indexOf(query) !== -1 ||
-        c.model.toLowerCase().indexOf(query) !== -1 ||
-        c.tier.toLowerCase().indexOf(query) !== -1
+        (c.neighborhood || '').toLowerCase().indexOf(query) !== -1 ||
+        (c.zip || '').indexOf(query) !== -1 ||
+        (c.model || '').toLowerCase().indexOf(query) !== -1 ||
+        (c.tier || '').toLowerCase().indexOf(query) !== -1
       );
     });
 
-    renderCompetitorTable(filtered);
+    renderFn(filtered);
   });
 }
 
 // --------------- INTERACTIVITY: SORTABLE TABLES ---------------
 
 var sortState = {};
+// Holds the currently-active combined dataset after Google data merges in
+var _activeCompetitorData = null;
+
+// Stores the current dataSource + renderFn per table so re-calling makeSortable
+// updates existing handlers instead of stacking duplicate listeners.
+var _sortBindings = {};
 
 function makeSortable(tableId, dataSource, renderFn) {
   var table = document.getElementById(tableId);
   if (!table) return;
+
+  // Update the binding (existing click handlers will read from here)
+  _sortBindings[tableId] = { data: dataSource, render: renderFn };
+
+  // Only attach listeners once per table
+  if (table.getAttribute('data-sort-bound')) return;
+  table.setAttribute('data-sort-bound', '1');
 
   var headers = table.querySelectorAll("thead th");
   headers.forEach(function (th, colIndex) {
@@ -446,6 +461,9 @@ function makeSortable(tableId, dataSource, renderFn) {
     th.setAttribute("data-col-index", colIndex);
 
     th.addEventListener("click", function () {
+      var binding = _sortBindings[tableId];
+      if (!binding) return;
+
       var key = tableId + "-" + colIndex;
       var ascending = sortState[key] === "asc" ? false : true;
       sortState[key] = ascending ? "asc" : "desc";
@@ -462,8 +480,8 @@ function makeSortable(tableId, dataSource, renderFn) {
       arrow.textContent = ascending ? " \u25B2" : " \u25BC";
       th.appendChild(arrow);
 
-      // Sort the data
-      var sorted = dataSource.slice().sort(function (a, b) {
+      // Sort the data using the current binding
+      var sorted = binding.data.slice().sort(function (a, b) {
         var keys = Object.keys(a);
         var field = keys[colIndex];
         var valA = a[field];
@@ -480,7 +498,7 @@ function makeSortable(tableId, dataSource, renderFn) {
         return ascending ? valA - valB : valB - valA;
       });
 
-      renderFn(sorted);
+      binding.render(sorted);
     });
   });
 }
@@ -1541,6 +1559,13 @@ function handleGoogleDataLoaded(event) {
   renderPricingTable();
   renderCompetitorTableCombined(allShops);
   renderDensityCombined();
+
+  // Store combined dataset so sort/search/filter use it instead of DB-only COMPETITORS
+  _activeCompetitorData = allShops;
+
+  // Re-bind sortable with combined data so column sorts don't revert to DB-only
+  makeSortable("pricing-table", PRICING_BY_ZIP, renderPricingTableFromData);
+  makeSortable("competitor-table", allShops, renderCompetitorTableCombined);
 
   // Re-render gap finder with updated data
   renderGapFinder();
