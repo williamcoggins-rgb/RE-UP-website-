@@ -1277,10 +1277,35 @@ function applyDashPaywall() {
 // --------------- GOOGLE DATA INTEGRATION ---------------
 // When enriched Google Places data arrives, merge with DB data and re-render all sections
 
+// Client-side price estimation from price_level (safety net if backend sends nulls)
+var CLIENT_PRICE_EST = {
+  1: { haircut: 18, beard: 10, students: 15, hotTowel: null, lineup: 10, tier: 'Value' },
+  2: { haircut: 30, beard: 18, students: 22, hotTowel: 25, lineup: 15, tier: 'Mid-tier' },
+  3: { haircut: 48, beard: 28, students: 35, hotTowel: 40, lineup: 25, tier: 'Premium' },
+  4: { haircut: 65, beard: 40, students: 45, hotTowel: 55, lineup: 35, tier: 'Premium' }
+};
+var DEFAULT_TIER = CLIENT_PRICE_EST[2]; // mid-tier default for shops with no price_level
+
 function handleGoogleDataLoaded(event) {
   var googleShops = event.detail.shops || [];
   var googleStats = event.detail.stats || {};
   if (!googleShops.length) return;
+
+  // Ensure every Google shop has pricing (client-side fallback)
+  googleShops.forEach(function(shop) {
+    if (!shop.estimated_haircut) {
+      var est = shop.price_level ? CLIENT_PRICE_EST[shop.price_level] : DEFAULT_TIER;
+      if (est) {
+        shop.estimated_haircut = shop.estimated_haircut || est.haircut;
+        shop.estimated_beard = shop.estimated_beard || est.beard;
+        shop.estimated_students = shop.estimated_students || est.students;
+        shop.estimated_hotTowel = shop.estimated_hotTowel || est.hotTowel;
+        shop.estimated_lineup = shop.estimated_lineup || est.lineup;
+        shop.estimated_tier = shop.estimated_tier || est.tier;
+        if (!shop.pricing_source) shop.pricing_source = shop.price_level ? 'estimated' : 'default';
+      }
+    }
+  });
 
   // Build a lookup of DB shop names for dedup
   var dbNames = {};
@@ -1290,7 +1315,6 @@ function handleGoogleDataLoaded(event) {
   var googleCompetitors = [];
   googleShops.forEach(function(shop) {
     var lowerName = shop.name.toLowerCase().trim();
-    // Skip if already in DB (exact or fuzzy match)
     var isDupe = dbNames[lowerName];
     if (!isDupe) {
       Object.keys(dbNames).forEach(function(dbName) {
@@ -1312,7 +1336,7 @@ function handleGoogleDataLoaded(event) {
       model: '\u2014',
       tier: shop.estimated_tier || 'Mid-tier',
       source: 'google',
-      pricing_source: shop.pricing_source || null,
+      pricing_source: shop.pricing_source || 'default',
       price_level: shop.price_level || null,
       booking_platform: shop.booking_platform || null,
       total_ratings: shop.total_ratings || 0,
@@ -1543,7 +1567,7 @@ function renderCompetitorTableCombined(allShops) {
     if (c.source === 'google') {
       if (c.pricing_source === 'booking') {
         sourceBadge = ' <span class="source-badge source-badge--booking">BOOKING</span>';
-      } else if (c.pricing_source === 'estimated') {
+      } else if (c.pricing_source === 'estimated' || c.pricing_source === 'default') {
         sourceBadge = ' <span class="source-badge source-badge--estimated">EST</span>';
       } else {
         sourceBadge = ' <span class="source-badge source-badge--live">GOOGLE</span>';
@@ -1563,7 +1587,7 @@ function renderCompetitorTableCombined(allShops) {
       '<td data-label="Neighborhood">' + escapeHtml(c.neighborhood || c.zip || '') + '</td>' +
       '<td class="cell-mono" data-label="Zip">' + escapeHtml(c.zip || '') + '</td>' +
       '<td class="cell-price" data-label="Avg Cut">' + priceStr +
-        (c.pricing_source === 'estimated' ? ' <span class="price-est">~</span>' : '') +
+        ((c.pricing_source === 'estimated' || c.pricing_source === 'default') ? ' <span class="price-est">~</span>' : '') +
         (c.pricing_source === 'booking' ? ' <span class="price-verified">\u2713</span>' : '') + '</td>' +
       '<td data-label="Rating">' + ratingCol + '</td>' +
       '<td data-label="Barbers">' + escapeHtml(c.barbers) + '</td>' +

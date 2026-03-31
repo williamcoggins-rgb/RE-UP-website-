@@ -316,7 +316,7 @@ var CLT_SEARCH_POINTS = [
   { lat: 35.1010, lng: -80.9710 }   // Berewick
 ];
 
-var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v3';
+var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v4';
 var CACHE_TTL = 86400; // 24 hours
 
 // Zip code centroids for deriving zip from lat/lng
@@ -573,15 +573,16 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     // Derive zip from coordinates
     shop.derived_zip = deriveZip(shop.lat, shop.lng);
 
-    // Estimate pricing from price_level
-    var est = shop.price_level ? PRICE_ESTIMATES[shop.price_level] : null;
-    shop.estimated_haircut = est ? est.haircut : null;
-    shop.estimated_beard = est ? est.beard : null;
-    shop.estimated_students = est ? est.students : null;
-    shop.estimated_hotTowel = est ? est.hotTowel : null;
-    shop.estimated_lineup = est ? est.lineup : null;
-    shop.estimated_tier = est ? est.tier : 'Mid-tier';
-    shop.pricing_source = null; // will be set below
+    // Estimate pricing from price_level (default to tier 2 / mid-tier if no price_level)
+    var tier = shop.price_level || 2;
+    var est = PRICE_ESTIMATES[tier];
+    shop.estimated_haircut = est.haircut;
+    shop.estimated_beard = est.beard;
+    shop.estimated_students = est.students;
+    shop.estimated_hotTowel = est.hotTowel;
+    shop.estimated_lineup = est.lineup;
+    shop.estimated_tier = est.tier;
+    shop.pricing_source = shop.price_level ? 'estimated' : 'default';
     shop.source_tag = 'google'; // always for Google shops
 
     // Estimate barber count from review count if not already set
@@ -600,9 +601,8 @@ async function handleCharlotteShops(apiKey, request, ctx) {
     if (booking) {
       shop.pricing_source = 'estimated'; // will upgrade to 'booking' if scrape succeeds
       bookingChecks.push(shop);
-    } else if (est) {
-      shop.pricing_source = 'estimated';
     }
+    // pricing_source already set above ('estimated' or 'default')
   });
 
   // Phase 4: Attempt to scrape booking pages for service menus (cap at 30)
