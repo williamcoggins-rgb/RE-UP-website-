@@ -253,6 +253,11 @@ function renderPricingTable() {
 // --------------- RENDER: COMPETITOR TABLE ---------------
 
 function renderCompetitorTable(data) {
+  // If combined data is available, delegate to the combined renderer
+  if (!data && _activeCompetitorData) {
+    renderCompetitorTableCombined(_activeCompetitorData);
+    return;
+  }
   var tbody = document.getElementById("competitor-tbody");
   if (!tbody) return;
   tbody.innerHTML = "";
@@ -338,6 +343,11 @@ function renderMoves() {
 // --------------- RENDER: DENSITY ---------------
 
 function renderDensity() {
+  // If Google data has loaded, use the combined density renderer
+  if (_activeCompetitorData) {
+    renderDensityCombined();
+    return;
+  }
   var grid = document.getElementById("density-grid");
   if (!grid) return;
   grid.innerHTML = "";
@@ -1458,6 +1468,11 @@ function handleGoogleDataLoaded(event) {
   }
 
   // ─── Update Heat Map (zip code counts + pricing) ──────────
+  // On refresh, strip previously-added Google zip rows so we don't duplicate
+  for (var pi = PRICING_BY_ZIP.length - 1; pi >= 0; pi--) {
+    if (PRICING_BY_ZIP[pi]._fromGoogle) PRICING_BY_ZIP.splice(pi, 1);
+  }
+
   // Build enriched PRICING_BY_ZIP with Google data
   var zipShopCounts = {};
   var zipHaircutPrices = {};
@@ -1466,9 +1481,11 @@ function handleGoogleDataLoaded(event) {
   var zipHotTowelPrices = {};
   var zipLineupPrices = {};
 
-  // Start with DB data
+  // Start with DB data — use _origShops (frozen on first run) to prevent count inflation
   PRICING_BY_ZIP.forEach(function(z) {
-    zipShopCounts[z.zip] = z.shops || 0;
+    if (z._origShops == null) z._origShops = z.shops || 0;
+    z.shops = z._origShops; // reset to original DB count before re-adding Google
+    zipShopCounts[z.zip] = z._origShops;
     if (typeof z.haircut === 'number') zipHaircutPrices[z.zip] = [z.haircut];
     if (typeof z.beard === 'number') zipBeardPrices[z.zip] = [z.beard];
     if (typeof z.students === 'number') zipStudentsPrices[z.zip] = [z.students];
@@ -1547,7 +1564,8 @@ function handleGoogleDataLoaded(event) {
         hotTowel: avgFn(zipHotTowelPrices[zip]),
         lineup: avgFn(zipLineupPrices[zip]),
         shops: zipShopCounts[zip],
-        _estimated: true
+        _estimated: true,
+        _fromGoogle: true
       });
     }
   });
