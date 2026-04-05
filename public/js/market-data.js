@@ -12,15 +12,15 @@
     { zip: "28203", area: "South End / Dilworth", haircut: 44, beard: 25, students: "\u2014", hotTowel: 40, lineup: 20, shops: 6 },
     { zip: "28205", area: "NoDa / Plaza Midwood", haircut: 38, beard: 23, students: 31, hotTowel: "\u2014", lineup: "\u2014", shops: 5 },
     { zip: "28206", area: "North Charlotte / Druid Hills", haircut: 20, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
-    { zip: "28208", area: "West Charlotte / Airport", haircut: "\u2014", beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 3 },
+    { zip: "28208", area: "West Charlotte / Airport", haircut: 28, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 3 },
     { zip: "28209", area: "Park Road / Selwyn", haircut: 27, beard: 12, students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 4 },
-    { zip: "28210", area: "South Charlotte / Sharon Lakes", haircut: "\u2014", beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 1 },
-    { zip: "28211", area: "SouthPark / Myers Park", haircut: "\u2014", beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
+    { zip: "28210", area: "South Charlotte / Sharon Lakes", haircut: 30, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 1 },
+    { zip: "28211", area: "SouthPark / Myers Park", haircut: 43, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
     { zip: "28213", area: "University City / UNCC", haircut: 35, beard: 25, students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 8 },
     { zip: "28215", area: "East Charlotte / Albemarle Rd", haircut: 25, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
     { zip: "28216", area: "Brookshire / North Charlotte", haircut: 33, beard: "\u2014", students: 20, hotTowel: "\u2014", lineup: "\u2014", shops: 3 },
-    { zip: "28262", area: "University City / N Tryon", haircut: "\u2014", beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
-    { zip: "28269", area: "University City / WT Harris", haircut: "\u2014", beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
+    { zip: "28262", area: "University City / N Tryon", haircut: 28, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
+    { zip: "28269", area: "University City / WT Harris", haircut: 33, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 },
     { zip: "28273", area: "Steele Creek", haircut: 35, beard: "\u2014", students: "\u2014", hotTowel: "\u2014", lineup: "\u2014", shops: 2 }
   ];
 
