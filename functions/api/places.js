@@ -317,7 +317,7 @@ var CLT_SEARCH_POINTS = [
   { lat: 35.1010, lng: -80.9710 }   // Berewick
 ];
 
-var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v7';
+var CACHE_KEY_URL = 'https://reup-internal-cache.reupreport.com/charlotte-shops-v8';
 var CACHE_TTL = 86400; // 24 hours
 
 // Zip code centroids for deriving zip from lat/lng
