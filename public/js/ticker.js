@@ -14,11 +14,11 @@
     ticker.innerHTML =
       '<div class="snapshot-label">CLT MARKET SNAPSHOT</div>' +
       '<div class="snapshot-stats">' +
-        '<span class="snapshot-stat">Avg Cut: <strong id="ticker-avgcut">$37</strong></span>' +
+        '<span class="snapshot-stat">Avg Cut: <strong id="ticker-avgcut">$33</strong></span>' +
         '<span class="snapshot-divider">|</span>' +
         '<span class="snapshot-stat">Shops: <strong id="ticker-shops">170+</strong></span>' +
         '<span class="snapshot-divider">|</span>' +
-        '<span class="snapshot-stat">Barbers: <strong id="ticker-barbers">85</strong></span>' +
+        '<span class="snapshot-stat">Barbers: <strong id="ticker-barbers">165</strong></span>' +
         '<span class="snapshot-divider">|</span>' +
         '<span class="snapshot-stat">Updated: <strong>Mar 2026</strong></span>' +
       '</div>';
@@ -34,7 +34,7 @@
       var tickerBarbers = document.getElementById('ticker-barbers');
 
       // Total shops = DB count + unique Google shops (deduped)
-      var dbCount = (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) ? window.RE_UP_MARKET.COMPETITORS.length : 47;
+      var dbCount = (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) ? window.RE_UP_MARKET.COMPETITORS.length : 0;
       var dbNames = {};
       if (window.RE_UP_MARKET && window.RE_UP_MARKET.COMPETITORS) {
         window.RE_UP_MARKET.COMPETITORS.forEach(function(c) { dbNames[c.name.toLowerCase().trim()] = true; });
