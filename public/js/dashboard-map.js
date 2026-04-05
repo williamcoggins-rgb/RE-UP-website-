@@ -33,7 +33,7 @@
     'Premium':  '#e50914',
     'Mid-tier': '#f59e0b',
     'Value':    '#22c55e',
-    'google':   '#888888'
+    'google':   '#e50914'
   };
 
   // ── Map Initialization ──────────────────────────────────────

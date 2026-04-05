@@ -18,7 +18,7 @@
         '<span class="snapshot-divider">|</span>' +
         '<span class="snapshot-stat">Shops: <strong id="ticker-shops">170+</strong></span>' +
         '<span class="snapshot-divider">|</span>' +
-        '<span class="snapshot-stat">Barbers: <strong id="ticker-barbers">165</strong></span>' +
+        '<span class="snapshot-stat">Barbers: <strong id="ticker-barbers">350+</strong></span>' +
         '<span class="snapshot-divider">|</span>' +
         '<span class="snapshot-stat">Updated: <strong>Mar 2026</strong></span>' +
       '</div>';
